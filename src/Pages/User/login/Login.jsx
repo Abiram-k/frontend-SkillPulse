@@ -64,7 +64,7 @@ function Login() {
     }
   };
   const handleGoogleAuth = () => {
-    window.location.href = `http://localhost:3000/auth/google?method=login`;
+    window.location.href = `https://skillpulseapi.abiram.website/auth/google?method=login`;
   };
   const toggleReferral = () => {
     setIsReferral((prev) => !prev);

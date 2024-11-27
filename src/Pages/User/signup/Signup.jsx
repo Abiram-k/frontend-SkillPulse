@@ -111,7 +111,7 @@ const Signup = () => {
     }
   };
   const handleGoogleAuth = () => {
-    window.location.href = `http://localhost:3000/auth/google?method=signup`;
+    window.location.href = `https://skillpulseapi.abiram.website/auth/google?method=signup`;
   };
   return (
     <div className="text-white text-center my-6 lg:my-10 px-4 lg:px-0">
