@@ -8,7 +8,7 @@ import axios from "@/axiosIntercepters/AxiosInstance";
 const LandingPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [category, setCategories] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
