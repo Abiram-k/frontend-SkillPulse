@@ -11,7 +11,7 @@ const LandingPage = () => {
   const [category, setCategories] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+ 
   const goToDetails = (product) => {
     dispatch(setProductDetails(product));
     navigate("/user/productDetails");
