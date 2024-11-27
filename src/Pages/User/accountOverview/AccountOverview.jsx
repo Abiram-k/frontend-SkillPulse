@@ -10,9 +10,7 @@ import {
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../../redux/userSlice";
-// import axios from "axios";
 import { Toast } from "../../../Components/Toast";
-import { Link } from "react-router-dom";
 import { ChangePassword } from "@/Components/ChangePassword";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import { ToastContainer, toast } from "react-toastify";
