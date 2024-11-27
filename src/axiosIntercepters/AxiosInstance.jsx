@@ -5,7 +5,6 @@ const axiosInstance = axios.create({
   baseURL: `${SERVER_URL}`,
   withCredentials: true,
 });
-alert(SERVER_URL)
 
 axiosInstance.interceptors.response.use(
   (response) => response,
