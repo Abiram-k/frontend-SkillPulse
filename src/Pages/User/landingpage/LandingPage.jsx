@@ -29,7 +29,7 @@ const LandingPage = () => {
       }
     })();
   }, []);
-  
+
   return (
     <div>
       <header className="flex justify-between items-center p-4 bg-[#1C1C1C]">
@@ -121,52 +121,45 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section className="flex flex-wrap justify-around py-8 bg-black border-gray-500 border-b-2 gap-6">
-        {categories?.length > 0 ? (
-          categories.map(
-            (category) =>
-              category.isListed && (
+      <section className="flex flex-wrap justify-center gap-6 py-8 px-4 bg-black border-b border-gray-500">
+        {category?.length > 0 ? (
+          category.slice(0, 4)?.map(
+            (cat) =>
+              cat.isListed && (
                 <div
-                  className="w-full sm:w-1/2 md:w-1/4 lg:w-1/5 text-center mb-8 p-4 bg-gray-900 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-                  key={category._id}
+                  className="w-full sm:w-1/2 md:w-1/4 lg:w-1/5 text-center mb-8 p-4 bg-gray-900  shadow-lg hover:shadow-xl transition-shadow  rounded duration-300"
+                  key={cat._id}
                 >
                   <img
-                    src={category.image || "https://placehold.co/150x150"}
+                    src={cat.image || "https://placehold.co/150x150"}
                     className="mx-auto rounded-full w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 object-cover mb-4 hover:scale-105 transition-transform duration-300"
-                    alt={category.name}
+                    alt={cat.name}
                   />
                   <p className="text-white text-sm md:text-base font-semibold">
-                    {category.name}
+                    {cat.name}
                   </p>
                 </div>
               )
           )
         ) : (
           <>
-            <div className="w-full sm:w-1/2 md:w-1/4 text-center mb-4">
-              <img
-                src="https://placehold.co/150x150"
-                alt="RazorClaw X"
-                className="mx-auto"
-              />
-              <p className="text-white">RazorClaw X</p>
-            </div>
-            <div className="w-full sm:w-1/2 md:w-1/4 text-center mb-4">
-              <img
-                src="https://placehold.co/150x150"
-                alt="HyperVox Graphics card"
-                className="mx-auto"
-              />
-              <p className="text-white">HyperVox Graphics card</p>
-            </div>
-            <div className="w-full sm:w-1/2 md:w-1/4 text-center mb-4">
-              <img
-                src="https://placehold.co/150x150"
-                alt="Vortex Controller"
-                className="mx-auto"
-              />
-              <p className="text-white">Vortex Controller</p>
-            </div>
+            {["RazorClaw X", "HyperVox Graphics card", "Vortex Controller"].map(
+              (placeholder, index) => (
+                <div
+                  className="w-full sm:w-1/2 md:w-1/4 lg:w-1/5 text-center mb-8 p-4 bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                  key={index}
+                >
+                  <img
+                    src="https://placehold.co/150x150"
+                    alt={placeholder}
+                    className="mx-auto rounded-full w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 object-cover mb-4 hover:scale-105 transition-transform duration-300"
+                  />
+                  <p className="text-white text-sm md:text-base font-semibold">
+                    {placeholder}
+                  </p>
+                </div>
+              )
+            )}
           </>
         )}
       </section>
