@@ -1,0 +1,21 @@
+.otp-input {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between input boxes */
+  }
+  
+  .otp-field {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+    /* border: 2px solid #ccc; */
+    border-radius: 4px;
+    outline: none;
+    transition: border 0.3s;
+  }
+  
+  .otp-field:focus {
+    border-color: #007bff; /* Border color when focused */
+  }
+  
