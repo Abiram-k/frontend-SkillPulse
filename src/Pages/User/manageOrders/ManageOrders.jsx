@@ -1,4 +1,3 @@
-import { responsive } from "@cloudinary/react";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,14 +6,11 @@ import { Toast } from "@/Components/Toast";
 import { logoutUser } from "@/redux/userSlice";
 import AlertDialogueButton from "@/Components/AlertDialogueButton";
 import { showToast } from "@/Components/ToastNotification";
-import axiosInstance from "@/axiosIntercepters/AxiosInstance";
 import Razorpay from "../paymentComoponent/RazorPay";
-import { Link } from "react-router-dom";
 import { ReturnProduct } from "@/Components/ReturnProduct";
 import { ArrowDown } from "lucide-react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { normal } from "@cloudinary/url-gen/qualifiers/textDecoration";
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -26,7 +22,6 @@ const ManageOrders = () => {
   const user = useSelector((state) => state.users.user);
 
   useEffect(() => {
-    // if (orders.length == 0) {
     (async () => {
       try {
         const response = await axios.get(`/order?id=${user._id}`);
@@ -38,8 +33,7 @@ const ManageOrders = () => {
         console.log(error.message);
       }
     })();
-    // }
-  }, [refresh, orders]);
+  }, [refresh]);
 
   const handleCancelOrder = async (item) => {
     try {
@@ -50,6 +44,7 @@ const ManageOrders = () => {
 
       setRefresh((prev) => prev + 1);
     } catch (error) {
+      console.log(error, "ERROROROOROROROR");
       Toast.fire({
         icon: "error",
         title: `${error?.response?.data.message}`,
@@ -102,7 +97,7 @@ const ManageOrders = () => {
       (order, index) => order?._id.toString() == orderId
     );
     try {
-      const response = await axiosInstance.post(
+      const response = await axios.post(
         `/order/${user._id}`,
         { checkoutItems: orderForRetry },
         {
@@ -355,7 +350,7 @@ const ManageOrders = () => {
                               />
                             </div>
                           )}
-                          
+
                         {item.productStatus === "delivered" &&
                           item.returnDescription === "" && (
                             <div className="bg-red-500 text-white p-2 rounded-md">
