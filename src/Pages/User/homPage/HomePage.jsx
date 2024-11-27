@@ -42,7 +42,7 @@ const HomePage = () => {
      
       const uniqueWishlistItems = [
         ...new Set(
-          response.data.wishlist[0].products.map(
+          response.data.wishlist[0].products?.map(
             (product) => product.product._id
           )
         ),
@@ -50,7 +50,6 @@ const HomePage = () => {
       uniqueWishlistItems.forEach((id) => {
         setWishlistItems((prev) => [...prev, id]);
       });
-      
     } catch (error) {
       console.error(
         "Error fetching wishlist:",
@@ -65,6 +64,7 @@ const HomePage = () => {
       });
     }
   };
+  
 
   const goToDetails = (product) => {
     dispatch(setProductDetails(product));
@@ -151,7 +151,7 @@ const HomePage = () => {
       </h5>
       <section className="flex flex-wrap justify-center gap-6 py-8 px-4 bg-black border-b border-gray-500">
   {category?.length > 0 ? (
-    category.slice(0, 4).map(
+    category.slice(0, 4)?.map(
       (cat) =>
         cat.isListed && (
           <div
@@ -196,7 +196,7 @@ const HomePage = () => {
 <section className="w-screen flex justify-center p-4 h-auto">
   <Carousel className="relative w-full text-black">
     <CarouselContent className="relative w-full">
-      {banners.map((banner, index) => (
+      {banners?.map((banner, index) => (
         <CarouselItem
           key={banner._id || index}
           className="relative flex items-center justify-center"
@@ -220,7 +220,7 @@ const HomePage = () => {
       <h2 className="text-md lg:text-xl  ps-8 font-bold ">New Arrivals</h2>
       <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-8 bg-black ">
         {products?.length > 0 ? (
-          products.map(
+          products?.map(
             (product) =>
               product.isListed &&
               !product.isDeleted && (
