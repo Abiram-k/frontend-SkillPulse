@@ -22,13 +22,14 @@ const LandingPage = () => {
       try {
         const response = await axios.get("/products");
         console.log("fdsfasdfasdf", response.data.products);
-        setProducts(response.data.products);
-        setCategories(response.data.category);
+        setProducts(response.data?.products);
+        setCategories(response.data?.categoryDoc);
       } catch (error) {
         console.log(error.message);
       }
     })();
   }, []);
+  
   return (
     <div>
       <header className="flex justify-between items-center p-4 bg-[#1C1C1C]">
