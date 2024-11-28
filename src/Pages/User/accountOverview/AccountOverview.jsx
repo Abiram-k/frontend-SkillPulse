@@ -169,7 +169,10 @@ const AccountOverview = () => {
     setEditMode((editMode) => !editMode);
   };
   return (
-    <div className="flex-1 bg-black rounded-lg p-4 sm:p-6 font-mono"style={{fontFamily: "Montserrat"}}>
+    <div
+      className="flex-1 bg-black rounded-lg p-4 sm:p-6 font-mono"
+      style={{ fontFamily: "Montserrat" }}
+    >
       {spinner && (
         <div className="spinner-overlay">
           <div className="spinner"></div>
@@ -202,11 +205,13 @@ const AccountOverview = () => {
           <span className="font-semibold">{user.firstName || "Abiram k"}</span>
         </div>
         <div className="flex gap-3">
-          <ChangePassword
-            name="Change Password"
-            className="mt-5"
-            id={user._id}
-          />
+          {!user.googleid && (
+            <ChangePassword
+              name="Change Password"
+              className="mt-5"
+              id={user._id}
+            />
+          )}
           <button
             className="bg-green-500 rounded p-2 hover:scale-110 transition-all duration-100 flex gap-2 justify-center items-center"
             onClick={handleEditMode}
@@ -225,9 +230,9 @@ const AccountOverview = () => {
           </button>
         </div>
       </div>
-  
+
       {message.image && <p className="text-red-600 mb-4">{message.image}</p>}
-  
+
       <h2 className="text-xl font-semibold mb-6">
         {editMode ? (
           <>
@@ -237,7 +242,7 @@ const AccountOverview = () => {
           "Personal Information"
         )}
       </h2>
-  
+
       <form className="space-y-6 font-mono">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -294,7 +299,7 @@ const AccountOverview = () => {
             </div>
           </div>
         </div>
-  
+
         <div>
           <label className="block mb-2">Date of Birth</label>
           <input
@@ -305,9 +310,9 @@ const AccountOverview = () => {
             disabled={!editMode}
           />
         </div>
-  
+
         <h3 className="text-lg font-semibold pt-4">Contact Information</h3>
-  
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block mb-2">Mobile Number</label>
@@ -332,7 +337,7 @@ const AccountOverview = () => {
             />
           </div>
         </div>
-  
+
         {editMode && (
           <button
             className="bg-green-600 text-white px-6 py-2 rounded-lg w-full sm:w-auto"
@@ -344,7 +349,6 @@ const AccountOverview = () => {
       </form>
     </div>
   );
-  
 };
 
 export default AccountOverview;
