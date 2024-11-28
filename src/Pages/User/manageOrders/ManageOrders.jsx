@@ -33,7 +33,7 @@ const ManageOrders = () => {
         console.log(error.message);
       }
     })();
-  }, [refresh]);
+  }, [refresh,orders]);
 
   const handleCancelOrder = async (item) => {
     try {
