@@ -13,6 +13,7 @@ const ShoppingCartPage = () => {
   const [trigger, setTrigger] = useState(1);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [maxDiscount, setMaxDiscount] = useState("");
+  const [spinner, setSpinner] = useState(false);
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
   const dispatch = useDispatch();
@@ -72,13 +73,16 @@ const ShoppingCartPage = () => {
         if (newQuantity <= 5) {
           if (newQuantity <= availableQuantity || value == -1) {
             try {
+              setSpinner(true);
               const response = await axios.post(
                 `/updateQuantity/${productId}`,
                 {},
                 { params: { userId: user._id, value } }
               );
+              setSpinner(false);
               setTrigger((t) => t + 1);
             } catch (error) {
+              setSpinner(false);
               setCouponMessage(error?.response.data?.couponMessage);
               console.log(error);
             }
@@ -170,6 +174,11 @@ const ShoppingCartPage = () => {
   };
   return (
     <div className="min-h-screen bg-black text-white font-mono">
+      {spinner && (
+        <div className="spinner-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row lg:gap-8 gap-4 justify-center">
           <div className="flex-grow max-w-4xl">
