@@ -271,15 +271,17 @@ const AccountOverview = () => {
               <p className="text-red-600">{message.lastName}</p>
             )}
           </div>
-          <div>
-            <label className="block mb-2">Password</label>
-            <input
-              type="password"
-              className="w-full bg-gray-700 rounded-lg p-2"
-              defaultValue={"* * * * * * * *"}
-              disabled
-            />
-          </div>
+          {!user.googleid && (
+            <div>
+              <label className="block mb-2">Password</label>
+              <input
+                type="password"
+                className="w-full bg-gray-700 rounded-lg p-2"
+                defaultValue={"* * * * * * * *"}
+                disabled
+              />
+            </div>
+          )}
           <div>
             <label className="block mb-2">Referral Code</label>
             <div className="flex items-center">

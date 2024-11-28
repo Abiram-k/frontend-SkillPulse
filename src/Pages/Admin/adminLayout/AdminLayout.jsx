@@ -126,7 +126,7 @@ export default function Dashboard() {
               onClick={() => navigate("/admin/notifications")}
             >
               <Bell className="h-6 w-6 text-yellow-700" />
-              <div className="absolute -top-1 -right-1 font-mono flex items-center justify-center h-4 w-4 bg-red-600 text-white text-xs rounded">
+              <div className="absolute -top-1 -right-1 font-mono flex items-center justify-center h-4 w-4 bg-red-600 text-white text-xs rounded-full">
                 {notificationCount || 0}
               </div>
             </div>

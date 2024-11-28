@@ -1,4 +1,5 @@
 import axios from "@/axiosIntercepters/AxiosInstance";
+import { showToast } from "@/Components/ToastNotification";
 import React, { useEffect, useState } from "react";
 const API_ID = import.meta.env.VITE_RAZORPAY_ID;
 const Razorpay = ({
@@ -73,7 +74,9 @@ const Razorpay = ({
     razorpayInstance.on("payment.failed", (response) => {
       handlePlaceOrder(true, orderId);
     });
-    console.log(isAddressSelected?.firstName || retry);
+    if(!isAddressSelected?.firstName && !retry)
+      showToast("error","Add delivery address")
+    
     if (isAddressSelected?.firstName || retry) {
       console.log("Opening Razorpay instance");
       razorpayInstance.open();
