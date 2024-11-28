@@ -44,7 +44,7 @@ const OrderManagement = () => {
         alert(error?.response.data.message);
       }
     })();
-  }, [filterOrders, dispatch]);
+  }, [filterOrders, dispatch,orders]);
 
   const handleUpdatedStatus = (status) => {
     if (status) setUpdatedStatus(status);

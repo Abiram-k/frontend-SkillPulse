@@ -122,6 +122,7 @@ const ManageOrders = () => {
       alert("Order not found");
       return;
     }
+    
     const doc = new jsPDF();
 
     doc.setFillColor(240, 240, 240);

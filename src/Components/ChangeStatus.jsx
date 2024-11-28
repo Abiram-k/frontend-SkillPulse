@@ -16,6 +16,7 @@ import { Edit } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Toast } from "./Toast";
+import { showToast } from "./ToastNotification";
 
 export const ChangeStatus = ({
   updatedState,
@@ -35,10 +36,7 @@ export const ChangeStatus = ({
         productId,
         updatedStatus,
       });
-      Toast.fire({
-        icon: "success",
-        title: `${response.data.message}`,
-      });
+      showToast("success", response.data.message);
       setOpen(false);
     } catch (error) {
       console.log(error);
@@ -49,6 +47,7 @@ export const ChangeStatus = ({
       });
     }
   };
+  
   return (
     <Dialog className="mt-5" open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
