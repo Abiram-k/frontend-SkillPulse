@@ -93,7 +93,7 @@ function Login() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 lg:ps-10 ">
       <h1 className="text-white text-3xl lg:text-6xl mb-6 lg:mb-10">
-        SKILL PULSE mmmm
+        SKILL PULSE 
       </h1>
       {message.response && <Notification message={message.response} />}
       <div
