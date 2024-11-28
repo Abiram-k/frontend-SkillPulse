@@ -54,7 +54,7 @@ function Login() {
         password,
         referralCode,
       });
-      
+
       if (response.status === 200) {
         dispatch(addUser(response.data.user));
         setMessage({ response: response?.data?.message });
@@ -68,6 +68,7 @@ function Login() {
   const handleGoogleAuth = () => {
     window.location.href = `https://skillpulseapi.abiram.website/auth/google?method=login`;
   };
+
   const toggleReferral = () => {
     setIsReferral((prev) => !prev);
   };
@@ -92,7 +93,7 @@ function Login() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 lg:ps-10 ">
       <h1 className="text-white text-3xl lg:text-6xl mb-6 lg:mb-10">
-        SKILL PULSE
+        SKILL PULSE mmmm
       </h1>
       {message.response && <Notification message={message.response} />}
       <div
