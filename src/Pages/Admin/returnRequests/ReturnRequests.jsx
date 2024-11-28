@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "@/axiosIntercepters/AxiosInstance";
-import { ReturnProduct } from "@/Components/ReturnProduct";
-import { useSelector } from "react-redux";
 import { showToast } from "@/Components/ToastNotification";
 
 const ReturnRequests = () => {
   const [returnedProducts, setReturnedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const user = useSelector((state) => state.users.user);
+  // const user = useSelector((state) => state.users.user);
   useEffect(() => {
     const fetchReturnedProducts = async () => {
       try {
@@ -33,10 +31,11 @@ const ReturnRequests = () => {
     fetchReturnedProducts();
   }, [returnedProducts]);
 
+
   const handleApprove = async (id) => {
     try {
-      const response = await axiosInstance.put(`admin/returnProduct`, {
-        id: user._id,
+      const response = await axiosInstance.patch(`admin/returnProduct`, {
+        // id: user._id,
         itemId: id,
       });
       showToast("success", response.data.message);
@@ -45,6 +44,7 @@ const ReturnRequests = () => {
       showToast("error", error.response?.data.message);
     }
   };
+
   return (
     <div className="p-6 bg-white min-h-screen font-mono">
       <h1 className="text-2xl font-bold text-black mb-4">Returned Products</h1>
