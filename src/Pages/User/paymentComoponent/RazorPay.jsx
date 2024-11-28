@@ -74,9 +74,11 @@ const Razorpay = ({
     razorpayInstance.on("payment.failed", (response) => {
       handlePlaceOrder(true, orderId);
     });
-    if(!isAddressSelected?.firstName && !retry)
+    if(!isAddressSelected?.firstName && !retry){
       showToast("error","Add delivery address")
-    
+      return;
+    }
+
     if (isAddressSelected?.firstName || retry) {
       console.log("Opening Razorpay instance");
       razorpayInstance.open();
