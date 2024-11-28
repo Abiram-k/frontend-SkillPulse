@@ -28,7 +28,7 @@ const HomePage = () => {
   const [isBlocked, setIsBlocked] = useState(false);
   const [addedToWishlist, setAddedToWishlist] = useState(false);
   const [banners, setBanners] = useState([]);
-
+  const [spinner, setSpinner] = useState(false);
   const [trigger, setTrigger] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -71,9 +71,12 @@ const HomePage = () => {
 
   const handleAddToWishList = async (product) => {
     try {
+      setSpinner(true);
       await addToWishList(product, user, dispatch);
+      setSpinner(false);
       setTrigger((prev) => prev + 1);
     } catch (error) {
+      setSpinner(false);
       console.log(error);
     }
   };
@@ -120,6 +123,11 @@ const HomePage = () => {
   }, [trigger]);
   return (
     <div>
+      {spinner && (
+        <div className="spinner-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <section className="relative overflow-hidden h-80 lg:h-auto">
         <img
           src={banner}
