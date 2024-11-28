@@ -132,7 +132,7 @@ const EditProduct = () => {
   };
 
   return (
-    <form className="bg-gray-200 text-black p-8 shadow-md rounded-lg font-sans">
+    <form className="bg-gray-200 text-black p-8 shadow-md rounded font-sans">
       {spinner && (
         <div className="spinner-overlay">
           <div className="spinner"></div>
@@ -240,7 +240,7 @@ const EditProduct = () => {
           {["image1", "image2", "image3"].map((field, index) => (
             <div
               key={field}
-              className="border rounded-lg p-4 flex flex-col items-center"
+              className="border rounded p-4 flex flex-col items-center"
             >
               <label htmlFor={`fileInput${index}`}>
                 <img

@@ -68,7 +68,7 @@ const OrderManagement = () => {
       <div className="flex min-h-screen bg-black font-mono">
         <div className="flex-1 bg-black">
           <main className="p-6">
-            <div className="bg-black rounded-lg overflow-hidden">
+            <div className="bg-black rounded overflow-hidden">
               <table className="w-full">
                 <thead>
                   <tr className="bg-black text-white text-lg mb-5">

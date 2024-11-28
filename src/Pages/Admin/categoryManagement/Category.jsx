@@ -182,7 +182,7 @@ const Category = () => {
           <div className="spinner"></div>
         </div>
       )}
-      <div className="bg-gray-200 p-4 rounded-lg shadow-md text-black h-80 overflow-y-scroll">
+      <div className="bg-gray-200 p-4 rounded shadow-md text-black h-80 overflow-y-scroll">
         <table className="w-full text-left ">
           <thead className="">
             <tr className="bg-orange-500 ">
@@ -267,7 +267,7 @@ const Category = () => {
           </tbody>
         </table>
       </div>
-      <div className="bg-gray-200 p-4 mt-8 rounded-lg shadow-md text-black">
+      <div className="bg-gray-200 p-4 mt-8 rounded shadow-md text-black">
         <h2 className="text-xl font-bold mb-4">Add New Category</h2>
         <form className="flex flex-col space-y-6">
           <div className="flex flex-col lg:flex-row lg:space-x-8 space-y-6 lg:space-y-0">
@@ -276,7 +276,7 @@ const Category = () => {
               <label className="mr-2 font-mono">Name :</label>
               <input
                 type="text"
-                className="border-2 border-gray-400 p-2 rounded-lg font-mono"
+                className="border-2 border-gray-400 p-2 rounded font-mono"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -289,7 +289,7 @@ const Category = () => {
               <label className="mr-2 font-mono">Description (optional):</label>
               <input
                 type="text"
-                className="border-2 border-gray-400 p-2 rounded-lg font-mono"
+                className="border-2 border-gray-400 p-2 rounded font-mono"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
@@ -297,13 +297,13 @@ const Category = () => {
           </div>
 
           {/* Improved Image Upload Area */}
-          <div className="border-2 border-gray-300 rounded-lg p-4 flex flex-col items-center">
+          <div className="border-2 border-gray-300 rounded p-4 flex flex-col items-center">
             <label htmlFor="fileInputone" className="cursor-pointer group">
-              <div className="relative w-32 h-32 mb-4 border-2 border-dashed border-gray-300 rounded-lg flex justify-center items-center hover:bg-gray-100 group-hover:border-blue-500 transition-all">
+              <div className="relative w-32 h-32 mb-4 border-2 border-dashed border-gray-300 rounded flex justify-center items-center hover:bg-gray-100 group-hover:border-blue-500 transition-all">
                 <img
                   src={categoryImage || "https://placehold.co/100x100"}
                   alt="product image"
-                  className={`object-cover w-full h-full rounded-lg ${
+                  className={`object-cover w-full h-full rounded ${
                     !categoryImage ? "opacity-50" : ""
                   }`}
                 />
@@ -334,7 +334,7 @@ const Category = () => {
           <div className="flex items-center justify-center">
             <button
               type="submit"
-              className="bg-green-500 text-white p-3 rounded-lg font-mono w-32 hover:bg-green-600 transition-all"
+              className="bg-green-500 text-white p-3 rounded font-mono w-32 hover:bg-green-600 transition-all"
               onClick={handleAddCategory}
             >
               SAVE

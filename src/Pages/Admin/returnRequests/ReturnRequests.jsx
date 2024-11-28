@@ -58,7 +58,7 @@ const ReturnRequests = () => {
           No returned products found.
         </div>
       ) : (
-        <div className="overflow-x-auto bg-white shadow rounded-lg">
+        <div className="overflow-x-auto bg-white shadow rounded">
           <table className="min-w-full text-left border-collapse border border-black">
             <thead className="bg-gray-100 text-black font-bold">
               <tr>

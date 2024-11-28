@@ -57,7 +57,7 @@ const AdminLogin = () => {
       </h1>
       {message.response && <Notification message={message.response} />}
       <div
-        className="bg-[#1C1C1C] rounded-lg shadow-lg flex flex-col sm:flex-row items-center p-6 sm:p-8"
+        className="bg-[#1C1C1C] rounded shadow-lg flex flex-col sm:flex-row items-center p-6 sm:p-8"
         style={{
           width: "100%",
           maxWidth: "600px",

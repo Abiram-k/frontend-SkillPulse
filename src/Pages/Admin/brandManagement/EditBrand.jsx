@@ -90,7 +90,7 @@ function EditBrand() {
   };
 
   return (
-    <div className="bg-gray-200 p-4 mt-8 rounded-lg shadow-md text-black ">
+    <div className="bg-gray-200 p-4 mt-8 rounded shadow-md text-black ">
       {spinner && (
         <div className="spinner-overlay">
           <div className="spinner"></div>
@@ -104,7 +104,7 @@ function EditBrand() {
         <label className="mr-2">Name :</label>
         <input
           type="text"
-          className="border-2 border-gray-400 p-2 rounded-lg flex-grow font-mono"
+          className="border-2 border-gray-400 p-2 rounded flex-grow font-mono"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -112,11 +112,11 @@ function EditBrand() {
         <label className="mr-2">Description :</label>
         <input
           type="text"
-          className="border-2 border-gray-400 p-2 rounded-lg flex-grow w-1/2 focus:outline-none font-mono"
+          className="border-2 border-gray-400 p-2 rounded flex-grow w-1/2 focus:outline-none font-mono"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <div className="border rounded-lg p-4 flex flex-col items-center justify-center">
+        <div className="border rounded p-4 flex flex-col items-center justify-center">
           <label htmlFor="fileInputone" className="w-full flex justify-center">
             <img
               src={
@@ -144,7 +144,7 @@ function EditBrand() {
         {message.name && <p className="text-red-700 text-sm">{message.name}</p>}
         <button
           type="submit"
-          className="bg-green-500 text-white p-2 rounded-lg ml-4"
+          className="bg-green-500 text-white p-2 rounded ml-4"
         >
           Submit
         </button>

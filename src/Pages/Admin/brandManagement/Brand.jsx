@@ -191,7 +191,7 @@ const Brand = () => {
           <div className="spinner"></div>
         </div>
       )}
-      <div className="bg-gray-200 p-4 rounded-lg shadow-md text-black h-80 overflow-y-scroll">
+      <div className="bg-gray-200 p-4 rounded shadow-md text-black h-80 overflow-y-scroll">
         <table className="w-full text-left ">
           <thead>
             <tr className="bg-orange-500 ">
@@ -267,7 +267,7 @@ const Brand = () => {
           </tbody>
         </table>
       </div>
-      <div className="bg-gray-200 p-4 mt-8 rounded-lg shadow-md text-black">
+      <div className="bg-gray-200 p-4 mt-8 rounded shadow-md text-black">
         <h2 className="text-xl font-bold mb-4">Add New Brand</h2>
         <form className="flex flex-col space-y-6">
           <div className="flex flex-col lg:flex-row lg:space-x-8 space-y-6 lg:space-y-0">

@@ -213,12 +213,12 @@ const OrderReport = () => {
           </button>
         </div>
       </div>
-      <div className="p-6 rounded-lg bg-white shadow-lg" ref={reportRef}>
+      <div className="p-6 rounded bg-white shadow-lg" ref={reportRef}>
         <h3 className="text-3xl font-extrabold mb-6 text-gray-900">
           {`${filter == "Daily" ? "Today's" : filter}`} Sales Report
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-6 rounded-lg shadow-md">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-6 rounded shadow-md">
           <div className="flex flex-col gap-4">
             <h3 className="text-2xl font-semibold text-gray-800">Summary</h3>
             <p className="text-lg text-gray-700">
@@ -271,7 +271,7 @@ const OrderReport = () => {
         </div>
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+          <div className="bg-gray-50 p-6 rounded shadow-md">
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">
               Total Discounts
             </h3>
@@ -298,7 +298,7 @@ const OrderReport = () => {
             </p>
           </div>
 
-          <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+          <div className="bg-gray-50 p-6 rounded shadow-md">
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">
               Payment Method Usage
             </h3>
@@ -313,7 +313,7 @@ const OrderReport = () => {
           </div>
         </div>
 
-        <div className="mt-6 bg-gray-50 p-6 rounded-lg shadow-md flex justify-between items-center">
+        <div className="mt-6 bg-gray-50 p-6 rounded shadow-md flex justify-between items-center">
           <div>
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">
               Order Status
@@ -330,8 +330,8 @@ const OrderReport = () => {
           <PieChart orderStatusCount={orderStatusCount} />
         </div>
 
-        <div className="overflow-x-auto mt-6 rounded-lg shadow-md">
-          <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+        <div className="overflow-x-auto mt-6 rounded shadow-md">
+          <table className="min-w-full bg-white border border-gray-200 rounded">
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-6 py-3 border text-sm text-gray-600">

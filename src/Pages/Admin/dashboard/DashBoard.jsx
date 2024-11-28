@@ -132,7 +132,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full ">
-        <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow">
+        <div className="lg:col-span-2 bg-white p-6 rounded shadow">
           <div className="mb-4 flex space-x-4 font-mono">
             {["Monthly", "Yearly"].map((option) => (
               <button
@@ -150,7 +150,7 @@ export default function Dashboard() {
           </div>
           <Chart orders={recentSales} filter={filter} />
         </div>
-        <div className="bg-white p-6 rounded-lg  shadow h-auto ">
+        <div className="bg-white p-6 rounded  shadow h-auto ">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl  text-gray-400 font-bold ">Recent Sales</h2>
           </div>
@@ -214,7 +214,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="flex flex-col lg:flex-row mt-10 gap-6">
-        <div className="bg-white p-6 rounded-lg  shadow-lg hover:scale-105 duration-300 w-full lg:w-2/3">
+        <div className="bg-white p-6 rounded  shadow-lg hover:scale-105 duration-300 w-full lg:w-2/3">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg sm:text-xl text-gray-400 font-bold">
               Top 10 Products
@@ -263,7 +263,7 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg  shadow-lg hover:scale-105 duration-300 w-full lg:w-2/3">
+        <div className="bg-white p-6 rounded  shadow-lg hover:scale-105 duration-300 w-full lg:w-2/3">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg sm:text-xl text-gray-400 font-bold">
               Top 10 Category
@@ -314,7 +314,7 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-lg hover:scale-105 duration-300 w-full lg:w-2/3 ">
+        <div className="bg-white p-6 rounded shadow-lg hover:scale-105 duration-300 w-full lg:w-2/3 ">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg sm:text-xl text-gray-400 font-bold">
               Top 10 Brands
@@ -372,7 +372,7 @@ export default function Dashboard() {
 
 function StatsCard({ title, value, bgColor }) {
   return (
-    <div className={`${bgColor} p-6 rounded-lg`}>
+    <div className={`${bgColor} p-6 rounded`}>
       <h3 className="text-gray-600 mb-2">{title}</h3>
       <p className="text-2xl font-semibold">{value}</p>
     </div>
