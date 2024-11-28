@@ -48,7 +48,7 @@ function Login() {
       return;
     }
     try {
-      console.log(email, password, referralCode);
+      console.log(email, password, referralCode)
       const response = await axios.post("/login", {
         email,
         password,
@@ -67,7 +67,6 @@ function Login() {
   };
   const handleGoogleAuth = () => {
     window.location.href = `https://skillpulseapi.abiram.website/auth/google?method=login`;
-    alert("https://skillpulseapi.abiram.website/auth/google?method=login");
   };
 
   const toggleReferral = () => {
