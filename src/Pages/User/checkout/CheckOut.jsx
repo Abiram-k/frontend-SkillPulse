@@ -592,7 +592,7 @@ const Checkout = () => {
         update you with your order in email
       </p>
       <Link
-        to={"/user/profile/shop"}
+        to={"/user/shop"}
         className="bg-red-600 text-white rounded px-6 py-2"
       >
         Continue Shopping
