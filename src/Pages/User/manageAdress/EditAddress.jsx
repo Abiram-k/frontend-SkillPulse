@@ -69,7 +69,7 @@ const EditAddress = () => {
 
     if (addressDetails.trim() === "") {
         error.addressDetails = "Address is required *";
-    } else if (!addressRegex.test(addressDetails)) {
+    } else if (!addressRegex.test(addressDetails.trim())) {
         error.addressDetails = "Address must be at least 8 characters long *";
     }
 
