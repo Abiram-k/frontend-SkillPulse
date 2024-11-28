@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 
 const ProtectCheckout = ({ children }) => {
   const checkoutItems = useSelector((state) => state.users.checkoutItems);
-  if (!checkoutItems.length) return <Navigate to="/user/cart" />;
-  return children;
+  if (checkoutItems.length == 0) return <Navigate to="/user/cart" />;
+  else return children;
 };
 export default ProtectCheckout;
