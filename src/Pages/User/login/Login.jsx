@@ -54,11 +54,13 @@ function Login() {
         password,
         referralCode,
       });
+      
       if (response.status === 200) {
         dispatch(addUser(response.data.user));
         setMessage({ response: response?.data?.message });
         navigate("/user/home");
       }
+
     } catch (err) {
       setMessage({ response: err?.response?.data?.message });
     }
