@@ -35,7 +35,7 @@ const ReturnRequests = () => {
 
   const handleApprove = async (id) => {
     try {
-      const response = await axiosInstance.patch(`admin/returnProduct`, {
+      const response = await axiosInstance.put(`admin/returnProduct`, {
         id: user._id,
         itemId: id,
       });

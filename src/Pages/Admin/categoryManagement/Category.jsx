@@ -150,7 +150,7 @@ const Category = () => {
           title: "Listed",
           text: `${response.data.category.name}
             "Listed successfully`,
-          icon: "sucess",
+          icon: "success",
           confirmButtonText: "Done",
         });
       } else {
