@@ -11,9 +11,9 @@ const LandingPage = () => {
   const [category, setCategories] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
- 
+
   const goToDetails = (product) => {
-    dispatch(setProductDetails(product));
+    // dispatch(setProductDetails(product));
     navigate("/user/productDetails");
   };
 
@@ -115,7 +115,10 @@ const LandingPage = () => {
           <p className="text-base sm:text-lg md:text-xl mt-2 ">
             Deserve best interpret your music differently
           </p>
-          <button className="mt-4 px-6 py-2 bg-red-600 text-white font-bold rounded text-center font-mono ">
+          <button
+            className="mt-4 px-6 py-2 bg-red-600 text-white font-bold rounded text-center font-mono "
+            onClick={() => goToDetails()}
+          >
             ORDER NOW
           </button>
         </div>
@@ -129,6 +132,7 @@ const LandingPage = () => {
                 <div
                   className="w-full sm:w-1/2 md:w-1/4 lg:w-1/5 text-center mb-8 p-4 bg-gray-900  shadow-lg hover:shadow-xl transition-shadow  rounded duration-300"
                   key={cat._id}
+                  onClick={() => goToDetails()}
                 >
                   <img
                     src={cat.image || "https://placehold.co/150x150"}

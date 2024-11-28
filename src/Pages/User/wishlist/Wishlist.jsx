@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToWishList, removeFromWishlist } from "./addRemoveWishlit";
 import AlertDialogueButton from "@/Components/AlertDialogueButton";
 import { Link } from "react-router-dom";
+import { showToast } from "@/Components/ToastNotification";
 
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState({});
@@ -63,10 +64,7 @@ const Wishlist = () => {
         return prev;
       });
       setTrigger((prev) => prev + 1);
-      Toast.fire({
-        icon: "success",
-        title: `${response.data.message}`,
-      });
+      showToast("success",response.data.message)
     } catch (error) {
       if (error?.response.data.isBlocked) {
         dispatch(logoutUser());

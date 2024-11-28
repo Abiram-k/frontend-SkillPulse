@@ -20,39 +20,58 @@ const AddAddress = () => {
   const navigate = useNavigate();
   const formValidate = () => {
     let error = {};
-    const firstnameFirstCharacter = firstName.charAt(0);
-    const secondnameFirstCharacter = secondName.charAt(0);
 
-    if (firstName.trim() === "") error.firstName = "First name is required *";
-    else if (!isNaN(firstnameFirstCharacter)) {
-      error.firstName = "Name must start with a character *";
+    const nameRegex = /^[A-Za-z][A-Za-z\s]*$/; // Allows letters and spaces, must start with a letter
+    const mobileRegex = /^[0-9]{10}$/; // Exactly 10 digits
+    const pincodeRegex = /^[0-9]{6}$/; // Exactly 6 digits
+    const addressRegex = /^.{8,}$/; // Minimum 8 characters
+
+    if (!firstName.trim()) {
+        error.firstName = "First name is required *";
+    } else if (!nameRegex.test(firstName)) {
+        error.firstName = "First name must start with a letter and contain only letters *";
+    }
+    if (!secondName.trim()) {
+        error.secondName = "Last name is required *";
+    } else if (!nameRegex.test(secondName)) {
+        error.secondName = "Last name must start with a letter and contain only letters *";
+    }
+    if (!mobileNumber.trim()) {
+        error.mobileNumber = "Mobile number is required *";
+    } else if (!mobileRegex.test(mobileNumber)) {
+        error.mobileNumber = "Please enter a valid 10-digit mobile number *";
     }
 
-    if (secondName.trim() === "") error.secondName = "Last name is required *";
-    else if (!isNaN(secondnameFirstCharacter)) {
-      error.secondName = "Last name must start with a character *";
+    if (alternativeMobile.trim() && !mobileRegex.test(alternativeMobile)) {
+        error.alternativeMobile = "Please enter a valid 10-digit mobile number *";
+    }
+    if (!city.trim()) {
+        error.city = "City is required *";
+    } else if (!nameRegex.test(city)) {
+        error.city = "City must contain only letters and spaces *";
     }
 
-    if (!mobileNumber.trim())
-      error.mobileNumber = "Mobile number is required *";
-    else if (mobileNumber.length !== 10) {
-      error.mobileNumber = "Please enter a 10-digit mobile number *";
+    if (!state.trim()) {
+        error.state = "State is required *";
+    } else if (!nameRegex.test(state)) {
+        error.state = "State must contain only letters and spaces *";
     }
-    if (alternativeMobile.length > 0 && alternativeMobile.length < 10)
-      error.alternativeMobile = "Please enter  10-digit mobile number *";
 
-    if (city.trim() === "") error.city = "City is required *";
-    if (state.trim() === "") error.state = "State is required *";
+    if (!address.trim()) {
+        error.address = "Address is required *";
+    } else if (!addressRegex.test(address)) {
+        error.address = "Address must be at least 8 characters *";
+    }
 
-    if (address.trim() === "") error.address = "Address is required *";
-    else if (address.length < 8)
-      error.address = "Address must be at least 8 characters *";
-
-    if (pincode.trim() === "") error.pincode = "Pincode is required *";
-    else if (pincode.length < 6) error.pincode = "Enter a valid pincode *";
+    if (!pincode.trim()) {
+        error.pincode = "Pincode is required *";
+    } else if (!pincodeRegex.test(pincode)) {
+        error.pincode = "Enter a valid 6-digit pincode *";
+    }
 
     return error;
-  };
+};
+
 
   const handleAddAddress = async (e) => {
     e.preventDefault();

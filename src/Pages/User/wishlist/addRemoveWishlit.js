@@ -2,6 +2,7 @@
 
 import axios from "@/axiosIntercepters/AxiosInstance";
 import { Toast } from "@/Components/Toast";
+import { showToast } from "@/Components/ToastNotification";
 import { logoutUser, removefromWishlist } from "@/redux/userSlice";
 
 export const addToWishList = async (product, user, dispatch) => {
@@ -25,16 +26,14 @@ export const addToWishList = async (product, user, dispatch) => {
     // });
   }
 };
-export const removeFromWishlist = async (product,user,dispatch) => {
+export const removeFromWishlist = async (product, user, dispatch) => {
   try {
     const response = await axios.delete(
       `/wishList?user=${user._id}&product=${product}`
     );
     if (response.status == 200) {
-      Toast.fire({
-        icon: "success",
-        title: `${response.data.message}`,
-      });
+      showToast("success", response.data.message)
+
       dispatch(removefromWishlist(product));
       // window.location.reload();
     }

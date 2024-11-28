@@ -134,6 +134,7 @@ const AccountOverview = () => {
       return;
     }
     try {
+      
       const formData = new FormData();
       formData.append("firstName", firstName);
       formData.append("lastName", secondName);
@@ -168,6 +169,7 @@ const AccountOverview = () => {
   const handleEditMode = () => {
     setEditMode((editMode) => !editMode);
   };
+
   return (
     <div
       className="flex-1 bg-black rounded-lg p-4 sm:p-6 font-mono"
