@@ -102,11 +102,7 @@ const AddAddress = () => {
       navigate("/user/profile/manageAddress");
     } catch (error) {
       console.log(error.message);
-
-      Toast.fire({
-        icon: "error",
-        title: `${error?.response.data.message}`,
-      });
+      showToast("error",error?.response.data.message)
     }
   };
 

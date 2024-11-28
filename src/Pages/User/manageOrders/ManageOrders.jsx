@@ -112,7 +112,7 @@ const ManageOrders = () => {
       );
       showToast("success", `${response?.data.message}`);
     } catch (error) {
-      showToast("error", `${error?.response?.data.message}`);
+      showToast("error", `Payment failed`);
     }
   };
 
@@ -122,7 +122,7 @@ const ManageOrders = () => {
       alert("Order not found");
       return;
     }
-    
+
     const doc = new jsPDF();
 
     doc.setFillColor(240, 240, 240);
