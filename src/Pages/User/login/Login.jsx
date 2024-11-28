@@ -67,6 +67,7 @@ function Login() {
   };
   const handleGoogleAuth = () => {
     window.location.href = `https://skillpulseapi.abiram.website/auth/google?method=login`;
+    alert("https://skillpulseapi.abiram.website/auth/google?method=login");
   };
 
   const toggleReferral = () => {
