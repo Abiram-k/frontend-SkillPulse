@@ -78,11 +78,11 @@ const Shop = () => {
   const currentProduct = filteredProduct.slice(firstPostIndex, lastPostIndex);
 
   const handleAddToWishList = async (product) => {
-    setTrigger((prev) => prev + 1);
     try {
       setSpinner(true);
       await addToWishList(product, user, dispatch);
       setSpinner(false);
+      setTrigger((prev) => prev + 1);
     } catch (error) {
       setSpinner(false);
       console.log(error);

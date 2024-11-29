@@ -4,8 +4,10 @@
 
 
 body{
-  background-color: #000;
-  color: #fff;
+  background-color: #fff;
+  color: #000;
+  /* background-color: #000;
+  color: #fff; */
   box-sizing: border-box;
   font-family: orbitron, Arial, Helvetica, sans-serif;
   overflow-x: hidden;
