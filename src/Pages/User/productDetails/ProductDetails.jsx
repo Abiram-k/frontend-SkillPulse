@@ -48,7 +48,7 @@ const ProductDetails = () => {
       } catch (error) {
         if (
           error?.response.data.isBlocked ||
-          error?.response.data.message == "token not found" 
+          error?.response.data.message == "token not found"
         ) {
           dispatch(logoutUser());
         }
@@ -115,7 +115,13 @@ const ProductDetails = () => {
     [magnifierPosition.x, magnifierPosition.y]
   );
 
-  const gotoDetails = (product) => dispatch(setProductDetails(product));
+  const gotoDetails = (product) => {
+    dispatch(setProductDetails(product));
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   const handleAddToCart = async () => {
     try {
