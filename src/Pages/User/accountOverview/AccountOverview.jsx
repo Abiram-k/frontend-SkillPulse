@@ -15,6 +15,7 @@ import { ChangePassword } from "@/Components/ChangePassword";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { showToast } from "@/Components/ToastNotification";
 
 const AccountOverview = () => {
   const user = useSelector((state) => state.users.user);
@@ -108,6 +109,7 @@ const AccountOverview = () => {
     (async () => {
       try {
         const response = await axios.get(`/user?id=${user._id}`);
+        console.log("PROFILE USER = ", user);
         setFirstName(response.data?.userData.firstName);
         setSecondName(response.data?.userData.lastName);
         setDateOfBirth(response.data?.userData.dateOfBirth);
@@ -134,7 +136,6 @@ const AccountOverview = () => {
       return;
     }
     try {
-      
       const formData = new FormData();
       formData.append("firstName", firstName);
       formData.append("lastName", secondName);
@@ -151,14 +152,15 @@ const AccountOverview = () => {
       });
       setSpinner(false);
       setProfileImage(response.data?.updatedUser);
-      Toast.fire({
-        icon: "success",
-        title: `${response.data?.message}`,
-      });
+      showToast("success", response.data?.message);
     } catch (error) {
       setSpinner(false);
-      alert(error.message);
-      console.log(error?.response?.data?.message);
+      if (
+        error?.response.data.isBlocked ||
+        error?.response.data.message == "token not found"
+      ) {
+        dispatch(logoutUser());
+      }
       Toast.fire({
         icon: "error",
         title: `${error?.response.data?.message || "Error occured"}`,

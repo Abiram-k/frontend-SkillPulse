@@ -22,7 +22,7 @@ const Wishlist = () => {
     (async () => {
       try {
         const response = await axios.get(`wishlist?user=${user._id}`);
-        setWishlist(response.data.wishlist);
+        setWishlist(response?.data.wishlist);
       } catch (error) {
         if (
           error?.response.data.isBlocked ||

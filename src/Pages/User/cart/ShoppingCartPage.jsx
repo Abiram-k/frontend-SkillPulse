@@ -30,11 +30,11 @@ const ShoppingCartPage = () => {
     (async () => {
       try {
         const response = await axios.get(`/cart/${user._id}`);
-        setCartItems(response.data.cartItems);
+        setCartItems(response?.data.cartItems);
       } catch (error) {
         if (
           error?.response.data.isBlocked ||
-          error?.response.data.message == "Token not found"
+          error?.response.data.message == "token not found"
         ) {
           dispatch(logoutUser());
         }
