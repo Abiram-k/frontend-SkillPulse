@@ -93,7 +93,6 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    window.location.reload()
     (async () => {
       try {
         const response = await axios.get("/products", {
