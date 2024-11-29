@@ -3,6 +3,7 @@ import axios from "@/axiosIntercepters/AxiosInstance";
 import { format } from "date-fns";
 
 import { useSelector } from "react-redux";
+import { logoutUser } from "@/redux/userSlice";
 const Wallet = () => {
   const [walletData, setWalletData] = useState({});
   const user = useSelector((state) => state.users.user);
@@ -14,6 +15,12 @@ const Wallet = () => {
         setWalletData(response.data.wallet);
         console.log("Wallet data : ", response.data.wallet);
       } catch (error) {
+        if (
+          error?.response.data.isBlocked ||
+          error?.response.data.message == "Token not found" 
+        ) {
+          dispatch(logoutUser());
+        }
         console.error(error);
       }
     })();

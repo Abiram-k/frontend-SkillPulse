@@ -101,7 +101,7 @@ const HomePage = () => {
       } catch (error) {
         if (
           error?.response.data.isBlocked ||
-          error?.response.data.message == "token not found"
+          error?.response.data.message == "Token not found" 
         ) {
           dispatch(logoutUser());
         }

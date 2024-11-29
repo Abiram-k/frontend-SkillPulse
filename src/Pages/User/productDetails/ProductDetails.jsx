@@ -47,6 +47,12 @@ const ProductDetails = () => {
             setIsAvailable(response.data.isAvailable);
           }
       } catch (error) {
+        if (
+          error?.response.data.isBlocked ||
+          error?.response.data.message == "Token not found" 
+        ) {
+          dispatch(logoutUser());
+        }
         console.log(error.message);
       }
     })();

@@ -27,7 +27,10 @@ const ManageOrders = () => {
         const response = await axios.get(`/order?id=${user._id}`);
         setOrders(response.data?.orderData);
       } catch (error) {
-        if (error?.response.data.isBlocked) {
+        if (
+          error?.response.data.isBlocked ||
+          error?.response.data.message == "Token not found" 
+        ) {
           dispatch(logoutUser());
         }
         console.log(error.message);

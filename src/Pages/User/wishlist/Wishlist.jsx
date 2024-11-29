@@ -24,7 +24,10 @@ const Wishlist = () => {
         const response = await axios.get(`wishlist?user=${user._id}`);
         setWishlist(response.data.wishlist);
       } catch (error) {
-        if (error?.response.data.isBlocked) {
+        if (
+          error?.response.data.isBlocked ||
+          error?.response.data.message == "Token not found" 
+        ) {
           dispatch(logoutUser());
         }
         Toast.fire({
@@ -33,7 +36,7 @@ const Wishlist = () => {
         });
       }
     })();
-  }, [trigger]);
+  }, [trigger,wishlist]);
 
   const handleDeleteItem = async (product) => {
     try {

@@ -173,16 +173,16 @@ const Checkout = () => {
         setAddresses(response.data.addresses);
         setSelectedAddress(response.data.selectedAddress);
       } catch (error) {
-        if (error?.response.data.isBlocked) {
+        if (
+          error?.response.data.isBlocked ||
+          error?.response.data.message == "Token not found" 
+        ) {
           dispatch(logoutUser());
-          Toast.fire({
-            icon: "error",
-            title: `${error?.response.data.message}`,
-          });
         }
         console.log(error);
       }
     })();
+    
   }, [user?._id, selectedAddressId, checkoutComplete]);
 
   const handleSelectedAddress = (selectedAddress) => {
