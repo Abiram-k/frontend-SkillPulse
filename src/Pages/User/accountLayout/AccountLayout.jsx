@@ -26,6 +26,7 @@ function AccountLayout() {
         const response = await axios.get(`/user?id=${user._id}`);
         setProfileImage(response.data?.userData.profileImage);
       } catch (error) {
+        console.log(error);
         console.log(error?.response?.data?.message ,"Error");
       }
     })();
