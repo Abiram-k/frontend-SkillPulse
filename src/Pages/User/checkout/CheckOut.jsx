@@ -193,10 +193,12 @@ const Checkout = () => {
     if (paymentMethod == "cod" && summary.checkoutTotal >= 5000) {
       showToast("error", "Cash on delivery is not applicable");
       return;
-    } else if (!selectedAddress) {
+    } 
+     if (!selectedAddress) {
       showToast("error", "Add an address");
       return;
     }
+
     try {
       const response = await axios.post(`/order/${user._id}`, cartItems, {
         params: {
