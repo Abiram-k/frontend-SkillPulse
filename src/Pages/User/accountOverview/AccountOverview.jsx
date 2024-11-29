@@ -43,7 +43,7 @@ const AccountOverview = () => {
       error.firstName = "Name must start with a charecter *";
     }
 
-    if (!isNaN(lastnameFirstCharecter)) {
+    if (!isNaN(lastnameFirstCharecter) && lastnameFirstCharecter.trim()) {
       error.lastName = "Last name must start with a charecter *";
     }
     if (!mobileNumber.trim())

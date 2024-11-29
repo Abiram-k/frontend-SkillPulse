@@ -91,7 +91,9 @@ const HomePage = () => {
       console.log(error);
     }
   };
-
+  useEffect(()=>{
+   window.location.reload();
+  },[])
   useEffect(() => {
     (async () => {
       try {
