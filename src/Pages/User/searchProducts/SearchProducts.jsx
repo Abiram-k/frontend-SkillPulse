@@ -15,7 +15,6 @@ const SearchProducts = () => {
     (async () => {
       try {
         const response = await axios.get("/products");
-        console.log("product from homepage:", products);
         setProducts(response.data.products);
         setCategory(response.data.category);
       } catch (error) {

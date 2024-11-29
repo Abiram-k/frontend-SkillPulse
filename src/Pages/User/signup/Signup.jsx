@@ -74,7 +74,6 @@ const Signup = () => {
 
     try {
       const formErrors = formValidate();
-      console.log("FormErrors: ", formErrors);
       if (Object.keys(formErrors).length > 0) {
         setMessage(formErrors);
         return;
@@ -97,7 +96,6 @@ const Signup = () => {
         );
 
         setSpinner(false);
-        console.log("Response data is:", response.data);
         if (response.status === 200) {
           dispatch(signUpSuccess(response.data.message));
           navigate("/otp");

@@ -109,8 +109,6 @@ const AccountOverview = () => {
     (async () => {
       try {
         const response = await axios.get(`/user?id=${user._id}`);
-        console.log("PROFILE USER = ", user);
-        console.log("RES PROFILE USER =", response.data?.userData.firstName);
         setFirstName(response.data?.userData.firstName);
         setSecondName(response.data?.userData.lastName);
         setDateOfBirth(response.data?.userData.dateOfBirth);

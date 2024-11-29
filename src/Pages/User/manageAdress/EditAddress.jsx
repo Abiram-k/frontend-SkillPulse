@@ -128,7 +128,6 @@ const EditAddress = () => {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
-        console.log(response.data);
         showToast("success",response.data.message)
         navigate("/user/profile/manageAddress");
       }
@@ -137,7 +136,7 @@ const EditAddress = () => {
         icon: "error",
         title: `${error?.response?.data.message}`,
       });
-      console.log(error, "<<<<<<<<<<<<<>>>>>>>>>>>>>>");
+      console.log(error);
     }
   };
 

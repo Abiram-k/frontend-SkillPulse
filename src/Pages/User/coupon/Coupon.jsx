@@ -4,7 +4,7 @@ const Coupon = () => {
   const [couponCode, setCouponCode] = useState("");
 
   const handleCouponSubmit = () => {
-    console.log("Coupon code:", couponCode);
+    // console.log("Coupon code:", couponCode);
   };
 
   return (

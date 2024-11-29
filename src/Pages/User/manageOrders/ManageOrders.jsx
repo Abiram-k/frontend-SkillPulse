@@ -47,7 +47,7 @@ const ManageOrders = () => {
 
       setRefresh((prev) => prev + 1);
     } catch (error) {
-      console.log(error, "ERROROROOROROROR");
+      console.log(error);
       Toast.fire({
         icon: "error",
         title: `${error?.response?.data.message}`,

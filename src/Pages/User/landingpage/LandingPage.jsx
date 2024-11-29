@@ -21,7 +21,6 @@ const LandingPage = () => {
     (async () => {
       try {
         const response = await axios.get("/products");
-        console.log("fdsfasdfasdf", response.data.products);
         setProducts(response.data?.products);
         setCategories(response.data?.categoryDoc);
       } catch (error) {
@@ -177,21 +176,25 @@ const LandingPage = () => {
           })`,
         }}
       >
-        <div className="ps-12 bg-opacity-60  rounded-lg font-mono">
-          <h2 className="text-3xl font-bold text-white">
+        <div className="px-4 sm:px-8 md:px-12 lg:px-20 xl:px-32 bg-opacity-60 rounded-lg font-mono bg-black/50">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-center lg:text-left">
             FireStrike Joystick – Unleash Precision Control
           </h2>
-          <p className="mt-4 text-gray-300 font-semibold">
+          <p className="mt-4 text-gray-300 font-semibold text-center lg:text-left">
             The FireStrike Joystick is engineered for gamers who crave
-            <br />
+            <br className="hidden lg:block" />
             precision, control, and immersive gameplay.
           </p>
-          <ul className="mt-4 space-y-2 text-gray-300">
-            <li>Solo Pro wireless joystick</li>
-            <li>Carrying Case</li>
-            <li>Lightning to USB-A charging cable</li>
-            <li>Quick Start Guide</li>
-            <li>Warranty Cart</li>
+          <ul className="mt-4 space-y-2 text-gray-300 text-sm sm:text-base md:text-lg">
+            <li className="text-center lg:text-left">
+              Solo Pro wireless joystick
+            </li>
+            <li className="text-center lg:text-left">Carrying Case</li>
+            <li className="text-center lg:text-left">
+              Lightning to USB-A charging cable
+            </li>
+            <li className="text-center lg:text-left">Quick Start Guide</li>
+            <li className="text-center lg:text-left">Warranty Cart</li>
           </ul>
         </div>
       </section>

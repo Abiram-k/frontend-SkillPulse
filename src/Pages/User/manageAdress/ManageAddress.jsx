@@ -16,7 +16,6 @@ const ManageAddress = () => {
     (async () => {
       try {
         const response = await axios.get(`/address?id=${user?._id}`);
-        console.log(response.data);
         setAddresses(response.data.addresses);
       } catch (error) {
         if (
@@ -33,7 +32,6 @@ const ManageAddress = () => {
   const handleDeleteAddress = async (id) => {
     try {
       const response = await axios.delete(`/address?id=${id}`);
-      console.log(response.data);
       showToast("success", response.data.message);
     } catch (error) {
       console.log(error);

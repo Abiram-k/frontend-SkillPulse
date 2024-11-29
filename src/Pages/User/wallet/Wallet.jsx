@@ -13,7 +13,6 @@ const Wallet = () => {
       try {
         const response = await axios.get(`/wallet/${user._id}`);
         setWalletData(response.data.wallet);
-        console.log("Wallet data : ", response.data.wallet);
       } catch (error) {
         if (
           error?.response.data.isBlocked ||

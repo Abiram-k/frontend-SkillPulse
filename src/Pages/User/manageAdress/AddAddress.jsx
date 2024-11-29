@@ -95,7 +95,6 @@ const AddAddress = () => {
       const response = await axios.post(`/address?id=${user?._id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(response.data);
 
       showToast("success",response.data.message)
      

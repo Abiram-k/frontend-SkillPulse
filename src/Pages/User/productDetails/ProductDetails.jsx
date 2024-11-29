@@ -18,7 +18,6 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.users.details);
   const user = useSelector((state) => state.users.user);
-  console.log(product, "From product details page");
 
   const [goToCart, setGoToCart] = useState(false);
   const [cartProduct, setCartProduct] = useState([]);

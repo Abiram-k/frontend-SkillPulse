@@ -105,7 +105,6 @@ const Shop = () => {
   const fetchWishlist = async () => {
     try {
       const response = await axios.get(`/wishlist?user=${user._id}`);
-      console.log(response.data.wishlist[0]);
       const uniqueWishlistItems = [
         ...new Set(
           response.data.wishlist[0].products.map(
@@ -116,8 +115,7 @@ const Shop = () => {
       uniqueWishlistItems.forEach((id) => {
         setWishlistItems((prev) => [...prev, id]);
       });
-      // dispatch(removefromWishlist());
-      console.log("Wishlist Items : ", response.data.wishlist);
+      
     } catch (error) {
       console.error(
         "Error fetching wishlist:",

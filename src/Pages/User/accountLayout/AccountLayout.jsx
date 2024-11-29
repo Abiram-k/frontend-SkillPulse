@@ -26,7 +26,12 @@ function AccountLayout() {
         const response = await axios.get(`/user?id=${user._id}`);
         setProfileImage(response.data?.userData.profileImage);
       } catch (error) {
-        console.log(error);
+        if (
+          error?.response.data.isBlocked ||
+          error?.response.data.message == "token not found"
+        ) {
+          dispatch(logoutUser());
+        }
         console.log(error?.response?.data?.message ,"Error");
       }
     })();

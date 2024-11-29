@@ -80,7 +80,6 @@ const Razorpay = ({
     }
 
     if (isAddressSelected?.firstName || retry) {
-      console.log("Opening Razorpay instance");
       razorpayInstance.open();
     } else {
       alert("Order failed");

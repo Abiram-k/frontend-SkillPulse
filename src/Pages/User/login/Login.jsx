@@ -41,14 +41,12 @@ function Login() {
     e.preventDefault();
     setMessage({});
     const errors = formValidate();
-    console.log("Error object for validation:", errors);
 
     if (Object.keys(errors).length > 0) {
       setMessage(errors);
       return;
     }
     try {
-      console.log(email, password, referralCode)
       const response = await axios.post("/login", {
         email,
         password,

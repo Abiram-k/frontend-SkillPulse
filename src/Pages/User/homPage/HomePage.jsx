@@ -21,6 +21,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/Components/ui/carousel.jsx";
+import { showToast } from "@/Components/ToastNotification";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -106,10 +107,7 @@ const HomePage = () => {
         ) {
           dispatch(logoutUser());
         }
-        Toast.fire({
-          icon: "error",
-          title: `${error?.response?.data.message}`,
-        });
+        showToast("error",error?.response?.data.message)
         console.log(error.message);
       }
       try {
