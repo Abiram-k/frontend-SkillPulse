@@ -55,7 +55,10 @@ const HomePage = () => {
         "Error fetching wishlist:",
         error.response || error.message
       );
-      if (error?.response.data.isBlocked) {
+      if (
+        error?.response.data.isBlocked ||
+        error?.response.data.message == "token not found"
+      ) {
         dispatch(logoutUser());
       }
       Toast.fire({
@@ -101,12 +104,7 @@ const HomePage = () => {
         setProducts(response.data.products);
         setCategory(response.data.categoryDoc);
       } catch (error) {
-        if (
-          error?.response.data.isBlocked ||
-          error?.response.data.message == "token not found"
-        ) {
-          dispatch(logoutUser());
-        }
+       
         showToast("error",error?.response?.data.message)
         console.log(error.message);
       }

@@ -41,6 +41,7 @@ const Razorpay = ({
       description: "Skill Pulse Order Transaction",
       handler: async (response) => {
         try {
+          
           const res = await axios.post(
             "/verify-payment",
             {
@@ -59,6 +60,7 @@ const Razorpay = ({
         } catch (error) {
           alert("Payment verification failed. Please try again.");
         }
+
       },
       prefill: {
         name: "Abiram k",
