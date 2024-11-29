@@ -139,9 +139,30 @@ function UserLayout() {
           <div className="text-center w-1/2 md:w-auto">
             <h3 className="font-bold">FOLLOW US</h3>
             <div className="flex justify-center space-x-4 mt-2">
-              <i className="fab fa-facebook-f"></i>
-              <i className="fab fa-instagram"></i>
-              <i className="fab fa-linkedin-in"></i>
+              <a
+                href="https://www.linkedin.com/in/abiram-k-711358248"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-blue-600"
+              >
+                <i className="fab fa-facebook-f"></i>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/abiram-k-711358248"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-pink-600"
+              >
+                <i className="fab fa-instagram"></i>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/abiram-k-711358248"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-blue-500"
+              >
+                <i className="fab fa-linkedin-in"></i>
+              </a>
             </div>
           </div>
 
