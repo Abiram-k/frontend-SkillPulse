@@ -91,10 +91,9 @@ const HomePage = () => {
       console.log(error);
     }
   };
-  useEffect(()=>{
-   window.location.reload();
-  },[])
+
   useEffect(() => {
+    window.location.reload()
     (async () => {
       try {
         const response = await axios.get("/products", {
