@@ -18,6 +18,7 @@ import {
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
+  const [spinner, setSpinner] = useState(false);
   const [brand, setBrand] = useState([]);
   const [filter, setFilter] = useState({
     category: "",
@@ -79,17 +80,24 @@ const Shop = () => {
   const handleAddToWishList = async (product) => {
     setTrigger((prev) => prev + 1);
     try {
+      setSpinner(true);
       await addToWishList(product, user, dispatch);
+      setSpinner(false);
     } catch (error) {
+      setSpinner(false);
       console.log(error);
     }
   };
 
   const handleRemoveFromWishlist = async (product) => {
     try {
+      setSpinner(true);
       await removeFromWishlist(product, user, dispatch);
       setTrigger((prev) => prev + 1);
+      window.location.reload();
+      setSpinner(false);
     } catch (error) {
+      setSpinner(false);
       console.log(error);
     }
   };
@@ -122,6 +130,11 @@ const Shop = () => {
   };
   return (
     <div>
+      {spinner && (
+        <div className="spinner-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <div
         className="py-8 bg-cover bg-center mb-10 w-full h-96 md:h-[500px] lg:h-[600px] relative"
         style={{
@@ -141,7 +154,7 @@ const Shop = () => {
           </h1>
         </div>
       </div>
-     
+
       <div className="filters grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 bg-gray-950 rounded-lg shadow-lg border-b-2 border-t-2 border-gray-800 mb-10">
         <div>
           <p className="font-bold text-2xl mb-4">Category</p>

@@ -108,8 +108,10 @@ const AccountOverview = () => {
   useEffect(() => {
     (async () => {
       try {
+        alert("hey");
         const response = await axios.get(`/user?id=${user._id}`);
         console.log("PROFILE USER = ", user);
+        console.log("RES PROFILE USER =", response.data?.userData.firstName);
         setFirstName(response.data?.userData.firstName);
         setSecondName(response.data?.userData.lastName);
         setDateOfBirth(response.data?.userData.dateOfBirth);
@@ -119,7 +121,10 @@ const AccountOverview = () => {
         setProfileImage(response.data?.userData.profileImage);
         setRefferal(response.data?.userData.referralCode);
       } catch (error) {
-        if (error?.response.data?.isBlocked) {
+        if (
+          error?.response.data.isBlocked ||
+          error?.response.data.message == "token not found"
+        ) {
           dispatch(logoutUser());
         }
         console.log(error?.response?.data?.message);
@@ -152,15 +157,10 @@ const AccountOverview = () => {
       });
       setSpinner(false);
       setProfileImage(response.data?.updatedUser);
-      showToast("success", response.data?.message);
+      showToast("success", response?.data?.message);
     } catch (error) {
       setSpinner(false);
-      if (
-        error?.response.data.isBlocked ||
-        error?.response.data.message == "token not found"
-      ) {
-        dispatch(logoutUser());
-      }
+
       Toast.fire({
         icon: "error",
         title: `${error?.response.data?.message || "Error occured"}`,

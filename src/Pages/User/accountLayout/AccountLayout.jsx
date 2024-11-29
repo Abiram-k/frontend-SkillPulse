@@ -23,14 +23,14 @@ function AccountLayout() {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(`/user/${user._id}`);
+        const response = await axios.get(`/user?id=${user._id}`);
         setProfileImage(response.data?.userData.profileImage);
       } catch (error) {
-        console.log(error?.response?.data?.message);
+        console.log(error?.response?.data?.message ,"Error");
       }
     })();
   }, []);
-  
+
   return (
     <div className="min-h-screen text-white ">
       <div className="container mx-auto p-4">
@@ -69,11 +69,10 @@ function AccountLayout() {
                 >
                   {profileImage ? (
                     <img
-                    aria-disabled
+                      aria-disabled
                       src={profileImage}
                       alt="Profile"
                       className="w-full h-full object-cover cursor-default"
-                      
                     />
                   ) : (
                     <User className="w-6 h-6 text-gray-800" />

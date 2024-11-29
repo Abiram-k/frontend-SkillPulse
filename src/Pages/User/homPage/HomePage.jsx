@@ -85,6 +85,7 @@ const HomePage = () => {
     try {
       await removeFromWishlist(product, user, dispatch);
       setTrigger((prev) => prev + 1);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -101,7 +102,7 @@ const HomePage = () => {
       } catch (error) {
         if (
           error?.response.data.isBlocked ||
-          error?.response.data.message == "Token not found" 
+          error?.response.data.message == "token not found"
         ) {
           dispatch(logoutUser());
         }
