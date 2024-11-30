@@ -57,8 +57,8 @@ function Login() {
         dispatch(addUser(response.data.user));
         setMessage({ response: response?.data?.message });
         navigate("/user/home");
+        window.location.reload();
       }
-
     } catch (err) {
       setMessage({ response: err?.response?.data?.message });
     }
@@ -91,7 +91,7 @@ function Login() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 lg:ps-10 ">
       <h1 className="text-white text-3xl lg:text-6xl mb-6 lg:mb-10">
-        SKILL PULSE 
+        SKILL PULSE
       </h1>
       {message.response && <Notification message={message.response} />}
       <div
@@ -109,7 +109,11 @@ function Login() {
           <h2 className="text-white text-2xl text-center mb-6 font-bold tracking-wide">
             LOGIN
           </h2>
-          <form className="space-y-4" onSubmit={handleLogin} style={{fontFamily:"Montserrat"}}>
+          <form
+            className="space-y-4"
+            onSubmit={handleLogin}
+            style={{ fontFamily: "Montserrat" }}
+          >
             <div>
               <input
                 type="email"
@@ -118,7 +122,11 @@ function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="p-2 rounded w-full bg-gray-800 text-white border-b-2 border-gray-600 focus:outline-none"
               />
-              {message.email && <p className="error text-red-500 text-sm mt-1">{message.email}</p>}
+              {message.email && (
+                <p className="error text-red-500 text-sm mt-1">
+                  {message.email}
+                </p>
+              )}
             </div>
             <div>
               <input
@@ -129,7 +137,9 @@ function Login() {
                 className="rounded p-2 w-full bg-gray-800 text-white border-b-2 border-gray-600 focus:outline-none"
               />
               {message.password && (
-                <p className="error text-red-500 text-sm mt-1">{message.password}</p>
+                <p className="error text-red-500 text-sm mt-1">
+                  {message.password}
+                </p>
               )}
             </div>
             <div>
@@ -141,7 +151,9 @@ function Login() {
                 className="rounded p-2 w-full bg-gray-800 text-white border-b-2 border-gray-600 focus:outline-none"
               />
               {message.referralCode && (
-                <p className="error text-red-500 text-sm mt-1">{message.referralCode}</p>
+                <p className="error text-red-500 text-sm mt-1">
+                  {message.referralCode}
+                </p>
               )}
             </div>
             <div className="flex justify-center">
@@ -153,7 +165,10 @@ function Login() {
               </button>
             </div>
           </form>
-          <div className="text-center mt-4"  style={{fontFamily:"Montserrat"}}>
+          <div
+            className="text-center mt-4"
+            style={{ fontFamily: "Montserrat" }}
+          >
             <Link
               to="/verifyEmail"
               className="text-gray-400 text-sm hover:underline block mb-2"
@@ -205,4 +220,3 @@ function Login() {
 }
 
 export default Login;
-

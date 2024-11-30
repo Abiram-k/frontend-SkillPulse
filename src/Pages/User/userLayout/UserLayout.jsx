@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import paymentTag from "../../../assets/paymentTags.png";
 import { BadgeDemo } from "@/Components/BadgeDemo";
@@ -6,7 +6,6 @@ import { BadgeDemo } from "@/Components/BadgeDemo";
 function UserLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-
   return (
     <>
       <div className="bg-[#1C1C1C] text-white p-4 flex justify-between items-center sticky top-0 z-50 ">
