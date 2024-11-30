@@ -67,8 +67,8 @@ const Checkout = () => {
   const calculations = () => {
 
     const calcs = {};
-    calcs.totalItems = checkoutItems.products.reduce(
-      (acc, item) => acc + +(item.quantity),
+    calcs.totalItems = checkoutItems[0]?.products?.reduce(
+      (acc, item) => acc + item.quantity,
       0
     );
 
