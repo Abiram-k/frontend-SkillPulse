@@ -94,15 +94,18 @@ const Checkout = () => {
   };
 
   const offerPrice = (couponAmount = 0, couponType) => {
+    const basePrice = 
+      checkoutItems[0]?.totalDiscount !== 0
+        ? checkoutItems[0]?.totalDiscount 
+        : checkoutItems[0]?.grandTotal;
+  
     const totalPrice = Math.abs(
-      checkoutItems[0]?.totalDiscount || checkoutItems[0]?.grandTotal
+      basePrice + calculateGST(gstRate) + calculateDeliveryCharge() - couponAmount
     );
-
-    const gstRate = 18;
-    const total =
-      totalPrice + calculateGST(gstRate) + calculateDeliveryCharge();
-    return total;
+  
+    return totalPrice;
   };
+  
   const handleCouponDelete = async () => {
     try {
       const response = await axiosInstance.patch(
