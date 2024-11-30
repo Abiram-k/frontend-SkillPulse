@@ -139,7 +139,7 @@ const Checkout = () => {
       try {
         const response = await axios.get(`/cart/${user._id}`);
         setCartItems(response.data.cartItems);
-        console.log("CART ITEMS :",cartItems);
+        console.log("CART ITEMS :",response.data.cartItems);
       } catch (error) {
         if (error?.response.data.isBlocked) {
           dispatch(logoutUser());
