@@ -94,16 +94,19 @@ const Checkout = () => {
   };
 
   const offerPrice = (couponAmount = 0, couponType) => {
-    const basePrice = 
+    const basePrice =
       cartItems[0]?.totalDiscount !== 0
-        ? cartItems[0]?.totalDiscount 
+        ? cartItems[0]?.totalDiscount
         : cartItems[0]?.grandTotal;
-  
-        const gstRate = 18;
+
+    const gstRate = 18;
     const totalPrice = Math.abs(
-      basePrice + calculateGST(gstRate) + calculateDeliveryCharge() - couponAmount
+      basePrice +
+        calculateGST(gstRate) +
+        calculateDeliveryCharge() -
+        couponAmount
     );
-  
+
     return totalPrice;
   };
   const handleCouponDelete = async () => {
@@ -142,7 +145,7 @@ const Checkout = () => {
       try {
         const response = await axios.get(`/cart/${user._id}`);
         setCartItems(response.data.cartItems);
-        console.log("CART ITEMS :",response.data.cartItems);
+        console.log("CART ITEMS :", response.data.cartItems);
       } catch (error) {
         if (error?.response.data.isBlocked) {
           dispatch(logoutUser());
@@ -198,7 +201,13 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = async (paymentFailed) => {
-    if (paymentMethod == "cod" && summary.checkoutTotal >= 5000) {
+    if (
+      paymentMethod == "cod" &&
+      offerPrice(
+        cartItems[0]?.appliedCoupon?.couponAmount,
+        cartItems[0]?.appliedCoupon?.couponType
+      ) >= 5000
+    ) {
       showToast("error", "Cash on delivery is not applicable");
       return;
     }
@@ -422,10 +431,11 @@ const Checkout = () => {
                         }`}
                       >
                         {" "}
-                        ₹ { (offerPrice(
+                        ₹{" "}
+                        {offerPrice(
                           cartItems[0]?.appliedCoupon?.couponAmount,
                           cartItems[0]?.appliedCoupon?.couponType
-                        ).toFixed() )}
+                        ).toFixed()}
                       </span>
                     </p>
                     {walletData.totalAmount <
