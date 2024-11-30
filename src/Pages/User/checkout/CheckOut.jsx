@@ -35,7 +35,7 @@ const Checkout = () => {
 
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
-
+  console.log(checkoutItems);
   const totalPrice = () => {
     return cartItems[0]?.products.reduce(
       (acc, item) => acc + item.product?.salesPrice * item.quantity,
