@@ -65,7 +65,6 @@ const Checkout = () => {
   };
 
   const calculations = () => {
-
     const calcs = {};
     calcs.totalItems = checkoutItems[0]?.products?.reduce(
       (acc, item) => acc + item.quantity,
@@ -73,7 +72,7 @@ const Checkout = () => {
     );
 
     calcs.totalPrice =
-    checkoutItems[0]?.totalDiscount === 0
+      checkoutItems[0]?.totalDiscount === 0
         ? checkoutItems[0]?.grandTotal
         : checkoutItems[0]?.totalDiscount;
 
@@ -409,16 +408,27 @@ const Checkout = () => {
                       Product Amount :
                       <span
                         className={`${
-                          walletData.totalAmount < summary.checkoutTotal
+                          walletData.totalAmount <
+                          offerPrice(
+                            cartItems[0]?.appliedCoupon?.couponAmount,
+                            cartItems[0]?.appliedCoupon?.couponType
+                          ).toFixed()
                             ? "text-red-600"
                             : "text-green-500"
                         }`}
                       >
                         {" "}
-                        ₹ {Math.round(summary.checkoutTotal)}
+                        ₹ { (offerPrice(
+                          cartItems[0]?.appliedCoupon?.couponAmount,
+                          cartItems[0]?.appliedCoupon?.couponType
+                        ).toFixed() )}
                       </span>
                     </p>
-                    {walletData.totalAmount < summary.checkoutTotal && (
+                    {walletData.totalAmount <
+                      offerPrice(
+                        cartItems[0]?.appliedCoupon?.couponAmount,
+                        cartItems[0]?.appliedCoupon?.couponType
+                      ).toFixed() && (
                       <p className="text-red-600">
                         Insufficient wallet balance, Try different payment
                         method !
@@ -438,7 +448,11 @@ const Checkout = () => {
                   onClick={handlePlaceOrder}
                   disabled={
                     paymentMethod == "wallet" &&
-                    walletData.totalAmount < summary.checkoutTotal
+                    walletData.totalAmount <
+                      offerPrice(
+                        cartItems[0]?.appliedCoupon?.couponAmount,
+                        cartItems[0]?.appliedCoupon?.couponType
+                      ).toFixed()
                   }
                 >
                   Place order
