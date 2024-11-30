@@ -35,12 +35,14 @@ const Checkout = () => {
 
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
+
   const totalPrice = () => {
     return cartItems[0]?.products.reduce(
       (acc, item) => acc + item.product?.salesPrice * item.quantity,
       0
     );
   };
+
   const calculateDeliveryCharge = () => {
     if (totalPrice() < 14999) return Math.round((2 / 100) * totalPrice());
     else return 0;
@@ -63,13 +65,17 @@ const Checkout = () => {
   };
 
   const calculations = () => {
+
     const calcs = {};
     calcs.totalItems = checkoutItems.reduce(
       (acc, item) => acc + item.quantity,
       0
     );
 
-    calcs.totalPrice = cartItems[0]?.totalDiscount || cartItems[0]?.grandTotal;
+    calcs.totalPrice = cartItems[0]?.totalDiscount === 0 
+    ? cartItems[0]?.grandTotal 
+    : cartItems[0]?.totalDiscount;
+
 
     if (calcs?.totalPrice < 1000)
       calcs.deliveryCharge = Math.round((2 / 100) * calcs.totalPrice);
@@ -243,7 +249,7 @@ const Checkout = () => {
               cartItems[0].products.map((item) => (
                 <div
                   className="flex items-start space-x-4 mb-8"
-                  key={item.product._id}
+                  key={item.product?._id}
                 >
                   <img
                     src={
@@ -395,7 +401,7 @@ const Checkout = () => {
                       <span className="text-green-500">
                         {" "}
                         ₹{" "}
-                        {walletData.totalAmount ? walletData.totalAmount : "0"}
+                        {walletData.totalAmount ? (walletData.totalAmount).toFixed(2) : "0"}
                       </span>
                     </p>
                     <p>
@@ -456,7 +462,7 @@ const Checkout = () => {
             </div>
           </div>
           <div className="w-full md:w-80 ">
-            <div className="bg-red-600 text-center text-white p-4 rounded mb-4 none lg:block">
+            <div className="bg-red-600 text-center text-white p-4 rounded mb-4 hidden lg:block">
               Checkout Details
             </div>
             <div className="bg-pink-50 text-black p-6 rounded">
