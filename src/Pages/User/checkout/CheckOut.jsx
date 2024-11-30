@@ -95,9 +95,9 @@ const Checkout = () => {
 
   const offerPrice = (couponAmount = 0, couponType) => {
     const basePrice = 
-      checkoutItems[0]?.totalDiscount !== 0
-        ? checkoutItems[0]?.totalDiscount 
-        : checkoutItems[0]?.grandTotal;
+      cartItems[0]?.totalDiscount !== 0
+        ? cartItems[0]?.totalDiscount 
+        : cartItems[0]?.grandTotal;
   
         const gstRate = 18;
     const totalPrice = Math.abs(
