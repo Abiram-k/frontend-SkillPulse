@@ -20,7 +20,7 @@ const Breadcrumbs = () => {
     return null;
   }
   return (
-    <div className="breadcrumbs mt-20 ms-5 z-30 absolute text-white font-semibold">
+    <div className="breadcrumbs mt-16 lg:mt-20 ms-5 z-30 absolute text-white font-semibold ">
       {pathnames.length > 0 && (
         <Link to="/user/home" className="border-b- border-orange-500">
           Home

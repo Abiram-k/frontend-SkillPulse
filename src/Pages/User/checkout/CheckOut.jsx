@@ -456,7 +456,7 @@ const Checkout = () => {
             </div>
           </div>
           <div className="w-full md:w-80 ">
-            <div className="bg-red-600 text-center text-white p-4 rounded mb-4">
+            <div className="bg-red-600 text-center text-white p-4 rounded mb-4 none lg:block">
               Checkout Details
             </div>
             <div className="bg-pink-50 text-black p-6 rounded">
