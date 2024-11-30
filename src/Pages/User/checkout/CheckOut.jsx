@@ -65,16 +65,17 @@ const Checkout = () => {
   };
 
   const calculations = () => {
+
     const calcs = {};
-    calcs.totalItems = checkoutItems.reduce(
-      (acc, item) => acc + item.quantity,
+    calcs.totalItems = checkoutItems.products.reduce(
+      (acc, item) => acc + +(item.quantity),
       0
     );
 
     calcs.totalPrice =
-      cartItems[0]?.totalDiscount === 0
-        ? cartItems[0]?.grandTotal
-        : cartItems[0]?.totalDiscount;
+    checkoutItems[0]?.totalDiscount === 0
+        ? checkoutItems[0]?.grandTotal
+        : checkoutItems[0]?.totalDiscount;
 
     if (calcs?.totalPrice < 1000)
       calcs.deliveryCharge = Math.round((2 / 100) * calcs.totalPrice);
@@ -95,7 +96,7 @@ const Checkout = () => {
 
   const offerPrice = (couponAmount = 0, couponType) => {
     const totalPrice = Math.abs(
-      cartItems[0]?.totalDiscount || cartItems[0]?.grandTotal
+      checkoutItems[0]?.totalDiscount || checkoutItems[0]?.grandTotal
     );
 
     const gstRate = 18;
