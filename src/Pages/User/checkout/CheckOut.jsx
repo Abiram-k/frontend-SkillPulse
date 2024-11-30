@@ -65,17 +65,16 @@ const Checkout = () => {
   };
 
   const calculations = () => {
-
     const calcs = {};
     calcs.totalItems = checkoutItems.reduce(
       (acc, item) => acc + item.quantity,
       0
     );
 
-    calcs.totalPrice = cartItems[0]?.totalDiscount === 0 
-    ? cartItems[0]?.grandTotal 
-    : cartItems[0]?.totalDiscount;
-
+    calcs.totalPrice =
+      cartItems[0]?.totalDiscount === 0
+        ? cartItems[0]?.grandTotal
+        : cartItems[0]?.totalDiscount;
 
     if (calcs?.totalPrice < 1000)
       calcs.deliveryCharge = Math.round((2 / 100) * calcs.totalPrice);
@@ -110,10 +109,10 @@ const Checkout = () => {
         `/cartCouponRemove/${user._id}`
       );
       setTrigger((prev) => prev + 1);
-      showToast("success",`${response.data.message}`)
+      showToast("success", `${response.data.message}`);
     } catch (error) {
       console.log(error);
-      showToast("error",`${error?.response?.data.message}`)
+      showToast("error", `${error?.response?.data.message}`);
     }
   };
   const handleGetSelectedCoupons = async (
@@ -139,7 +138,7 @@ const Checkout = () => {
     (async () => {
       try {
         const response = await axios.get(`/cart/${user._id}`);
-        setCartItems(response.data.cartItems); 
+        setCartItems(response.data.cartItems);
       } catch (error) {
         if (error?.response.data.isBlocked) {
           dispatch(logoutUser());
@@ -161,7 +160,7 @@ const Checkout = () => {
       }
     })();
     const calcs = calculations();
-
+    console.log(calcs, "CALCS");
     if (Object.keys(calcs).length > 0) {
       setSummary(calculations());
       return;
@@ -188,7 +187,6 @@ const Checkout = () => {
         console.log(error);
       }
     })();
-    
   }, [user?._id, selectedAddressId, checkoutComplete]);
 
   const handleSelectedAddress = (selectedAddress) => {
@@ -199,8 +197,8 @@ const Checkout = () => {
     if (paymentMethod == "cod" && summary.checkoutTotal >= 5000) {
       showToast("error", "Cash on delivery is not applicable");
       return;
-    } 
-     if (!selectedAddress) {
+    }
+    if (!selectedAddress) {
       showToast("error", "Add an address");
       return;
     }
@@ -401,7 +399,9 @@ const Checkout = () => {
                       <span className="text-green-500">
                         {" "}
                         ₹{" "}
-                        {walletData.totalAmount ? (walletData.totalAmount).toFixed(2) : "0"}
+                        {walletData.totalAmount
+                          ? walletData.totalAmount.toFixed(2)
+                          : "0"}
                       </span>
                     </p>
                     <p>
@@ -490,7 +490,7 @@ const Checkout = () => {
                   <span>GST Amount (18%)</span>
                   <span>{calculateGST(18)} ₹</span>
                 </div>
-               
+
                 {cartItems[0]?.appliedCoupon && (
                   <div className="flex justify-between">
                     <div className="flex gap-2 items-center">
@@ -515,14 +515,12 @@ const Checkout = () => {
                       <span className="text-sm font-mono">Saved Amount </span>{" "}
                       <span className="text-green-500">
                         -
-                        {
-                          Math.round(
-                            parseFloat(
-                              cartItems[0]?.grandTotal -
-                                cartItems[0]?.totalDiscount
-                            )
+                        {Math.round(
+                          parseFloat(
+                            cartItems[0]?.grandTotal -
+                              cartItems[0]?.totalDiscount
                           )
-                        }
+                        )}
                       </span>
                     </div>
                     <div className="flex justify-between font-bold pt-3 border-t border-gray-200">
