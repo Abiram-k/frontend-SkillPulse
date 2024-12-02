@@ -29,14 +29,14 @@ const ManageOrders = () => {
       } catch (error) {
         if (
           error?.response.data.isBlocked ||
-          error?.response.data.message == "token not found" 
+          error?.response.data.message == "token not found"
         ) {
           dispatch(logoutUser());
         }
         console.log(error.message);
       }
     })();
-  }, [refresh,orders]);
+  }, [refresh, orders]);
 
   const handleCancelOrder = async (item) => {
     try {
@@ -96,9 +96,13 @@ const ManageOrders = () => {
     : orders;
 
   const handlePlaceOrder = async (paymentFailed, orderId) => {
+    alert(paymentFailed);
+    alert(orderId);
+
     const orderForRetry = orders?.filter(
       (order, index) => order?._id.toString() == orderId
     );
+    
     try {
       const response = await axios.post(
         `/order/${user._id}`,

@@ -49,6 +49,7 @@ const Razorpay = ({
               orderId: response.razorpay_order_id,
               signature: response.razorpay_signature,
               actuallOrder: orderId,
+              retry
             },
             {
               headers: {
@@ -56,6 +57,7 @@ const Razorpay = ({
               },
             }
           );
+          alert("SDFSDF")
           handlePlaceOrder(false, orderId);
         } catch (error) {
           alert("Payment verification failed. Please try again.");

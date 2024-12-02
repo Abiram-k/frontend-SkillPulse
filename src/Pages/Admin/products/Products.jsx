@@ -15,6 +15,7 @@ function Products() {
   const [currentPage, setCurrentPage] = useState(1);
   const [postPerPage, setPostPerPage] = useState(5);
   const [filterProduct, setFilterProduct] = useState("All");
+  const [spinner, setSpinner] = useState(false);
   const searchFocus = useRef(null);
   const { setData } = useContext(context);
   const dispatch = useDispatch();
@@ -29,13 +30,16 @@ function Products() {
     setData(product);
   };
   useEffect(() => {
+    setSpinner(true);
     (async () => {
       try {
         const response = await axios.get(
           `/admin/product?filter=${filterProduct}`
         );
         setProducts(response.data.products);
+        setSpinner(false);
       } catch (error) {
+        setSpinner(false);
         if (
           error?.response.data.message == "Token not found" ||
           error?.response.data.message == "Failed to authenticate Admin"
@@ -84,21 +88,25 @@ function Products() {
     }
   };
   const handleDelete = async (id) => {
+    setSpinner(true);
     const result = confirm("Are you sure to delete this product");
     try {
       if (result) {
         const response = await axios.delete(`/admin/product/${id}`);
+        setSpinner(false);
         Toast.fire({
           icon: "success",
           title: `${response.data.message}`,
         });
       } else {
+        setSpinner(false);
         Toast.fire({
           icon: "success",
           title: `Cancelled the deletion`,
         });
       }
     } catch (error) {
+      setSpinner(false);
       Toast.fire({
         icon: "success",
         title: `${response.data.message}`,
@@ -125,6 +133,11 @@ function Products() {
 
   return (
     <>
+      {spinner && (
+        <div className="spinner-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <Link
         className="bg-green-500 text-white px-4 py-2 rounded mb-4 block sm:inline-block"
         to="add"

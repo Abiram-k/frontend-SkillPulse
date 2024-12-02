@@ -287,7 +287,7 @@ const ShoppingCartPage = () => {
                     )}{" "}
                     Items
                   </span>
-                  <span>{totalPrice() || 0} ₹</span>
+                  <span>{Math.round(totalPrice()) || 0} ₹</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Delivery Charges</span>
@@ -321,11 +321,11 @@ const ShoppingCartPage = () => {
                       <span className="text-sm">Saved Amount</span>
                       <span className="text-green-500">
                         -
-                        {cartTotalPrice() -
+                        {Math.round(cartTotalPrice() -
                           offerPrice(
                             cartItems[0]?.appliedCoupon?.couponAmount,
                             cartItems[0]?.appliedCoupon?.couponType
-                          ).toFixed()}
+                          ))}
                       </span>
                     </div>
                     <div className="flex justify-between font-bold pt-3 border-t border-gray-200">

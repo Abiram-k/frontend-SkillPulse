@@ -9,13 +9,19 @@ import { logoutAdmin } from "@/redux/adminSlice";
 export default function Dashboard() {
   const [recentSales, setRecentSales] = useState([]);
   const [filter, setFilter] = useState("Yearly");
+  const [spinner, setSpinner] = useState(false);
+
   const dispatch = useDispatch();
+
   useEffect(() => {
+    setSpinner(true);
     (async () => {
       try {
         const response = await axios.get(`/admin/recentSales?filter=${filter}`);
         setRecentSales(response.data.orders);
+        setSpinner(false);
       } catch (error) {
+        setSpinner(false);
         console.log(error?.response?.data?.message);
         if (
           error?.response.data.message == "Token not found" ||
@@ -106,6 +112,11 @@ export default function Dashboard() {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {spinner && (
+          <div className="spinner-overlay">
+            <div className="spinner"></div>
+          </div>
+        )}
         <StatsCard
           title="Total Sales"
           value={recentSales.reduce(

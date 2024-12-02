@@ -11,7 +11,6 @@ function GoogleAuthComponent() {
     const fetchUserData = async () => {
       try {
         const response = await axios.get("/googleUser");
-        console.log(response.data, "LKJHGFGHJJHGHJ");
         dispatch(
           addUser({
             isLoggedIn: true,

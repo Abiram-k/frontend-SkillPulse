@@ -32,15 +32,14 @@ const Checkout = () => {
   const [couponCode, setCouponCode] = useState("");
   const [cartItems, setCartItems] = useState([]);
   const [trigger, setTrigger] = useState(0);
+  const [spinner, setSpinner] = useState(false);
 
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
-  console.log(checkoutItems);
   const totalPrice = () => {
-    return cartItems[0]?.products.reduce(
-      (acc, item) => acc + item.product?.salesPrice * item.quantity,
-      0
-    );
+    return cartItems[0]?.products
+      .reduce((acc, item) => acc + item.product?.salesPrice * item.quantity, 0)
+      .toFixed();
   };
 
   const calculateDeliveryCharge = () => {
@@ -60,7 +59,7 @@ const Checkout = () => {
   const cartTotalPrice = () => {
     const gstRate = 18;
     const total =
-      totalPrice() + calculateGST(gstRate) + calculateDeliveryCharge();
+      +totalPrice() + calculateGST(gstRate) + calculateDeliveryCharge();
     return total;
   };
 
@@ -101,23 +100,26 @@ const Checkout = () => {
 
     const gstRate = 18;
     const totalPrice = Math.abs(
-      basePrice +
-        calculateGST(gstRate) +
-        calculateDeliveryCharge() -
-        couponAmount
+      parseInt(basePrice) +
+        parseInt(calculateGST(gstRate)) +
+        parseInt(calculateDeliveryCharge()) -
+        parseInt(couponAmount)
     );
 
     return totalPrice;
   };
   const handleCouponDelete = async () => {
     try {
+      setSpinner(true);
       const response = await axiosInstance.patch(
         `/cartCouponRemove/${user._id}`
       );
       setTrigger((prev) => prev + 1);
+      setSpinner(false);
       showToast("success", `${response.data.message}`);
     } catch (error) {
       console.log(error);
+      setSpinner(false);
       showToast("error", `${error?.response?.data.message}`);
     }
   };
@@ -132,11 +134,14 @@ const Checkout = () => {
     setMinPurchaseAmount(minPurchaseAmount);
     setCouponCode(couponCode);
     try {
+      setSpinner(true);
       const response = await axios.patch(
         `/cartCouponApply?id=${user._id}&couponId=${selectedCoupon}`
       );
       setTrigger((prev) => prev + 1);
+      setSpinner(false);
     } catch (error) {
+      setSpinner(false);
       console.log(error);
     }
   };
@@ -244,6 +249,11 @@ const Checkout = () => {
   };
   return !checkoutComplete ? (
     <div className="min-h-screen bg-black text-white mt-5 font-mono">
+      {spinner && (
+        <div className="spinner-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto p-6">
         <div className="flex flex-col md:flex-row justify-between">
           <div className="w-full md:w-2/3">
@@ -558,7 +568,7 @@ const Checkout = () => {
                         {offerPrice(
                           cartItems[0]?.appliedCoupon?.couponAmount,
                           cartItems[0]?.appliedCoupon?.couponType
-                        ).toFixed()}
+                        )}
                       </span>
                     </div>
                   </>

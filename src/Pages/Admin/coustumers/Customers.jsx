@@ -14,16 +14,20 @@ const Customers = () => {
   const [postPerPage, setPostPerPage] = useState(5);
   const [slno, setSlNo] = useState(0);
   const [filterUser, setFilterUser] = useState("All");
+  const [spinner, setSpinner] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
+    setSpinner(true);
     (async () => {
       try {
         const response = await axios.get(
           `/admin/customers?filter=${filterUser}`
         );
         console.log(response.data.users);
+        setSpinner(false);
         setUsers(response.data.users);
       } catch (error) {
+        setSpinner(false);
         if (
           error?.response.data.message == "Token not found" ||
           error?.response.data.message == "Failed to authenticate Admin"
@@ -74,6 +78,11 @@ const Customers = () => {
   };
   return (
     <div className="flex bg-white text-black h-4/5">
+      {spinner && (
+        <div className="spinner-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <div className="flex-1">
         <div className="p-8">
           <div className="flex justify-between items-center mb-4">
@@ -105,7 +114,6 @@ const Customers = () => {
                 <option value="Z-A">Z-A</option>
               </select>
             </div>
-            
           </div>
           <div className="table-container  p-5 rounded ">
             <table className="w-full table-auto ">
