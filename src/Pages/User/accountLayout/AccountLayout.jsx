@@ -5,6 +5,7 @@ import { User, Package, MapPin, Wallet, LogOut } from "lucide-react";
 import { logoutUser } from "../../../redux/userSlice";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import axiosInstance from "@/axiosIntercepters/AxiosInstance";
+import { showToast } from "@/Components/ToastNotification";
 
 function AccountLayout() {
   const [profileImage, setProfileImage] = useState(null);
@@ -20,11 +21,11 @@ function AccountLayout() {
   const handleLogout = async () => {
     try {
       const response = await axiosInstance.post("/logout");
-      alert(response.data.message);
+      showToast("success", response.data.message);
       dispatch(logoutUser());
     } catch (error) {
       console.log(error);
-      alert(error.response.data.message);
+      showToast("error", error.response.data.message);
     }
   };
 

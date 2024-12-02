@@ -30,15 +30,15 @@ export default function Dashboard() {
   const topTenSellingProducts = () => {
     let topSellingProducts = {};
 
-    recentSales.forEach((order) => {
-      order.orderItems.forEach((item) => {
+    recentSales?.forEach((order) => {
+      order?.orderItems.forEach((item) => {
         let productName = item.product.productName;
         if (topSellingProducts[productName]) {
           topSellingProducts[productName][1] += parseInt(item.quantity);
         } else {
           topSellingProducts[productName] = [
-            ...item.product.productImage[0],
-            parseInt(item.quantity),
+            ...item?.product?.productImage[0],
+            parseInt(item?.quantity),
           ];
         }
       });
@@ -57,13 +57,13 @@ export default function Dashboard() {
   const topTenSellingCategory = () => {
     let topSellingCategory = {};
 
-    recentSales.forEach((order) => {
-      order.orderItems.forEach((item) => {
-        let categoryName = item.product.category.name;
+    recentSales?.forEach((order) => {
+      order?.orderItems.forEach((item) => {
+        let categoryName = item.product?.category.name;
         if (topSellingCategory[categoryName]) {
           topSellingCategory[categoryName][1] += 1;
         } else {
-          topSellingCategory[categoryName] = [item.product.category.image, 1];
+          topSellingCategory[categoryName] = [item?.product?.category.image, 1];
         }
       });
     });
@@ -81,13 +81,13 @@ export default function Dashboard() {
   const topTenSellingBrand = () => {
     let topSellingBrand = {};
 
-    recentSales.forEach((order) => {
-      order.orderItems.forEach((item) => {
-        let brandName = item.product.brand.name;
+    recentSales?.forEach((order) => {
+      order?.orderItems?.forEach((item) => {
+        let brandName = item?.product?.brand.name;
         if (topSellingBrand[brandName]) {
           topSellingBrand[brandName][1] += 1;
         } else {
-          topSellingBrand[brandName] = [item.product.brand.image, 1];
+          topSellingBrand[brandName] = [item?.product?.brand.image, 1];
         }
       });
     });

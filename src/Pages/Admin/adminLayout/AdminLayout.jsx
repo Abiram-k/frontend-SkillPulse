@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { logoutAdmin } from "../../../redux/adminSlice";
 import { Badge } from "@/Components/ui/badge";
 import axiosInstance from "@/axiosIntercepters/AxiosInstance";
+import { showToast } from "@/Components/ToastNotification";
 
 // Sample data for the chart
 const chartData = Array.from({ length: 12 }, (_, i) => ({
@@ -95,11 +96,7 @@ export default function Dashboard() {
           <nav className="lg:space-y-12 flex flex-col ">
             <div className="flex flex-col lg:space-y-3">
               <NavItem icon={Menu} text="Dashboard" redirect="dashboard" />
-              <NavItem
-                icon={Users}
-                text="Customers"
-                redirect="customers"
-              />
+              <NavItem icon={Users} text="Customers" redirect="customers" />
               <NavItem icon={Package} text="Products" redirect="products" />
               <NavItem icon={FileText} text="Orders" redirect="orders" />
               <NavItem icon={Image} text="Banner" redirect="bannerMangement" />
@@ -107,7 +104,11 @@ export default function Dashboard() {
               <NavItem icon={CreditCard} text="Payments" redirect="dashboard" />
               <NavItem icon={ShoppingBag} text="Category" redirect="category" />
               <NavItem icon={Bandage} text="Brand" redirect="brand" />
-              <NavItem icon={Bell} text="Notifications" redirect="notifications" />
+              <NavItem
+                icon={Bell}
+                text="Notifications"
+                redirect="notifications"
+              />
             </div>
             <div>
               <NavItem icon={Settings} text="Settings" redirect="settings" />
@@ -151,8 +152,16 @@ export default function Dashboard() {
 // Helper Components
 function NavItem({ icon: Icon, text, active, redirect }) {
   const dispatch = useDispatch();
-  const handleLogout = () => {
+  const handleLogout = async () => {
     dispatch(logoutAdmin());
+
+    try {
+      const response = await axiosInstance.post("/admin/logout");
+      showToast("success", "Logged Out sucessfully");
+    } catch (error) {
+      console.log(error);
+      showToast("error", error.response.data.message);
+    }
   };
   return (
     <>
