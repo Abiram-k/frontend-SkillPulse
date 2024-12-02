@@ -4,6 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 import { User, Package, MapPin, Wallet, LogOut } from "lucide-react";
 import { logoutUser } from "../../../redux/userSlice";
 import axios from "@/axiosIntercepters/AxiosInstance";
+import axiosInstance from "@/axiosIntercepters/AxiosInstance";
 
 function AccountLayout() {
   const [profileImage, setProfileImage] = useState(null);
@@ -16,8 +17,15 @@ function AccountLayout() {
 
   const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
+  const handleLogout = async () => {
+    try {
+      const response = await axiosInstance.post("/logout");
+      alert(response.data.message);
+      dispatch(logoutUser());
+    } catch (error) {
+      console.log(error);
+      alert(error.response.data.message);
+    }
   };
 
   useEffect(() => {
@@ -32,7 +40,7 @@ function AccountLayout() {
         ) {
           dispatch(logoutUser());
         }
-        console.log(error?.response?.data?.message ,"Error");
+        console.log(error?.response?.data?.message, "Error");
       }
     })();
   }, []);
