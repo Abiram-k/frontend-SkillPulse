@@ -25,6 +25,9 @@ import EmailVerification from "./Pages/User/forgotPassword/EmailVerification";
 import EditBrand from "./Pages/Admin/brandManagement/EditBrand";
 import { Toaster } from "./Components/ui/toaster.jsx";
 import ProtectCheckout from "./Protected/ProtectCheckout";
+import ProtectedOrderDetails from "./Protected/protectedOrderDetails";
+import InternetCheck from "./InternetCheck";
+import OfflinePage from "./Pages/User/offlinePage/OfflinePage";
 
 const HomePage = lazy(() => import("./Pages/User/homPage/HomePage"));
 const Dashboard = lazy(() => import("./Pages/Admin/dashboard/DashBoard"));
@@ -35,7 +38,9 @@ const AddProduct = lazy(() => import("./Pages/Admin/addProduct/AddProduct"));
 const Category = lazy(() =>
   import("./Pages/Admin/categoryManagement/Category")
 );
-const OrderTrackingPage = lazy(()=>import("./Pages/User/manageOrders/detailedPage"))
+const OrderTrackingPage = lazy(() =>
+  import("./Pages/User/manageOrders/detailedPage")
+);
 const EditCategory = lazy(() =>
   import("./Pages/Admin/editCategory/EditCategory")
 );
@@ -88,399 +93,405 @@ const ReturnRequests = lazy(() =>
   import("./Pages/Admin/returnRequests/ReturnRequests")
 );
 
-
 function App() {
   return (
     <>
       <ToastNotification />
       <Router>
         <Breadcrumbs />
-        <Suspense fallback={<Spinner />}>
-          <Routes>
-            <Route path="/googleRedirect" element={<GoogleAuthComponent />} />
-            <Route
-              path="/login"
-              element={
-                <ProtectAuthUser>
-                  <Login />
-                </ProtectAuthUser>
-              }
-            />
-            <Route
-              path="/signup"
-              element={
-                <ProtectAuthUser>
-                  <Signup />
-                </ProtectAuthUser>
-              }
-            />
-            <Route
-              path="/forgotPassword"
-              element={
-                <ProtectAuthUser>
-                  <ForgotPassword />
-                </ProtectAuthUser>
-              }
-            />
-            <Route
-              path="/verifyEmail"
-              element={
-                <ProtectAuthUser>
-                  <EmailVerification />
-                </ProtectAuthUser>
-              }
-            />
-            <Route
-              path="/otp"
-              element={
-                <ProtectedOtp>
+        <InternetCheck>
+          <Suspense fallback={<Spinner />}>
+            <Routes>
+              <Route path="/offline" element={<OfflinePage />}></Route>
+              <Route path="/googleRedirect" element={<GoogleAuthComponent />} />
+              <Route
+                path="/login"
+                element={
                   <ProtectAuthUser>
-                    <Otp />
+                    <Login />
                   </ProtectAuthUser>
-                </ProtectedOtp>
-              }
-            />
-
-            <Route
-              path="/"
-              element={
-                <ProtectAuthUser>
-                  <LandingPage />
-                </ProtectAuthUser>
-              }
-            />
-            <Route
-              path="/user"
-              element={
-                <ProtectUserHome>
-                  <UserLayout />
-                </ProtectUserHome>
-              }
-            >
-              <Route
-                path="home"
-                element={
-                  <ProtectUserHome>
-                    <Provider>
-                      <HomePage />
-                    </Provider>
-                  </ProtectUserHome>
                 }
               />
               <Route
-                path="wishlist"
+                path="/signup"
                 element={
-                  <ProtectUserHome>
-                    <Provider>
-                      <Wishlist />
-                    </Provider>
-                  </ProtectUserHome>
+                  <ProtectAuthUser>
+                    <Signup />
+                  </ProtectAuthUser>
                 }
               />
               <Route
-                path="cart"
+                path="/forgotPassword"
                 element={
-                  <ProtectUserHome>
-                    <ShoppingCartPage />
-                  </ProtectUserHome>
+                  <ProtectAuthUser>
+                    <ForgotPassword />
+                  </ProtectAuthUser>
                 }
               />
               <Route
-                path="search"
+                path="/verifyEmail"
                 element={
-                  <ProtectUserHome>
-                    <SearchProducts />
-                  </ProtectUserHome>
+                  <ProtectAuthUser>
+                    <EmailVerification />
+                  </ProtectAuthUser>
+                }
+              />
+              <Route
+                path="/otp"
+                element={
+                  <ProtectedOtp>
+                    <ProtectAuthUser>
+                      <Otp />
+                    </ProtectAuthUser>
+                  </ProtectedOtp>
                 }
               />
 
               <Route
-                path="shop"
+                path="/"
                 element={
-                  <ProtectUserHome>
-                    <Shop />
-                  </ProtectUserHome>
+                  <ProtectAuthUser>
+                    <LandingPage />
+                  </ProtectAuthUser>
                 }
               />
               <Route
-                path="contact"
+                path="/user"
                 element={
                   <ProtectUserHome>
-                    <Contact />
-                  </ProtectUserHome>
-                }
-              />
-              <Route
-                path="coupon"
-                element={
-                  <ProtectUserHome>
-                    <Coupon />
-                  </ProtectUserHome>
-                }
-              />
-              <Route
-                path="about"
-                element={
-                  <ProtectUserHome>
-                    <About />
-                  </ProtectUserHome>
-                }
-              />
-
-              <Route
-                path="checkout"
-                element={
-                  <ProtectUserHome>
-                    <ProtectCheckout>
-                      <Checkout />
-                    </ProtectCheckout>
-                  </ProtectUserHome>
-                }
-              />
-
-              <Route
-                path="cart/checkout"
-                element={
-                  <ProtectUserHome>
-                    <Checkout />
-                  </ProtectUserHome>
-                }
-              />
-
-              <Route
-                path="productDetails"
-                element={
-                  <Provider>
-                    <ProductDetails />
-                  </Provider>
-                }
-              />
-              <Route
-                path="profile"
-                element={
-                  <ProtectUserHome>
-                    <AccountLayout />
+                    <UserLayout />
                   </ProtectUserHome>
                 }
               >
                 <Route
-                  path=""
+                  path="home"
                   element={
                     <ProtectUserHome>
-                      <AccountOverview />
+                      <Provider>
+                        <HomePage />
+                      </Provider>
                     </ProtectUserHome>
                   }
                 />
                 <Route
-                  path="Myorders"
+                  path="wishlist"
                   element={
                     <ProtectUserHome>
-                      <ManageOrders />
+                      <Provider>
+                        <Wishlist />
+                      </Provider>
                     </ProtectUserHome>
                   }
                 />
                 <Route
-                  path="Myorders/details"
+                  path="cart"
                   element={
                     <ProtectUserHome>
-                      <OrderTrackingPage />
+                      <ShoppingCartPage />
                     </ProtectUserHome>
                   }
                 />
                 <Route
-                  path="Myorders/refund"
+                  path="search"
                   element={
                     <ProtectUserHome>
-                      <RefundPage />
+                      <SearchProducts />
+                    </ProtectUserHome>
+                  }
+                />
+
+                <Route
+                  path="shop"
+                  element={
+                    <ProtectUserHome>
+                      <Shop />
                     </ProtectUserHome>
                   }
                 />
                 <Route
-                  path="manageAddress"
+                  path="contact"
                   element={
                     <ProtectUserHome>
-                      <ManageAddress />
+                      <Contact />
                     </ProtectUserHome>
                   }
                 />
                 <Route
-                  path="wallet"
+                  path="coupon"
                   element={
                     <ProtectUserHome>
-                      <Wallet />
+                      <Coupon />
                     </ProtectUserHome>
                   }
                 />
                 <Route
-                  path="addNew"
+                  path="about"
                   element={
                     <ProtectUserHome>
-                      <AddAddress />
+                      <About />
                     </ProtectUserHome>
                   }
                 />
+
                 <Route
-                  path="editAddress/:address"
+                  path="checkout"
                   element={
                     <ProtectUserHome>
-                      <EditAddress />
+                      <ProtectCheckout>
+                        <Checkout />
+                      </ProtectCheckout>
                     </ProtectUserHome>
+                  }
+                />
+
+                <Route
+                  path="cart/checkout"
+                  element={
+                    <ProtectUserHome>
+                      <Checkout />
+                    </ProtectUserHome>
+                  }
+                />
+
+                <Route
+                  path="productDetails"
+                  element={
+                    <Provider>
+                      <ProductDetails />
+                    </Provider>
+                  }
+                />
+                <Route
+                  path="profile"
+                  element={
+                    <ProtectUserHome>
+                      <AccountLayout />
+                    </ProtectUserHome>
+                  }
+                >
+                  <Route
+                    path=""
+                    element={
+                      <ProtectUserHome>
+                        <AccountOverview />
+                      </ProtectUserHome>
+                    }
+                  />
+                  <Route
+                    path="Myorders"
+                    element={
+                      <ProtectUserHome>
+                        <ManageOrders />
+                      </ProtectUserHome>
+                    }
+                  />
+
+                  <Route
+                    path="Myorders/details"
+                    element={
+                      <ProtectUserHome>
+                        <ProtectedOrderDetails>
+                          <OrderTrackingPage />
+                        </ProtectedOrderDetails>
+                      </ProtectUserHome>
+                    }
+                  />
+
+                  <Route
+                    path="Myorders/refund"
+                    element={
+                      <ProtectUserHome>
+                        <RefundPage />
+                      </ProtectUserHome>
+                    }
+                  />
+                  <Route
+                    path="manageAddress"
+                    element={
+                      <ProtectUserHome>
+                        <ManageAddress />
+                      </ProtectUserHome>
+                    }
+                  />
+                  <Route
+                    path="wallet"
+                    element={
+                      <ProtectUserHome>
+                        <Wallet />
+                      </ProtectUserHome>
+                    }
+                  />
+                  <Route
+                    path="addNew"
+                    element={
+                      <ProtectUserHome>
+                        <AddAddress />
+                      </ProtectUserHome>
+                    }
+                  />
+                  <Route
+                    path="editAddress/:address"
+                    element={
+                      <ProtectUserHome>
+                        <EditAddress />
+                      </ProtectUserHome>
+                    }
+                  />
+                </Route>
+              </Route>
+
+              <Route
+                path="admin/login"
+                element={
+                  <ProtectedAuthAdmin>
+                    <AdminLogin />
+                  </ProtectedAuthAdmin>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedDashboardAdmin>
+                    <AdminLayout />
+                  </ProtectedDashboardAdmin>
+                }
+              >
+                <Route
+                  path="dashboard"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <Dashboard />
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="notifications"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <ReturnRequests />
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="orderReport"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <OrderReport />
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="orders"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <OrderManagement />
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="customers"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <Customers />
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="coupon"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <CouponManagement />
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="coupon/add"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <AddCoupon />
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="bannerMangement"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <BannerManagement />
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="products"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <Provider>
+                        <Products />
+                      </Provider>
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="products/add"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <AddProduct />
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="products/edit"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <Provider>
+                        <EditProduct />
+                      </Provider>
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="category"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <Provider>
+                        <Category />
+                      </Provider>
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="brand"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <Provider>
+                        <Brand />
+                      </Provider>
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="category/edit"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <Provider>
+                        <EditCategory />
+                      </Provider>
+                    </ProtectedDashboardAdmin>
+                  }
+                />
+                <Route
+                  path="brand/edit"
+                  element={
+                    <ProtectedDashboardAdmin>
+                      <Provider>
+                        <EditBrand />
+                      </Provider>
+                    </ProtectedDashboardAdmin>
                   }
                 />
               </Route>
-            </Route>
-
-            <Route
-              path="admin/login"
-              element={
-                <ProtectedAuthAdmin>
-                  <AdminLogin />
-                </ProtectedAuthAdmin>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedDashboardAdmin>
-                  <AdminLayout />
-                </ProtectedDashboardAdmin>
-              }
-            >
-              <Route
-                path="dashboard"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <Dashboard />
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="notifications"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <ReturnRequests />
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="orderReport"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <OrderReport />
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="orders"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <OrderManagement />
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="customers"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <Customers />
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="coupon"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <CouponManagement />
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="coupon/add"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <AddCoupon />
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="bannerMangement"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <BannerManagement />
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="products"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <Provider>
-                      <Products />
-                    </Provider>
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="products/add"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <AddProduct />
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="products/edit"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <Provider>
-                      <EditProduct />
-                    </Provider>
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="category"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <Provider>
-                      <Category />
-                    </Provider>
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="brand"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <Provider>
-                      <Brand />
-                    </Provider>
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="category/edit"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <Provider>
-                      <EditCategory />
-                    </Provider>
-                  </ProtectedDashboardAdmin>
-                }
-              />
-              <Route
-                path="brand/edit"
-                element={
-                  <ProtectedDashboardAdmin>
-                    <Provider>
-                      <EditBrand />
-                    </Provider>
-                  </ProtectedDashboardAdmin>
-                }
-              />
-            </Route>
-          </Routes>
-        </Suspense>
+            </Routes>
+          </Suspense>
+        </InternetCheck>
       </Router>
       <Toaster />
     </>

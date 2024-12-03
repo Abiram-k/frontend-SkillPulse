@@ -3,25 +3,26 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: JSON.parse(localStorage.getItem("userData")) || null,
-  details: 
-  JSON.parse(localStorage.getItem("productDetails")) ||
-   [],
+  details: JSON.parse(localStorage.getItem("productDetails")) || [],
   checkoutItems: JSON.parse(localStorage.getItem("checkoutItems")) || null,
   signUpSuccess: localStorage.getItem("signUpSuccess") || null,
   // selectedAddress also need to remove from localstorage
   cartProductsQty: JSON.parse(localStorage.getItem("cartProductsQty")) || [],
   forgotEmailVerified:
     JSON.parse(localStorage.getItem("verifiedForgotEmail")) || "",
+  orderId: "",
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+
     addUser: (state, action) => {
       state.user = action.payload;
       localStorage.setItem("userData", JSON.stringify(action.payload));
     },
+
     signUpSuccess: (state, action) => {
       state.signUpSuccess = action.payload;
       localStorage.setItem("signUpSuccess", action.payload);
@@ -57,6 +58,9 @@ const userSlice = createSlice({
       state.checkoutItems = null;
       localStorage.removeItem("checkoutItems");
     },
+    orderDetails: (state, action) => {
+      state.orderId = action.payload;
+    },
     removefromWishlist: (state, action) => {
       if (!action.payload) state.wishlistItems = [];
       else state.wishlistItems.filter((item) => item !== action.payload);
@@ -83,4 +87,5 @@ export const {
   passwordReseted,
   wishlistItems,
   removefromWishlist,
+  orderDetails
 } = userSlice.actions;

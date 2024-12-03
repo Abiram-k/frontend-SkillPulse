@@ -41,13 +41,16 @@ const Shop = () => {
 
   const fetchProducts = async () => {
     try {
+      setSpinner(true);
       const response = await axios.get("/products", {
         params: filter,
       });
+      setSpinner(false);
       setProducts(response.data.products);
       setCategory(response.data.categoryDoc);
       setBrand(response.data.brandDoc);
     } catch (error) {
+      setSpinner(false);
       if (error?.response.data.isBlocked) {
         dispatch(logoutUser());
       }
@@ -115,7 +118,6 @@ const Shop = () => {
       uniqueWishlistItems.forEach((id) => {
         setWishlistItems((prev) => [...prev, id]);
       });
-      
     } catch (error) {
       console.error(
         "Error fetching wishlist:",

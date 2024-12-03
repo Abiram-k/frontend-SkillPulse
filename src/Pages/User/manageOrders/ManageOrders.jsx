@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./manageOrder.css";
 import { Toast } from "@/Components/Toast";
-import { logoutUser } from "@/redux/userSlice";
+import { logoutUser, orderDetails } from "@/redux/userSlice";
 import AlertDialogueButton from "@/Components/AlertDialogueButton";
 import { showToast } from "@/Components/ToastNotification";
 import Razorpay from "../paymentComoponent/RazorPay";
@@ -11,23 +11,30 @@ import { ReturnProduct } from "@/Components/ReturnProduct";
 import { ArrowDown } from "lucide-react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
   const [search, setSearch] = useState("");
   const [refresh, setRefresh] = useState(0);
   const [cartItems, setCartItems] = useState({});
+  const [spinner, setSpinner] = useState(false);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.users.user);
 
+
   useEffect(() => {
     (async () => {
+      setSpinner(true);
       try {
         const response = await axios.get(`/order?id=${user._id}`);
         setOrders(response.data?.orderData);
+        setSpinner(false);
       } catch (error) {
+        setSpinner(false);
         if (
           error?.response.data.isBlocked ||
           error?.response.data.message == "token not found"
@@ -37,7 +44,8 @@ const ManageOrders = () => {
         console.log(error.message);
       }
     })();
-  }, [refresh, orders]);
+  }, [refresh]);
+
 
   const handleCancelOrder = async (item) => {
     try {
@@ -217,13 +225,20 @@ const ManageOrders = () => {
     doc.text(`Thank you for your purchase!`, 14, footerY + 40);
     doc.save(`Invoice_${order.orderId}.pdf`);
   };
-  const handleOrderDetails = () => {
-    alert("clicked");
+  
+  const handleOrderDetails = (orderId) => {
+    dispatch(orderDetails(orderId));
+    navigate("/user/profile/myOrders/details");
   };
 
   return (
     // <div className="flex">
     <main className="w-full lg:w-full p-4 font-mono h-screen overflow-y-scroll no-scrollbar">
+      {spinner && (
+        <div className="spinner-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <h1 className="text-xl lg:text-3xl uppercase font-bold mb-4 lg:mb-14">
         Manage your orders
       </h1>
@@ -378,13 +393,13 @@ const ManageOrders = () => {
                     </div>
                   ))}
                 </div>
-                <Link
-                  to={"details"}
+
+                <button
                   className="mb-0 inline-block hover:scale-105 duration-150 border-gray-500 text-gray-300 bg-gray-700 rounded p-2 lg:p-3 "
-                  onClick={handleOrderDetails}
+                  onClick={() => handleOrderDetails(order?._id)}
                 >
                   View more
-                </Link>
+                </button>
 
                 <div className="text-center lg:text-end flex justify-center lg:justify-end">
                   {order.status === "delivered" && (
