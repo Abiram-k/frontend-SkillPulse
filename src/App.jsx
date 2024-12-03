@@ -25,7 +25,7 @@ import EmailVerification from "./Pages/User/forgotPassword/EmailVerification";
 import EditBrand from "./Pages/Admin/brandManagement/EditBrand";
 import { Toaster } from "./Components/ui/toaster.jsx";
 import ProtectCheckout from "./Protected/ProtectCheckout";
-import ProtectedOrderDetails from "./Protected/protectedOrderDetails";
+import ProtectedOrderDetails from "./Protected/ProtectedOrderDetails";
 import InternetCheck from "./InternetCheck";
 import OfflinePage from "./Pages/User/offlinePage/OfflinePage";
 
