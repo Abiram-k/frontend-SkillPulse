@@ -15,7 +15,8 @@ const Breadcrumbs = () => {
     pathname.includes("forgotPassword") ||
     pathname.includes("verifyEmail") ||
     pathname.includes("profile") ||
-    pathname.includes("otp")
+    pathname.includes("otp") ||
+    pathname.includes("offline")
   ) {
     return null;
   }

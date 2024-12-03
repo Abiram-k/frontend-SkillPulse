@@ -6,17 +6,25 @@ const InternetCheck = ({ children }) => {
 
   useEffect(() => {
     const handleConnectivityChange = () => {
+
       if (!navigator.onLine) {
-        navigate("/offline"); 
+        navigate("/offline");
+      } else {
+        navigate("/");
       }
     };
+
     if (!navigator.onLine) {
       navigate("/offline");
     }
+
     window.addEventListener("offline", handleConnectivityChange);
+    window.addEventListener("online", handleConnectivityChange);
+
     return () => {
       window.removeEventListener("offline", handleConnectivityChange);
     };
+    
   }, [navigate]);
 
   return <>{children}</>;

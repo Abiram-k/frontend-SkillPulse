@@ -17,35 +17,36 @@ const PixelBox = ({ children }) => (
 );
 
 export default function OfflinePage() {
+    
   const [isOnline, setIsOnline] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
 
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
+//   useEffect(() => {
+//     const handleOnline = () => setIsOnline(true);
+//     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+//     window.addEventListener('online', handleOnline);
+//     window.addEventListener('offline', handleOffline);
 
-    setIsOnline(navigator.onLine);
+//     setIsOnline(navigator.onLine);
 
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+//     return () => {
+//       window.removeEventListener('online', handleOnline);
+//       window.removeEventListener('offline', handleOffline);
+//     };
+//   }, []);
 
   const handleRetry = () => {
     setRetryCount(prevCount => prevCount + 1);
     window.location.reload();
   };
 
-  if (isOnline) {
-    return null;
-  }
+//   if (isOnline) {
+//     return null;
+//   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 font-mono">
       <PixelBox>
         <div className="text-center space-y-6">
           <h1 className="text-4xl font-bold text-red-500 mb-4 uppercase tracking-wide">Game Over</h1>
