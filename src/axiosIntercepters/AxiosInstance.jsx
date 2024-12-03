@@ -20,12 +20,7 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        await axios.post(
-          "http://localhost:3000/token",
-          {},
-          { withCredentials: true }
-        );
-
+        await axios.post(`${SERVER_URL}/token`, {}, { withCredentials: true });
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         console.log(refreshError);
