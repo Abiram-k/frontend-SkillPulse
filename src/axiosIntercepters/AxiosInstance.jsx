@@ -11,7 +11,7 @@ axiosInstance.interceptors.response.use(
 
   async (error) => {
     const originalRequest = error.config;
-
+    
     if (
       error.response &&
       error.response.status === 401 &&
@@ -24,7 +24,6 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         console.log(refreshError);
-        alert("Token refresh failed:");
         localStorage.removeItem("userData");
         window.location.href = "/login";
       }

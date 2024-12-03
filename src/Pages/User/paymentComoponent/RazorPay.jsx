@@ -57,7 +57,6 @@ const Razorpay = ({
               },
             }
           );
-          alert("SDFSDF")
           handlePlaceOrder(false, orderId);
         } catch (error) {
           alert("Payment verification failed. Please try again.");

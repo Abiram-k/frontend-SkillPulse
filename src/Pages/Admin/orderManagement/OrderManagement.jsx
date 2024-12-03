@@ -98,7 +98,8 @@ const OrderManagement = () => {
                           {item.product.salesPrice * item.quantity}
                         </td>
                         <td className="px-6 py-4 text-white whitespace-pre-line">
-                          {order.address.address}
+                          {order.address.address},
+                          {order.address.pincode}
                         </td>
                         <td
                           className={`px-6 py-4 ${getStatusColor(

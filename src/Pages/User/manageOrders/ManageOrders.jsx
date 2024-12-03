@@ -11,6 +11,7 @@ import { ReturnProduct } from "@/Components/ReturnProduct";
 import { ArrowDown } from "lucide-react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { Link } from "react-router-dom";
 
 const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -96,13 +97,9 @@ const ManageOrders = () => {
     : orders;
 
   const handlePlaceOrder = async (paymentFailed, orderId) => {
-    alert(paymentFailed);
-    alert(orderId);
-
     const orderForRetry = orders?.filter(
       (order, index) => order?._id.toString() == orderId
     );
-    
     try {
       const response = await axios.post(
         `/order/${user._id}`,
@@ -119,7 +116,7 @@ const ManageOrders = () => {
       );
       showToast("success", `${response?.data.message}`);
     } catch (error) {
-      showToast("error", `Payment failed`);
+      showToast("error", error?.response?.data.message);
     }
   };
 
@@ -220,6 +217,9 @@ const ManageOrders = () => {
     doc.text(`Thank you for your purchase!`, 14, footerY + 40);
     doc.save(`Invoice_${order.orderId}.pdf`);
   };
+  const handleOrderDetails = () => {
+    alert("clicked");
+  };
 
   return (
     // <div className="flex">
@@ -249,7 +249,10 @@ const ManageOrders = () => {
         {orders.length > 0 ? (
           filteredOrders.length > 0 ? (
             filteredOrders.map((order) => (
-              <div className="border-y border-gray-500 p-4 lg:p-6 rounded-lg shadow-md space-y-4 lg:space-y-6 bg-light-red">
+              <div
+                className="border-y border-gray-500 p-4 lg:p-6 rounded-lg shadow-md space-y-4 lg:space-y-6 bg-light-red"
+                key={order._id}
+              >
                 <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between items-start lg:items-center text-xs lg:text-base gap-4">
                   <div className="font-medium">
                     <strong>Order Date:</strong> {order.orderDate}
@@ -375,6 +378,13 @@ const ManageOrders = () => {
                     </div>
                   ))}
                 </div>
+                <Link
+                  to={"details"}
+                  className="mb-0 inline-block hover:scale-105 duration-150 border-gray-500 text-gray-300 bg-gray-700 rounded p-2 lg:p-3 "
+                  onClick={handleOrderDetails}
+                >
+                  View more
+                </Link>
 
                 <div className="text-center lg:text-end flex justify-center lg:justify-end">
                   {order.status === "delivered" && (

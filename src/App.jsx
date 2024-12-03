@@ -35,6 +35,7 @@ const AddProduct = lazy(() => import("./Pages/Admin/addProduct/AddProduct"));
 const Category = lazy(() =>
   import("./Pages/Admin/categoryManagement/Category")
 );
+const OrderTrackingPage = lazy(()=>import("./Pages/User/manageOrders/detailedPage"))
 const EditCategory = lazy(() =>
   import("./Pages/Admin/editCategory/EditCategory")
 );
@@ -275,6 +276,14 @@ function App() {
                   element={
                     <ProtectUserHome>
                       <ManageOrders />
+                    </ProtectUserHome>
+                  }
+                />
+                <Route
+                  path="Myorders/details"
+                  element={
+                    <ProtectUserHome>
+                      <OrderTrackingPage />
                     </ProtectUserHome>
                   }
                 />
