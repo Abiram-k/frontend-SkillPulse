@@ -38,7 +38,7 @@ const HomePage = () => {
 
   const fetchWishlist = async () => {
     try {
-      const response = await axios.get(`/wishlist`);
+      const response = await axios.get(`/wishlist?user=${user._id}`);
 
       const uniqueWishlistItems = [
         ...new Set(
@@ -104,8 +104,7 @@ const HomePage = () => {
         setProducts(response.data.products);
         setCategory(response.data.categoryDoc);
       } catch (error) {
-       
-        showToast("error",error?.response?.data.message)
+        showToast("error", error?.response?.data.message);
         console.log(error.message);
       }
       try {

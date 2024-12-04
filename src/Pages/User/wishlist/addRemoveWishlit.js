@@ -23,10 +23,11 @@ export const addToWishList = async (product, user, dispatch) => {
     // });
   }
 };
+
 export const removeFromWishlist = async (product, user, dispatch) => {
   try {
     const response = await axios.delete(
-      `/wishList?user=${user._id}&product=${product}`
+      `/wishList?user=${user?._id}&product=${product}`
     );
     if (response.status == 200) {
       showToast("success", response.data.message)
