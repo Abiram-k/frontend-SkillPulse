@@ -38,7 +38,7 @@ const HomePage = () => {
 
   const fetchWishlist = async () => {
     try {
-      const response = await axios.get(`/wishlist?user=${user._id}`);
+      const response = await axios.get(`/wishlist`);
 
       const uniqueWishlistItems = [
         ...new Set(

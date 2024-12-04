@@ -169,7 +169,10 @@ export default function OrderTrackingPage() {
                   <span className="text-yellow-500">🏅</span>
                   <div>
                     <p className="font-medium">
-                      {order.totalPrice - order.discountPrice} Discount applied
+                      ₹
+                      {parseInt(order?.totalAmount) -
+                        parseInt(order?.totalDiscount)}{" "}
+                      Discount applied
                     </p>
                     <p className="text-sm text-gray-600">
                       Use it to save on your next order
@@ -190,20 +193,24 @@ export default function OrderTrackingPage() {
               )}
             </div>
           </Card>
-          {order?.paymentStatus == "Success" && order?.status == "delivered" && (
-            <Card className="p-4">
-              <h2 className="mb-4 text-lg font-semibold">More actions</h2>
-              <Button variant="outline" className="w-full justify-between">
-                <span className="flex items-center gap-2">
-                  <Download className="h-4 w-4" />
-                  Download Invoice
-                </span>
-                <span className="text-blue-400" onClick={handleDownloadInvoice}>
-                  Download
-                </span>
-              </Button>
-            </Card>
-          )}
+          {order?.paymentStatus == "Success" &&
+            order?.status == "delivered" && (
+              <Card className="p-4">
+                <h2 className="mb-4 text-lg font-semibold">More actions</h2>
+                <Button variant="outline" className="w-full justify-between">
+                  <span className="flex items-center gap-2">
+                    <Download className="h-4 w-4" />
+                    Download Invoice
+                  </span>
+                  <span
+                    className="text-blue-400"
+                    onClick={handleDownloadInvoice}
+                  >
+                    Download
+                  </span>
+                </Button>
+              </Card>
+            )}
         </div>
         {order.orderItems?.length > 0 &&
           order.orderItems?.map((item, index) => (

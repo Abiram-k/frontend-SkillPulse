@@ -21,7 +21,7 @@ const Wishlist = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(`wishlist?user=${user._id}`);
+        const response = await axios.get(`/wishlist`);
         setWishlist(response?.data.wishlist);
       } catch (error) {
         if (

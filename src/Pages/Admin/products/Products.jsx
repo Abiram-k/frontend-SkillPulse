@@ -7,15 +7,17 @@ import { useContext, useRef } from "react";
 import Pagination from "../../../Components/Pagination";
 import { Toast } from "../../../Components/Toast";
 import { logoutAdmin } from "@/redux/adminSlice";
+import ReactPaginate from "react-paginate";
 import { useDispatch } from "react-redux";
 
 function Products() {
-  const [products, setProducts] = useState([]);
+  const [product, setProduct] = useState([]);
   const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const currentPage = useRef();
   const [postPerPage, setPostPerPage] = useState(5);
   const [filterProduct, setFilterProduct] = useState("All");
   const [spinner, setSpinner] = useState(false);
+  const [pageCount, setPageCount] = useState(1);
   const searchFocus = useRef(null);
   const { setData } = useContext(context);
   const dispatch = useDispatch();
@@ -29,32 +31,7 @@ function Products() {
   const sendDataToEdit = (product) => {
     setData(product);
   };
-  useEffect(() => {
-    setSpinner(true);
-    (async () => {
-      try {
-        const response = await axios.get(
-          `/admin/product?filter=${filterProduct}`
-        );
-        setProducts(response.data.products);
-        setSpinner(false);
-      } catch (error) {
-        setSpinner(false);
-        if (
-          error?.response.data.message == "Token not found" ||
-          error?.response.data.message == "Failed to authenticate Admin"
-        ) {
-          dispatch(logoutAdmin());
-        }
-        console.log(error?.response?.data?.message);
-      }
-    })();
-    searchFocus.current.focus();
-  }, [dispatch, filterProduct]);
 
-  const lastPostIndex = currentPage * postPerPage;
-  const firstPostIndex = lastPostIndex - postPerPage;
-  const currentProducts = products.slice(firstPostIndex, lastPostIndex);
   const handleListing = async (id) => {
     try {
       const response = await axios.patch(`/admin/productListing/${id}`);
@@ -77,7 +54,7 @@ function Products() {
       }
       const updatedProduct = response.data.product;
 
-      setProducts((prevPro) =>
+      setProduct((prevPro) =>
         prevPro.map((product) =>
           product._id == updatedProduct._id ? updatedProduct : product
         )
@@ -130,7 +107,33 @@ function Products() {
       });
     }
   };
+  useEffect(() => {
+    currentPage.current = 1;
+    fetchProducts();
+  }, [filterProduct]);
 
+  const handlePageClick = async (e) => {
+    currentPage.current = e.selected + 1;
+    fetchProducts();
+  };
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        `/admin/product?filter=${filterProduct}&page=${currentPage.current}&limit=${postPerPage}`
+      );
+      setProduct(response.data.results);
+      setPageCount(response.data.results.pageCount);
+      console.log(response.data.results);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleFilter = (e) => {
+    setFilterProduct(e.target.value);
+  };
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
   return (
     <>
       {spinner && (
@@ -145,7 +148,7 @@ function Products() {
         <i className="fas fa-plus mr-2"></i> Add Product
       </Link>
 
-      <main className="flex-1 p-6 bg-white text-black font-mono">
+      <main className="flex-1 p-6 bg-white text-black font-mono ">
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-6 space-y-4 lg:space-y-0">
           <button
             className="flex items-center text-gray-600 mb-4 lg:mb-0"
@@ -160,14 +163,14 @@ function Products() {
               className="border rounded px-4 py-2 w-full lg:w-auto"
               value={search}
               ref={searchFocus}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={handleSearchChange}
             />
             <div className="flex items-center space-x-4">
               <span className="font-semibold">Filter</span>
               <select
                 className="border rounded px-2 py-1 font-mono"
                 value={filterProduct}
-                onChange={(e) => setFilterProduct(e.target.value)}
+                onChange={handleFilter}
               >
                 <option value="">Select Option</option>
                 <option value="Recently Added">Recently Added</option>
@@ -196,9 +199,10 @@ function Products() {
                 <th className="p-2">Update</th>
               </tr>
             </thead>
+
             <tbody>
-              {currentProducts.length > 0 ? (
-                currentProducts
+              {product?.products?.length > 0 ? (
+                product.products
                   .filter(
                     (product) =>
                       search.length === 0 ||
@@ -296,12 +300,27 @@ function Products() {
               )}
             </tbody>
           </table>
-          <Pagination
-            totalPosts={products.length}
-            postsPerPage={postPerPage}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
+
+          <ReactPaginate
+            className="flex justify-center items-center space-x-2 mt-4"
+            breakLabel="..."
+            nextLabel="next >"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={pageCount}
+            previousLabel="< previous"
+            renderOnZeroPageCount={null}
+            marginPagesDisplayed={2}
+            containerClassName="flex flex-wrap justify-center gap-2"
+            pageClassName="flex items-center"
+            pageLinkClassName="px-4 py-2 border border-gray-400 rounded-md text-sm hover:bg-gray-200 transition duration-200"
+            previousClassName="flex items-center"
+            previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+            nextClassName="flex items-center"
+            nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+            activeClassName="bg-blue-500 text-white"
           />
+          
         </div>
       </main>
     </>
