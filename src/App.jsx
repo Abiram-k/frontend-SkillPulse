@@ -28,6 +28,8 @@ import ProtectCheckout from "./Protected/ProtectCheckout";
 import ProtectedOrderDetails from "./Protected/ProtectedOrderDetails";
 import InternetCheck from "./InternetCheck";
 import OfflinePage from "./Pages/User/offlinePage/OfflinePage";
+import ProtectedAdminOrder from "./Protected/ProtectedAdminOrder";
+import AdminOrderDetail from "./Pages/Admin/orderManagement/AdminOrderDetailed";
 
 const HomePage = lazy(() => import("./Pages/User/homPage/HomePage"));
 const Dashboard = lazy(() => import("./Pages/Admin/dashboard/DashBoard"));
@@ -388,6 +390,15 @@ function App() {
                     </ProtectedDashboardAdmin>
                   }
                 />
+                <Route
+                  path="orders/details"
+                  element={
+                    <ProtectedAdminOrder>
+                      <AdminOrderDetail />
+                    </ProtectedAdminOrder>
+                  }
+                />
+
                 <Route
                   path="customers"
                   element={

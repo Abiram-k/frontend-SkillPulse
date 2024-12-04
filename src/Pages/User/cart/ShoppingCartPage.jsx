@@ -321,11 +321,13 @@ const ShoppingCartPage = () => {
                       <span className="text-sm">Saved Amount</span>
                       <span className="text-green-500">
                         -
-                        {Math.round(cartTotalPrice() -
-                          offerPrice(
-                            cartItems[0]?.appliedCoupon?.couponAmount,
-                            cartItems[0]?.appliedCoupon?.couponType
-                          ))}
+                        {Math.round(
+                          cartTotalPrice() -
+                            offerPrice(
+                              cartItems[0]?.appliedCoupon?.couponAmount,
+                              cartItems[0]?.appliedCoupon?.couponType
+                            )
+                        )}
                       </span>
                     </div>
                     <div className="flex justify-between font-bold pt-3 border-t border-gray-200">

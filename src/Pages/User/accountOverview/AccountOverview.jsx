@@ -30,6 +30,7 @@ const AccountOverview = () => {
   const [spinner, setSpinner] = useState(false);
   const [message, setMessage] = useState({});
   const [editMode, setEditMode] = useState(false);
+
   const [referral, setRefferal] = useState();
   const dispatch = useDispatch();
 
@@ -108,7 +109,8 @@ const AccountOverview = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(`/user?id=${user._id}`);
+        setSpinner(true);
+        const response = await axios.get(`/user`);
         setFirstName(response.data?.userData.firstName);
         setSecondName(response.data?.userData.lastName);
         setDateOfBirth(response.data?.userData.dateOfBirth);
@@ -117,7 +119,9 @@ const AccountOverview = () => {
         setUserProfile(response.data?.userData);
         setProfileImage(response.data?.userData.profileImage);
         setRefferal(response.data?.userData.referralCode);
+        setSpinner(false);
       } catch (error) {
+        setSpinner(false);
         if (
           error?.response.data.isBlocked ||
           error?.response.data.message == "token not found"
@@ -153,6 +157,7 @@ const AccountOverview = () => {
         },
       });
       setSpinner(false);
+      setEditMode(false);
       setProfileImage(response.data?.updatedUser);
       showToast("success", response?.data?.message);
     } catch (error) {

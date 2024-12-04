@@ -32,7 +32,7 @@ function AccountLayout() {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(`/user?id=${user._id}`);
+        const response = await axios.get(`/user`);
         setProfileImage(response.data?.userData.profileImage);
       } catch (error) {
         if (

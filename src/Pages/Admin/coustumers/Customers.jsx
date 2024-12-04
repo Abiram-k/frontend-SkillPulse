@@ -77,6 +77,7 @@ const Customers = () => {
     }
   };
   return (
+    
     <div className="flex bg-white text-black h-4/5">
       {spinner && (
         <div className="spinner-overlay">

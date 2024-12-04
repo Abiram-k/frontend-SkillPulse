@@ -38,7 +38,7 @@ const HomePage = () => {
 
   const fetchWishlist = async () => {
     try {
-      const response = await axios.get(`/wishlist?user=${user._id}`);
+      const response = await axios.get(`/wishlist`);
 
       const uniqueWishlistItems = [
         ...new Set(
@@ -99,7 +99,7 @@ const HomePage = () => {
     (async () => {
       try {
         const response = await axios.get("/products", {
-          params: { newArrivals: true, user },
+          params: { newArrivals: true },
         });
         setProducts(response.data.products);
         setCategory(response.data.categoryDoc);

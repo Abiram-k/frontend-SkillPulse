@@ -25,7 +25,6 @@ const ManageOrders = () => {
 
   const user = useSelector((state) => state.users.user);
 
-
   useEffect(() => {
     (async () => {
       setSpinner(true);
@@ -45,7 +44,6 @@ const ManageOrders = () => {
       }
     })();
   }, [refresh]);
-
 
   const handleCancelOrder = async (item) => {
     try {
@@ -127,104 +125,6 @@ const ManageOrders = () => {
       showToast("error", error?.response?.data.message);
     }
   };
-
-  // const handleDownloadInvoice = (orderId) => {
-  //   const order = orders.find((order) => order._id.toString() === orderId);
-  //   if (!order) {
-  //     alert("Order not found");
-  //     return;
-  //   }
-
-  //   const doc = new jsPDF();
-
-  //   doc.setFillColor(240, 240, 240);
-  //   doc.rect(0, 0, 210, 297, "F");
-
-  //   doc.setFont("Helvetica", "bold");
-  //   doc.setFontSize(22);
-  //   doc.text("Order Invoice", 14, 20);
-
-  //   doc.setFont("Helvetica", "normal");
-  //   doc.setFontSize(18);
-  //   doc.text("Delivery Address:", 120, 20);
-
-  //   doc.setFont("Helvetica", "normal");
-  //   doc.setFontSize(12);
-  //   doc.text(`Order ID: ${order.orderId}`, 14, 30);
-  //   doc.text(`Customer Name: ${order.address.firstName}`, 14, 40);
-  //   doc.text(`Order Date: ${order.orderDate}`, 14, 50);
-  //   doc.text(`Total Amount: Rs. ${order.totalAmount.toFixed(2)}`, 14, 60);
-
-  //   doc.setFontSize(10);
-  //   doc.text(`${order.address.firstName} ${order.address.lastName}`, 120, 30);
-  //   const addressLines = doc.splitTextToSize(order.address.address, 50);
-  //   doc.text(addressLines, 120, 35);
-  //   doc.text(
-  //     `${order.address.city}, ${order.address.state}`,
-  //     120,
-  //     45 + (addressLines.length - 1) * 5
-  //   );
-  //   doc.text(
-  //     `Pincode: ${order.address.pincode}`,
-  //     120,
-  //     50 + (addressLines.length - 1) * 5
-  //   );
-  //   doc.text(
-  //     `Phone: ${order.address.mobileNumber}`,
-  //     120,
-  //     55 + (addressLines.length - 1) * 5
-  //   );
-
-  //   const headers = [["Item", "Quantity", "Price", "Total"]];
-
-  //   const rows = order.orderItems.map((item) => [
-  //     item.product.productName,
-  //     item.quantity,
-  //     `Rs. ${item.price.toFixed(2)}`,
-  //     `Rs. ${(item.quantity * item.price).toFixed(2)}`,
-  //   ]);
-
-  //   doc.autoTable({
-  //     startY: 70,
-  //     head: headers,
-  //     body: rows,
-  //     styles: { fillColor: [230, 230, 250] },
-  //     headStyles: { textColor: [255, 255, 255], fillColor: [0, 102, 204] },
-  //     margin: { top: 10 },
-  //   });
-
-  //   const footerY = doc.lastAutoTable.finalY + 10;
-  //   const columnX = 14;
-
-  //   doc.setFont("Helvetica", "bold");
-  //   doc.setFontSize(12);
-  //   doc.text("Summary", columnX, footerY);
-
-  //   doc.setFont("Helvetica", "normal");
-  //   const footerData = [
-  //     ["Delivery Charge:", `Rs. ${order.deliveryCharge ? deliveryCharge : 0}`],
-  //     ["Tax:", `Rs. ${"100.00"}`],
-  //     ["Total Amount:", `Rs. ${order.totalAmount.toFixed(2)}`],
-  //     [
-  //       "Discount Amount:",
-  //       `Rs. ${
-  //         order.discountAmount
-  //           ? (order.totalAmount - order.discountAmount).toFixed(2)
-  //           : "0.00"
-  //       }`,
-  //     ],
-  //   ];
-
-  //   footerData.forEach((item, index) => {
-  //     doc.text(item[0], columnX, footerY + 10 + index * 6);
-  //     doc.text(item[1], columnX + 100, footerY + 10 + index * 6);
-  //   });
-
-  //   doc.setFont("Helvetica", "italic");
-  //   doc.setFontSize(12);
-  //   doc.text(`Thank you for your purchase!`, 14, footerY + 40);
-  //   doc.save(`Invoice_${order.orderId}.pdf`);
-  // };
 
   const handleOrderDetails = (orderId) => {
     dispatch(orderDetails(orderId));
@@ -378,11 +278,23 @@ const ManageOrders = () => {
                           )}
 
                         {item.productStatus === "delivered" &&
-                          item.returnDescription === "" && (
+                          item.returnDescription === "" &&
+                          (() => {
+                            const [day, month, year] = order.orderDate
+                              .split("/")
+                              .map(Number);
+                              
+                            const orderDate = new Date(year, month - 1, day);
+                            const currentDate = new Date();
+                            const timeDiff = currentDate - orderDate;
+                            const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
+                            return dayDiff <= 3;
+                          })() && (
                             <div className="bg-red-500 text-white p-2 rounded-md">
                               <ReturnProduct item={item} />
                             </div>
                           )}
+
                         {item.productStatus !== "returned" &&
                           item.returnDescription && (
                             <p className="text-orange-600">
@@ -400,18 +312,6 @@ const ManageOrders = () => {
                 >
                   View more
                 </button>
-
-                {/* <div className="text-center lg:text-end flex justify-center lg:justify-end">
-                  {order.status === "delivered" && (
-                    <button
-                      className="border border-gray-500 text-gray-300 hover:bg-gray-700 p-2 lg:p-3 rounded-md hover:scale-105 duration-150 flex items-center gap-2"
-                      onClick={(e) => handleDownloadInvoice(order._id)}
-                    >
-                      <ArrowDown />
-                      Download Invoice
-                    </button>
-                  )}
-                </div> */}
               </div>
             ))
           ) : (
