@@ -47,9 +47,8 @@ const AccountOverview = () => {
     if (!isNaN(lastnameFirstCharecter) && lastnameFirstCharecter?.trim()) {
       error.lastName = "Last name must start with a charecter *";
     }
-    if (!mobileNumber?.trim())
-      error.mobileNumber = "Mobile number is required *";
-    else if (mobileNumber?.length !== 10) {
+
+    if (mobileNumber?.trim() && mobileNumber?.length !== 10) {
       error.mobileNumber = "Please enter a 10-digit mobile number *";
     }
     return error;
