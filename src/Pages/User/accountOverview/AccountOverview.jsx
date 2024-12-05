@@ -39,17 +39,17 @@ const AccountOverview = () => {
     const firstnameFirstCharecter = firstName.charAt(0);
     const lastnameFirstCharecter = secondName.charAt(0);
 
-    if (firstName.trim() == "") error.firstName = "first name is required *";
+    if (firstName?.trim() == "") error.firstName = "first name is required *";
     else if (!isNaN(firstnameFirstCharecter)) {
       error.firstName = "Name must start with a charecter *";
     }
 
-    if (!isNaN(lastnameFirstCharecter) && lastnameFirstCharecter.trim()) {
+    if (!isNaN(lastnameFirstCharecter) && lastnameFirstCharecter?.trim()) {
       error.lastName = "Last name must start with a charecter *";
     }
-    if (!mobileNumber.trim())
+    if (!mobileNumber?.trim())
       error.mobileNumber = "Mobile number is required *";
-    else if (mobileNumber.length !== 10) {
+    else if (mobileNumber?.length !== 10) {
       error.mobileNumber = "Please enter a 10-digit mobile number *";
     }
     return error;
