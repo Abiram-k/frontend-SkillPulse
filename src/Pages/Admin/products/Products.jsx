@@ -13,13 +13,13 @@ import { useDispatch } from "react-redux";
 function Products() {
   const [product, setProduct] = useState([]);
   const [search, setSearch] = useState("");
-  const currentPage = useRef();
-  const [postPerPage, setPostPerPage] = useState(5);
   const [filterProduct, setFilterProduct] = useState("All");
   const [spinner, setSpinner] = useState(false);
-  const [pageCount, setPageCount] = useState(1);
   const searchFocus = useRef(null);
   const { setData } = useContext(context);
+  const [pageCount, setPageCount] = useState(1);
+  const currentPage = useRef();
+  const [postPerPage, setPostPerPage] = useState(5);
   const dispatch = useDispatch();
 
   //to refresh the page
@@ -54,11 +54,12 @@ function Products() {
       }
       const updatedProduct = response.data.product;
 
-      setProduct((prevPro) =>
-        prevPro.map((product) =>
-          product._id == updatedProduct._id ? updatedProduct : product
-        )
-      );
+      setProduct((prevPro) => ({
+        ...prevPro,
+        products: prevPro.products.map((product) =>
+          product._id === updatedProduct._id ? updatedProduct : product
+        ),
+      }));
     } catch (error) {
       console.log(error);
       alert(error?.response?.data.message || "error admin/product");

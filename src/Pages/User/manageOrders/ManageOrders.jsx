@@ -27,13 +27,13 @@ const ManageOrders = () => {
 
   useEffect(() => {
     (async () => {
-      setSpinner(true);
+      // setSpinner(true);
       try {
         const response = await axios.get(`/order?id=${user._id}`);
         setOrders(response.data?.orderData);
-        setSpinner(false);
+        // setSpinner(false);
       } catch (error) {
-        setSpinner(false);
+        // setSpinner(false);
         if (
           error?.response.data.isBlocked ||
           error?.response.data.message == "token not found"
@@ -43,7 +43,7 @@ const ManageOrders = () => {
         console.log(error.message);
       }
     })();
-  }, [refresh]);
+  }, [refresh,orders]);
 
   const handleCancelOrder = async (item) => {
     try {

@@ -54,15 +54,12 @@ const Brand = () => {
 
   useEffect(() => {
     (async () => {
-      setSpinner(true);
       await axios
         .get("/admin/brand")
         .then((response) => {
-          setSpinner(false)
           setBrands(response.data.brands);
         })
         .catch((error) => {
-          setSpinner(false)
           if (
             error?.response.data.message == "Token not found" ||
             error?.response.data.message == "Failed to authenticate Admin"
