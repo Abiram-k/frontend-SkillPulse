@@ -196,7 +196,7 @@ const Signup = () => {
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className=" rounded p-1"
+              className="  p-1  border-gray-600"
             >
               {isPasswordVisible ? (
                 <i class="fa-solid fa-eye"></i>

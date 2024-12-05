@@ -133,18 +133,18 @@ function Login() {
                 </p>
               )}
             </div>
-            <div className="flex gap-1">
+            <div className="flex ">
               <input
                 type={isPasswordVisible ? "text" : "password"}
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="rounded p-2 w-full bg-gray-800 text-white border-b-2 border-gray-600 focus:outline-none"
+                className=" p-2 w-full bg-gray-800 text-white border-b-2 border-gray-600 focus:outline-none"
               />
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className=" rounded p-1"
+                className="  p-1 bg-gray-800 border-b-2 border-gray-600"
               >
                 {isPasswordVisible ? (
                   <i class="fa-solid fa-eye"></i>

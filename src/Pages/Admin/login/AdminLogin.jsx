@@ -98,12 +98,12 @@ const AdminLogin = () => {
                 type={isPasswordVisible ? "text" : "password"}
                 placeholder="Enter password"
                 onChange={(e) => setPassword(e.target.value)}
-                className="p-2 w-full bg-gray-800 text-white border-b-2 border-gray-600 focus:outline-none rounded"
+                className="p-2 w-full bg-gray-800 text-white border-b-2 border-gray-600 focus:outline-none "
               />
                <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className=" rounded p-1"
+                className="  p-1 bg-gray-800 border-b-2 border-gray-600"
               >
                 {isPasswordVisible ? (
                   <i class="fa-solid fa-eye"></i>
