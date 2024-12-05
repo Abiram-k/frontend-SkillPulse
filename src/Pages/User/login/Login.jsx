@@ -13,6 +13,11 @@ function Login() {
   const [message, setMessage] = useState({});
   const [referralCode, setReferralCode] = useState("");
   const [isReferral, setIsReferral] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let error = {};
@@ -128,14 +133,25 @@ function Login() {
                 </p>
               )}
             </div>
-            <div>
+            <div className="flex gap-1">
               <input
-                type="password"
+                type={isPasswordVisible ? "text" : "password"}
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="rounded p-2 w-full bg-gray-800 text-white border-b-2 border-gray-600 focus:outline-none"
               />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className=" rounded p-1"
+              >
+                {isPasswordVisible ? (
+                  <i class="fa-solid fa-eye"></i>
+                ) : (
+                  <i class="fa-solid fa-eye-slash"></i>
+                )}
+              </button>
               {message.password && (
                 <p className="error text-red-500 text-sm mt-1">
                   {message.password}
