@@ -326,7 +326,7 @@ const AccountOverview = () => {
             <input
               type="tel"
               className="w-full bg-gray-700 rounded-lg p-2"
-              value={mobileNumber}
+              value={mobileNumber ? mobileNumber : ""}
               onChange={(e) => setMobileNumber(e.target.value)}
               disabled={!editMode}
             />
