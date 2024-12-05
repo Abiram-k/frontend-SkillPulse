@@ -262,7 +262,7 @@ const Category = () => {
                 <td className="p-2 font-bold mt-10 ms-10 ">Loading ....</td>
               </tr>
             )}
-          </tbody>
+          </tbody> 
         </table>
       </div>
       <div className="bg-gray-200 p-4 mt-8 rounded shadow-md text-black">
