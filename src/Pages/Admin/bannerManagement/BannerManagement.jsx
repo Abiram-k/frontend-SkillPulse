@@ -44,12 +44,15 @@ const BannerManagement = () => {
   };
   useEffect(() => {
     (async () => {
+      setSpinner(true);
       await axios
         .get("/admin/banner")
         .then((response) => {
           setBanner(response?.data.banner);
+          setSpinner(false);
         })
         .catch((error) => {
+          setSpinner(false);
           if (
             error?.response?.data.message === "Token not found" ||
             error?.response?.data.message === "Failed to authenticate Admin"

@@ -21,6 +21,7 @@ const CouponManagement = () => {
   const [coupons, setCoupons] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   const [editCouponId, setEditCouponId] = useState("");
+  const [spinner, setSpinner] = useState(false);
 
   const validateForm = () => {
     let error = {};
@@ -66,11 +67,14 @@ const CouponManagement = () => {
 
   useEffect(() => {
     (async () => {
+      setSpinner(true);
       try {
         const response = await axios.get(`/admin/coupon`);
         setCoupons(response?.data);
+        setSpinner(false);
       } catch (error) {
         console.log(error);
+        setSpinner(false);
         Toast.fire({
           icon: "error",
           title: `${error?.response?.data?.message}`,
@@ -142,6 +146,11 @@ const CouponManagement = () => {
   };
   return (
     <main className="w-full lg:w-7/6 p-8 text-black font-mono mt-0">
+      {spinner && (
+        <div className="spinner-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <div className="flex justify-between items-center mb-4">
         <div className="text-2xl font-bold">Coupon Management</div>
         <Link

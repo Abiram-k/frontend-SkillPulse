@@ -118,13 +118,16 @@ function Products() {
   };
   const fetchProducts = async () => {
     try {
+      setSpinner(true);
       const response = await axios.get(
         `/admin/product?filter=${filterProduct}&page=${currentPage.current}&limit=${postPerPage}`
       );
+      setSpinner(false);
       setProduct(response.data.results);
       setPageCount(response.data.results.pageCount);
       console.log(response.data.results);
     } catch (error) {
+      setSpinner(false);
       console.log(error);
     }
   };
@@ -320,7 +323,6 @@ function Products() {
             nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
             activeClassName="bg-blue-500 text-white"
           />
-          
         </div>
       </main>
     </>

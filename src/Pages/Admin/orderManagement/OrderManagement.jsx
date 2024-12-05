@@ -95,49 +95,55 @@ const OrderManagement = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.map((order) =>
-                    order.orderItems.map((item, index) => (
-                      <tr
-                        key={index}
-                        className="border-t border-gray-800 hover:scale-100 hover:duration-150 cursor-pointer "
-                      >
-                        <td className="px-6 py-4 text-gray-200">
-                          {order.orderId}
-                        </td>
-                        <td
-                          className="px-6 py-4 text-white "
-                          onClick={() => handleOrderDetails(order?._id)}
+                  {orders.length > 0 ? (
+                    orders.map((order) =>
+                      order.orderItems.map((item, index) => (
+                        <tr
+                          key={index}
+                          className="border-t border-gray-800 hover:scale-100 hover:duration-150 cursor-pointer "
                         >
-                          {item.product?.productName} x ({item.quantity})
-                        </td>
-                        <td className="px-6 py-4 text-white">
-                          {order.orderDate}
-                        </td>
-                        <td className="px-6 py-4 text-white">
-                          {item.product.salesPrice * item.quantity}
-                        </td>
-                        <td className="px-6 py-4 text-white whitespace-pre-line">
-                          {order.address.address},{order.address.pincode}
-                        </td>
-                        <td
-                          className={`px-6 py-4 ${getStatusColor(
-                            item.productStatus
-                          )}`}
-                        >
-                          {item.productStatus}
-                        </td>
-                        {item.productStatus !== "delivered" && (
-                          <td className="px-6 py-4">
-                            <ChangeStatus
-                              updatedState={handleUpdatedStatus}
-                              orderId={order.orderId}
-                              productId={item._id}
-                              currentStatus={item.productStatus}
-                            />
+                          <td className="px-6 py-4 text-gray-200">
+                            {order.orderId}
                           </td>
-                        )}
-                      </tr>
-                    ))
+                          <td
+                            className="px-6 py-4 text-white "
+                            onClick={() => handleOrderDetails(order?._id)}
+                          >
+                            {item.product?.productName} x ({item.quantity})
+                          </td>
+                          <td className="px-6 py-4 text-white">
+                            {order.orderDate}
+                          </td>
+                          <td className="px-6 py-4 text-white">
+                            {item.product.salesPrice * item.quantity}
+                          </td>
+                          <td className="px-6 py-4 text-white whitespace-pre-line">
+                            {order.address.address},{order.address.pincode}
+                          </td>
+                          <td
+                            className={`px-6 py-4 ${getStatusColor(
+                              item.productStatus
+                            )}`}
+                          >
+                            {item.productStatus}
+                          </td>
+                          {item.productStatus !== "delivered" && (
+                            <td className="px-6 py-4">
+                              <ChangeStatus
+                                updatedState={handleUpdatedStatus}
+                                orderId={order.orderId}
+                                productId={item._id}
+                                currentStatus={item.productStatus}
+                              />
+                            </td>
+                          )}
+                        </tr>
+                      ))
+                    )
+                  ) : (
+                    <p className="mt-10 ms-10  flex justify-center align-middle items-center font-semibold ">
+                      Loading ....
+                    </p>
                   )}
                 </tbody>
               </table>

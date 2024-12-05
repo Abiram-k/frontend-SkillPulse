@@ -259,9 +259,7 @@ const Category = () => {
               ))
             ) : (
               <tr className="border-t">
-                <td className="p-2 font-bold  ">
-                  NO categorie were added Yet!
-                </td>
+                <td className="p-2 font-bold mt-10 ms-10 ">Loading ....</td>
               </tr>
             )}
           </tbody>
@@ -271,7 +269,6 @@ const Category = () => {
         <h2 className="text-xl font-bold mb-4">Add New Category</h2>
         <form className="flex flex-col space-y-6">
           <div className="flex flex-col lg:flex-row lg:space-x-8 space-y-6 lg:space-y-0">
-            
             <div className="flex flex-col">
               <label className="mr-2 font-mono">Name :</label>
               <input
