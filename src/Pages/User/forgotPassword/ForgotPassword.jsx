@@ -13,6 +13,7 @@ const ForgotPassword = () => {
   const dispatch = useDispatch();
   // const email = useSelector((state) => state.users.forgotEmailVerified);
   const email = localStorage.getItem("verifiedForgotEmail");
+  
   const validateForm = () => {
     let error = {};
     if (newPassword.trim() == "") error.newPassword = "Field Cant be empty *";
@@ -65,6 +66,7 @@ const ForgotPassword = () => {
         <div className="absolute inset-0 bg-red-500/20 blur-xl rounded-2xl -z-10"></div>
 
         <form onSubmit={handleSubmit} className="space-y-6 font-mono">
+          <p>email : {email}</p>
           <div>
             <input
               type="password"
