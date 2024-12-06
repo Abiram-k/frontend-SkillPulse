@@ -35,7 +35,6 @@ const ForgotPassword = () => {
         return;
       }
       if (Object.keys(formError).length == 0) {
-        alert(email)
         const response = await axios.patch(`/forgotPassword`, {
           email,
           newPassword,
@@ -67,7 +66,6 @@ const ForgotPassword = () => {
         <div className="absolute inset-0 bg-red-500/20 blur-xl rounded-2xl -z-10"></div>
 
         <form onSubmit={handleSubmit} className="space-y-6 font-mono">
-          <p>email : {email}</p>
           <div>
             <input
               type="password"
