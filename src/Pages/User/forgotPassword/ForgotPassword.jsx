@@ -11,7 +11,8 @@ const ForgotPassword = () => {
   const [message, setMessage] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const email = useSelector((state) => state.users.forgotEmailVerified);
+  // const email = useSelector((state) => state.users.forgotEmailVerified);
+  const email = localStorage.getItem("verifiedForgotEmail");
   const validateForm = () => {
     let error = {};
     if (newPassword.trim() == "") error.newPassword = "Field Cant be empty *";
