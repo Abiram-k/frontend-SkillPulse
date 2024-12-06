@@ -9,7 +9,7 @@ const initialState = {
   // selectedAddress also need to remove from localstorage
   cartProductsQty: JSON.parse(localStorage.getItem("cartProductsQty")) || [],
   forgotEmailVerified:
-    JSON.parse(localStorage.getItem("verifiedForgotEmail")) || "",
+    localStorage.getItem("verifiedForgotEmail") || "",
   orderId: "",
 };
 
