@@ -59,7 +59,9 @@ const Checkout = () => {
   const cartTotalPrice = () => {
     const gstRate = 18;
     const total =
-      +totalPrice() + calculateGST(gstRate) + calculateDeliveryCharge();
+      +totalPrice() +
+      //  calculateGST(gstRate) +
+        calculateDeliveryCharge();
     return total;
   };
 
@@ -525,10 +527,10 @@ const Checkout = () => {
                       : calculateDeliveryCharge() + " ₹"}
                   </span>
                 </div>
-                <div className="flex justify-between">
+                {/* {<div className="flex justify-between">
                   <span>GST Amount (18%)</span>
                   <span>{calculateGST(18)} ₹</span>
-                </div>
+                </div>} */}
 
                 {cartItems[0]?.appliedCoupon && (
                   <div className="flex justify-between">
