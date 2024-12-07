@@ -101,7 +101,7 @@ const Checkout = () => {
     const gstRate = 18;
     const totalPrice = Math.abs(
       parseInt(basePrice) +
-        parseInt(calculateGST(gstRate)) +
+        // parseInt(calculateGST(gstRate)) +
         parseInt(calculateDeliveryCharge()) -
         parseInt(couponAmount)
     );
