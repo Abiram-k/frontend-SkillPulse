@@ -111,7 +111,7 @@ export default function OrderTrackingPage() {
 
     doc.setFont("Helvetica", "normal");
     const footerData = [
-      ["Delivery Charge:", `Rs. ${order.deliveryCharge ? deliveryCharge : 0}`],
+      ["Delivery Charge:", `Rs. ${order?.deliveryCharge ? order?.deliveryCharge : 0}`],
       ["Tax:", `Rs. ${"100.00"}`],
       ["Total Amount:", `Rs. ${order.totalAmount.toFixed(2)}`],
       [
