@@ -13,10 +13,11 @@ const Wallet = () => {
       try {
         const response = await axios.get(`/wallet/${user._id}`);
         setWalletData(response.data.wallet);
+        response.data.wallet?.transaction?.reverse();
       } catch (error) {
         if (
           error?.response.data.isBlocked ||
-          error?.response.data.message == "token not found" 
+          error?.response.data.message == "token not found"
         ) {
           dispatch(logoutUser());
         }
@@ -24,6 +25,7 @@ const Wallet = () => {
       }
     })();
   }, []);
+  
   return (
     <div className="flex flex-col space-y-6 px-4 sm:px-6 lg:px-8 font-mono">
       <div className="flex flex-col sm:flex-row justify-between items-center bg-gray-900 p-4 rounded">
@@ -31,24 +33,24 @@ const Wallet = () => {
           <i className="fa-solid fa-wallet text-yellow-500 text-xl"></i>
           <p className="text-white font-bold text-xl">Wallet Balance</p>
         </div>
-  
+
         <p className="font-bold text-green-600 text-xl mt-2 sm:mt-0">
           {walletData?.totalAmount ? walletData?.totalAmount.toFixed(2) : "0"} ₹
         </p>
       </div>
-  
+
       <section className="bg-gray-900 p-6 rounded-lg">
         <h3 className="text-red-500 text-xl font-bold mb-4 lg:mb-10">
           WALLET HISTORY
         </h3>
-  
+
         <div className="hidden sm:grid grid-cols-4 gap-4 text-sm font-semibold tracking-widest mb-4 lg:mb-8 lg:text-md font-sans pb-2 border-b-4 border-gray-700">
           <span className="lg:ms-3">DESCRIPTION</span>
           <span>DATE</span>
           <span>AMOUNT</span>
           <span>TRANSACTION ID</span>
         </div>
-  
+
         {walletData?.transaction?.map((transact) => (
           <div
             key={transact.transactionId}
@@ -75,8 +77,10 @@ const Wallet = () => {
                 <strong>TRANSACTION ID:</strong> {transact.transactionId}
               </div>
             </div>
-  
-            <div className="hidden sm:block sm:col-span-1">{transact.description}</div>
+
+            <div className="hidden sm:block sm:col-span-1">
+              {transact.description}
+            </div>
             <div className="hidden sm:block sm:col-span-1">
               {format(transact.date, "dd-MM-yyyy")}
             </div>
@@ -95,7 +99,6 @@ const Wallet = () => {
       </section>
     </div>
   );
-  
 };
 
 export default Wallet;

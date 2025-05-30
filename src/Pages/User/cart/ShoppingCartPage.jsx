@@ -31,6 +31,7 @@ const ShoppingCartPage = () => {
       try {
         const response = await axios.get(`/cart/${user._id}`);
         setCartItems(response?.data.cartItems);
+        console.log("Cart items: ", response?.data.cartItems);
       } catch (error) {
         if (
           error?.response.data.isBlocked ||
@@ -43,6 +44,7 @@ const ShoppingCartPage = () => {
       }
     })();
   }, [trigger]);
+
   const removeItem = async (id) => {
     try {
       const response = await axios.delete(`/cartItem/${id}`, {
@@ -124,7 +126,7 @@ const ShoppingCartPage = () => {
   };
 
   const calculateDeliveryCharge = () => {
-    if (totalPrice() < 1000) return Math.round((2 / 100) * totalPrice());
+    if (Math.round(totalPrice()) > 1000) return 10;
     else return 0;
   };
 
@@ -292,15 +294,15 @@ const ShoppingCartPage = () => {
                 <div className="flex justify-between">
                   <span>Delivery Charges</span>
                   <span className="text-green-600">
-                    {totalPrice() > 1000
+                    {Math.round(totalPrice()) < 1000
                       ? "Free"
                       : calculateDeliveryCharge() + " ₹"}
                   </span>
                 </div>
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <span>GST Amount (18%)</span>
                   <span>{calculateGST(18)} ₹</span>
-                </div>
+                </div> */}
                 {cartItems[0]?.appliedCoupon && (
                   <>
                     <div className="flex justify-between">
@@ -340,6 +342,12 @@ const ShoppingCartPage = () => {
                       </span>
                     </div>
                   </>
+                )}
+                {!cartItems[0]?.appliedCoupon && (
+                  <div className="flex justify-between font-bold pt-3 border-t border-gray-200">
+                    <span>Payable Amount</span>
+                    <span>{totalPrice()}</span>
+                  </div>
                 )}
               </div>
             </div>

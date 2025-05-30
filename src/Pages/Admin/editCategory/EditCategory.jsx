@@ -22,7 +22,7 @@ function EditCategory() {
   const validateForm = () => {
     if (name.trim() === "") error.name = "Category name is required *";
 
-    if (maxDiscount.trim() === "")
+    if (maxDiscount.trim() === "" && offer?.length > 0)
       error.maxDiscount = "Max discount is required *";
 
     if (isNaN(offer)) error.offer = "offer price must a number";
@@ -33,6 +33,10 @@ function EditCategory() {
 
   const navigate = useNavigate();
   useEffect(() => {
+    if (!Object.keys(data).length) {
+      navigate("/admin/category");
+      return;
+    }
     if (data) {
       setName(data.name || "");
       setDescription(data.description || "");
@@ -65,6 +69,7 @@ function EditCategory() {
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setMessage(formErrors);
+      console.log("Form errors: ", formErrors);
       return;
     }
     setSpinner(true);

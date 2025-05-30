@@ -22,7 +22,7 @@ const Razorpay = ({
           });
           setRazorpayOrderId(response.data.orderId);
         } catch (error) {
-          alert(error);
+          // alert(error);
           console.error(error);
         }
       };

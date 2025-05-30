@@ -43,7 +43,7 @@ const Checkout = () => {
   };
 
   const calculateDeliveryCharge = () => {
-    if (totalPrice() < 14999) return Math.round((2 / 100) * totalPrice());
+    if (totalPrice() > 1000) return 10;
     else return 0;
   };
 
@@ -61,7 +61,7 @@ const Checkout = () => {
     const total =
       +totalPrice() +
       //  calculateGST(gstRate) +
-        calculateDeliveryCharge();
+      calculateDeliveryCharge();
     return total;
   };
 
@@ -208,6 +208,7 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = async (paymentFailed) => {
+    
     if (
       paymentMethod == "cod" &&
       offerPrice(
@@ -522,7 +523,7 @@ const Checkout = () => {
                 <div className="flex justify-between">
                   <span>Delivery Charges</span>
                   <span className="text-green-600">
-                    {totalPrice() > 1000
+                    {totalPrice() < 1000
                       ? "Free"
                       : calculateDeliveryCharge() + " ₹"}
                   </span>

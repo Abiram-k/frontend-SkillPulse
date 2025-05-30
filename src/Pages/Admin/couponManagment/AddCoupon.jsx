@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import { showToast } from "@/Components/ToastNotification";
+import { useNavigate } from "react-router-dom";
 
 function AddCoupon() {
   const [couponCode, setCouponCode] = useState("");
@@ -13,6 +14,8 @@ function AddCoupon() {
   const [expiryDate, setExpiryDate] = useState("");
   const [maxDiscount, setMaxDiscount] = useState("");
   const [message, setMessage] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setCouponCode("");
@@ -53,12 +56,12 @@ function AddCoupon() {
       error.purchaseAmount =
         "purchase amount must be greater than coupon Amount";
 
-    if (!maxDiscount.trim() || isNaN(maxDiscount))
+    if (couponType != "Amount" && (!maxDiscount.trim() || isNaN(maxDiscount)))
       error.maxDiscount = "Enter amount";
     if (maxDiscount < 0) error.maxDiscount = "Must be posetive value *";
 
-    if (couponType == "Amount" && couponAmount != maxDiscount)
-      error.maxDiscount = "Field must be same as coupon Amount*";
+    // if (couponType == "Amount" && couponAmount != maxDiscount)
+    //   error.maxDiscount = "Field must be same as coupon Amount*";
 
     if (!expiryDate.trim()) error.expiryDate = "Required *";
     if (new Date(expiryDate) <= new Date()) {
@@ -75,6 +78,7 @@ function AddCoupon() {
     const formError = validateForm();
     if (Object.keys(formError).length > 0) {
       setMessage(formError);
+      console.log("Errors: ", formError);
       return;
     }
     try {
@@ -99,6 +103,7 @@ function AddCoupon() {
       setExpiryDate("");
       setMaxDiscount("");
       setMessage({});
+      navigate("/admin/coupon");
       showToast("success", `${response?.data.message}`);
     } catch (error) {
       showToast("error", `${error?.response?.data?.message}`);
@@ -110,8 +115,15 @@ function AddCoupon() {
         <h2 className="text-xl font-bold mb-4 text-black">Add Coupon</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
           <div className="space-y-2">
+            <label
+              htmlFor="code"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Coupon code:
+            </label>
             <input
               type="text"
+              id="code"
               className="border p-3 rounded text-black focus:outline-none w-full"
               placeholder="Code"
               value={couponCode}
@@ -122,8 +134,15 @@ function AddCoupon() {
             )}
           </div>
           <div className="space-y-2">
+            <label
+              htmlFor="type"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Coupon type:
+            </label>
             <select
               type="text"
+              id="type"
               className="border p-3 rounded text-black focus:outline-none w-full"
               placeholder="Coupon Type"
               value={couponType}
@@ -140,8 +159,15 @@ function AddCoupon() {
             )}
           </div>
           <div className="space-y-2">
+            <label
+              htmlFor="amount"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Coupon amount:
+            </label>
             <input
               type="text"
+              id="amount"
               className="border p-3 rounded text-black focus:outline-none w-full"
               placeholder="Coupon Amount"
               value={couponAmount}
@@ -151,21 +177,37 @@ function AddCoupon() {
               <p className="ps-3 text-red-600">{message.couponAmount}</p>
             )}
           </div>
+
           <div className="space-y-2">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Description
+            </label>
             <input
+              id="description"
               type="text"
               className="border p-3 rounded text-black focus:outline-none w-full"
-              placeholder="Description"
+              placeholder="Enter description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
             {message.description && (
-              <p className="ps-3 text-red-600">{message.description}</p>
+              <p className="ps-3 text-red-600 text-sm">{message.description}</p>
             )}
           </div>
+
           <div className="space-y-2">
+            <label
+              htmlFor="limit"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Total limit:
+            </label>
             <input
               type="text"
+              id="limit"
               className="border p-3 rounded text-black focus:outline-none w-full"
               placeholder="Total Limit"
               value={totalLimit}
@@ -176,7 +218,14 @@ function AddCoupon() {
             )}
           </div>
           <div className="space-y-2">
+            <label
+              htmlFor="userLimit"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Per user limit:
+            </label>
             <input
+              id="userLimit"
               type="text"
               className="border p-3 rounded text-black focus:outline-none w-full"
               placeholder="Per User Limit"
@@ -188,8 +237,15 @@ function AddCoupon() {
             )}
           </div>
           <div className="space-y-2">
+            <label
+              htmlFor="purchaseAmount"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Min purchase amount:
+            </label>
             <input
               type="text"
+              id="purchaseAmount"
               className="border p-3 rounded text-black focus:outline-none w-full"
               placeholder="Purchase Amount"
               value={purchaseAmount}
@@ -199,21 +255,37 @@ function AddCoupon() {
               <p className="ps-3 text-red-600">{message.purchaseAmount}</p>
             )}
           </div>
+          {couponType !== "Amount" && (
+            <div className="space-y-2">
+              <label
+                htmlFor="discount"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Max discount:
+              </label>
+              <input
+                type="text"
+                id="discount"
+                className="border p-3 rounded text-black focus:outline-none w-full"
+                placeholder="max Discount"
+                value={maxDiscount}
+                onChange={(e) => setMaxDiscount(e.target.value)}
+              />
+              {message.maxDiscount && (
+                <p className="ps-3 text-red-600">{message.maxDiscount}</p>
+              )}
+            </div>
+          )}
           <div className="space-y-2">
-            <input
-              type="text"
-              className="border p-3 rounded text-black focus:outline-none w-full"
-              placeholder="max Discount"
-              value={maxDiscount}
-              onChange={(e) => setMaxDiscount(e.target.value)}
-            />
-            {message.maxDiscount && (
-              <p className="ps-3 text-red-600">{message.maxDiscount}</p>
-            )}
-          </div>
-          <div className="space-y-2">
+            <label
+              htmlFor="expiry"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Expiry Date:
+            </label>
             <input
               type="date"
+              id="expiry"
               className="border p-3 rounded text-black focus:outline-none w-full"
               placeholder="Expiry Date"
               value={expiryDate}

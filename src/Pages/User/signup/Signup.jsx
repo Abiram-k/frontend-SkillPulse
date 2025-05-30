@@ -34,25 +34,56 @@ const Signup = () => {
     if (!firstName && !lastName && !mobileNumber && !email) {
       error.all = "Please fill all the fields";
     }
+    // if (!firstName.trim()) {
+    //   error.firstName = "Name is required.";
+    // } else if (!isNaN(firstnameFirstCharecter)) {
+    //   error.firstName = "Name must start with a charecter";
+    // }
+    // if (!isNaN(lastnameFirstCharecter) && lastName && firstName) {
+    //   error.secondName = "Last name must start with a charecter";
+    // }
+    const nameRegex = /^[A-Za-z\s]+$/;
+
     if (!firstName.trim()) {
-      error.firstName = "Name is required.";
-    } else if (!isNaN(firstnameFirstCharecter)) {
-      error.firstName = "Name must start with a charecter";
+      error.firstName = "First name is required.";
+    } else if (!nameRegex.test(firstName)) {
+      error.firstName =
+        "First name must not include numbers or special characters.";
     }
-    if (!isNaN(lastnameFirstCharecter) && lastName && firstName) {
-      error.secondName = "Last name must start with a charecter";
+
+    if (!lastName.trim()) {
+      error.secondName = "Last name is required.";
+    } else if (!nameRegex.test(lastName)) {
+      error.secondName =
+        "Last name must not include numbers or special characters.";
     }
     if (!email.trim()) {
       error.email = "email is required.";
     } else if (!emailRegex.test(email)) {
       error.email = "Email is invalid.";
     }
+    // if (!password.trim()) {
+    //   error.password = "Password is required.";
+    // } else if (password.length < 8) {
+    //   error.password = "Password must be 8 characters";
+    // } else if (password != confirmPassword) {
+    //   error.password = "Password not match";
+    // }
+
     if (!password.trim()) {
       error.password = "Password is required.";
     } else if (password.length < 8) {
-      error.password = "Password must be 8 characters";
-    } else if (password != confirmPassword) {
-      error.password = "Password not match";
+      error.password = "Password must be at least 8 characters long.";
+    } else if (!/[A-Z]/.test(password)) {
+      error.password = "Password must include at least one uppercase letter.";
+    } else if (!/[a-z]/.test(password)) {
+      error.password = "Password must include at least one lowercase letter.";
+    } else if (!/[0-9]/.test(password)) {
+      error.password = "Password must include at least one number.";
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      error.password = "Password must include at least one special character.";
+    } else if (password !== confirmPassword) {
+      error.password = "Passwords do not match.";
     }
     if (!mobileNumber.trim()) {
       error.mobile = "Mobile number is required.";

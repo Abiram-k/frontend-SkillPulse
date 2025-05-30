@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { Toast } from "../../../Components/Toast";
 import { logoutAdmin } from "@/redux/adminSlice";
 import { useDispatch } from "react-redux";
+import ReactPaginate from "react-paginate";
 const Category = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -16,6 +17,13 @@ const Category = () => {
   const [categoryImage, setCategoryImage] = useState("");
   const [image, setImage] = useState(null);
   const [spinner, setSpinner] = useState(false);
+
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("All");
+  const currentPage = useRef();
+  const [pageCount, setPageCount] = useState(1);
+  const [postPerPage, setPostPerPage] = useState(5);
+
   const { setData } = useContext(context);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,6 +39,59 @@ const Category = () => {
   const sendDataToEdit = (category) => {
     setData(category);
   };
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
+  const handleFilter = (e) => {
+    setFilter(e.target.value);
+  };
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const handlePageClick = async (e) => {
+    currentPage.current = e.selected + 1;
+    fetchCategories();
+  };
+
+  const fetchCategories = async () => {
+    try {
+      setSpinner(true);
+      const response = await axios.get(
+        `/admin/category?search=${search}&filter=${filter}&page=${currentPage.current}&limit=${postPerPage}`
+      );
+      setCategories(response.data.categories);
+      setSpinner(false);
+      setPageCount(response.data?.pageCount);
+    } catch (error) {
+      setSpinner(false);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    // (async () => {
+    //   await axios
+    //     .get("/admin/category")
+    //     .then((response) => {
+    //       setCategories(response.data.categories);
+    //     })
+    //     .catch((error) => {
+    //       if (
+    //         error?.response.data.message == "Token not found" ||
+    //         error?.response.data.message == "Failed to authenticate Admin"
+    //       ) {
+    //         dispatch(logoutAdmin());
+    //       }
+    //       console.log(error);
+    //       alert(error?.response.data.message);
+    //     });
+    // })();
+
+    currentPage.current = 1;
+    fetchCategories();
+  }, [search, filter]);
 
   const handleProductImageChange = (e) => {
     const imageFile = e.target.files[0];
@@ -38,7 +99,6 @@ const Category = () => {
       setImage(imageFile);
     }
   };
-
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
     if (imageFile) {
@@ -49,26 +109,6 @@ const Category = () => {
       reader.readAsDataURL(imageFile);
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      await axios
-        .get("/admin/category")
-        .then((response) => {
-          setCategories(response.data.categories);
-        })
-        .catch((error) => {
-          if (
-            error?.response.data.message == "Token not found" ||
-            error?.response.data.message == "Failed to authenticate Admin"
-          ) {
-            dispatch(logoutAdmin());
-          }
-          console.log(error);
-          alert(error?.response.data.message);
-        });
-    })();
-  }, [categories]);
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
@@ -182,6 +222,38 @@ const Category = () => {
           <div className="spinner"></div>
         </div>
       )}
+
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-6 space-y-4 lg:space-y-0">
+        <button
+          className="flex items-center text-gray-600 mb-4 lg:mb-0"
+          onClick={handleRefresh}
+        >
+          <i className="fas fa-sync-alt mr-2"></i> Refresh
+        </button>
+        <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4 w-full lg:w-auto">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="border rounded text-black px-4 py-2 w-full lg:w-auto"
+            value={search}
+            onChange={handleSearchChange}
+          />
+          <div className="flex items-center space-x-4">
+            <span className="font-semibold text-gray-600">Filter</span>
+            <select
+              className="border rounded px-2 py-1 font-mono text-black  "
+              value={filter}
+              onChange={handleFilter}
+            >
+              <option value="">Select Option</option>
+              <option value="Recently Added">Recently Added</option>
+              <option value="A-Z">A-Z</option>
+              <option value="Z-A">Z-A</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-gray-200 p-4 rounded shadow-md text-black h-80 overflow-y-scroll">
         <table className="w-full text-left ">
           <thead className="">
@@ -262,8 +334,27 @@ const Category = () => {
                 <td className="p-2 font-bold mt-10 ms-10 ">Loading ....</td>
               </tr>
             )}
-          </tbody> 
+          </tbody>
         </table>
+        <ReactPaginate
+          className="flex justify-center border-gray-700 items-center space-x-2 mt-4"
+          breakLabel="..."
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel="< previous"
+          renderOnZeroPageCount={null}
+          marginPagesDisplayed={2}
+          containerClassName="flex flex-wrap justify-center gap-2"
+          pageClassName="flex items-center"
+          pageLinkClassName="px-4 py-2 border border-gray-400 rounded-md text-sm hover:bg-blue-600 transition duration-200"
+          previousClassName="flex items-center"
+          previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+          nextClassName="flex items-center"
+          nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+          activeClassName="bg-blue-500 text-white"
+        />
       </div>
       <div className="bg-gray-200 p-4 mt-8 rounded shadow-md text-black">
         <h2 className="text-xl font-bold mb-4">Add New Category</h2>

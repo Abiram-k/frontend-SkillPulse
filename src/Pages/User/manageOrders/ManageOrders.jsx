@@ -43,7 +43,7 @@ const ManageOrders = () => {
         console.log(error.message);
       }
     })();
-  }, [refresh,orders]);
+  }, [refresh, orders]);
 
   const handleCancelOrder = async (item) => {
     try {
@@ -163,7 +163,7 @@ const ManageOrders = () => {
       <div className="space-y-6">
         {orders.length > 0 ? (
           filteredOrders.length > 0 ? (
-            filteredOrders.map((order) => (
+            filteredOrders?.map((order) => (
               <div
                 className="border-y border-gray-500 p-4 lg:p-6 rounded-lg shadow-md space-y-4 lg:space-y-6 bg-light-red"
                 key={order._id}
@@ -283,7 +283,7 @@ const ManageOrders = () => {
                             const [day, month, year] = order.orderDate
                               .split("/")
                               .map(Number);
-                              
+
                             const orderDate = new Date(year, month - 1, day);
                             const currentDate = new Date();
                             const timeDiff = currentDate - orderDate;
