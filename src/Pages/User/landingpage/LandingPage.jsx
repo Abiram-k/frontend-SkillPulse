@@ -13,7 +13,8 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   const goToDetails = (product) => {
-    // dispatch(setProductDetails(product));
+    console.log("Products Details: ", product);
+    dispatch(setProductDetails(product));
     navigate("/user/productDetails");
   };
 

@@ -36,9 +36,9 @@ const OrderReport = () => {
         const response = await axios(
           `/admin/recentSales?filter=${filter}&startDate=${startDate}&endDate=${endDate}`
         );
-        setOrders(response?.data?.orders);
+        setOrders(response.data.orders);
+        console.log("Report data orders: ", response.data.orders);
         const updatedSalesData = [];
-
         response?.data?.orders.forEach((order) => {
           order?.orderItems.forEach((item, index) => {
             updatedSalesData.push({

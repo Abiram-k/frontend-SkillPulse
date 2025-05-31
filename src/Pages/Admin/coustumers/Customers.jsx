@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import Pagination from "../../../Components/Pagination";
-import { User } from "lucide-react";
+import { Calendar, Search, User } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logoutAdmin } from "@/redux/adminSlice";
 import { showToast } from "@/Components/ToastNotification";
@@ -15,13 +15,17 @@ const Customers = () => {
   const [slno, setSlNo] = useState(0);
   const [filterUser, setFilterUser] = useState("All");
   const [spinner, setSpinner] = useState(false);
+
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
   const dispatch = useDispatch();
   useEffect(() => {
     setSpinner(true);
     (async () => {
       try {
         const response = await axios.get(
-          `/admin/customers?filter=${filterUser}`
+          `/admin/customers?sort=${filterUser}&startDate=${startDate}&endDate=${endDate}`
         );
         console.log(response.data.users);
         setSpinner(false);
@@ -37,12 +41,25 @@ const Customers = () => {
         console.log(error);
       }
     })();
-    searchFocus.current.focus();
-  }, [filterUser]);
+    searchFocus?.current.focus();
+  }, [filterUser, startDate, endDate]);
 
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
   const currentUsers = users.slice(firstPostIndex, lastPostIndex);
+
+  const handleStartDateChange = (e) => {
+    setStartDate(e.target.value);
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+  };
+  const clearFilters = () => {
+    setStartDate("");
+    setEndDate("");
+    setSearch("");
+  };
 
   const handleblocking = async (id) => {
     try {
@@ -77,7 +94,6 @@ const Customers = () => {
     }
   };
   return (
-    
     <div className="flex bg-white text-black h-4/5">
       {spinner && (
         <div className="spinner-overlay">
@@ -87,17 +103,94 @@ const Customers = () => {
       <div className="flex-1">
         <div className="p-8">
           <div className="flex justify-between items-center mb-4">
-            <div>
+            {/* <div>
               <h1 className="px-4 font-semi-bold lg:text-lg">Coustomers</h1>
-            </div>
-            <input
+            </div> */}
+            {/* <input
               type="text"
               placeholder="Search..."
               className="border rounded px-4 py-2 w-full lg:w-auto"
               value={search}
               ref={searchFocus}
               onChange={(e) => setSearch(e.target.value)}
-            />
+            /> */}
+
+            <div className="w-full max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-sm font-sans">
+              <div className="space-y-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={search}
+                    ref={searchFocus}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  />
+                </div>
+
+                {/* Date Filters */}
+                <div className="flex flex-col sm:flex-row gap-4 items-center">
+                  <div className="flex flex-col sm:flex-row gap-4 flex-1">
+                    {/* Start Date */}
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Start Date
+                      </label>
+                      <div className="relative">
+                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                        <input
+                          type="date"
+                          value={startDate}
+                          onChange={handleStartDateChange}
+                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    {/* End Date */}
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        End Date
+                      </label>
+                      <div className="relative">
+                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                        <input
+                          type="date"
+                          value={endDate}
+                          onChange={handleEndDateChange}
+                          min={startDate} // Ensure end date is not before start date
+                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Clear Filters Button */}
+                  <button
+                    onClick={clearFilters}
+                    className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200"
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+
+                {/* Filter Summary */}
+                {/* {(startDate || endDate || search) && (
+                  <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-md">
+                    <span className="font-medium">Active filters:</span>
+                    {search && (
+                      <span className="ml-2">Search: "{search}"</span>
+                    )}
+                    {startDate && (
+                      <span className="ml-2">From: {startDate}</span>
+                    )}
+                    {endDate && <span className="ml-2">To: {endDate}</span>}
+                  </div>
+                )} */}
+              </div>
+            </div>
+
             <div className="font-mono">
               <label htmlFor="order" className="mr-2">
                 Sort By

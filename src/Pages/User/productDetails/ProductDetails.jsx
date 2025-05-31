@@ -24,12 +24,12 @@ const ProductDetails = () => {
 
   useEffect(() => {
     const savedCart =
-      JSON.parse(localStorage.getItem(`cart_${user._id}`)) || [];
+      JSON.parse(localStorage.getItem(`cart_${user?._id}`)) || [];
     setCartProduct(savedCart);
   }, [user?._id]);
 
   useEffect(() => {
-    const isProductInCart = cartProduct.includes(product[0]._id);
+    const isProductInCart = cartProduct.includes(product[0]?._id);
     setGoToCart(isProductInCart);
   }, [cartProduct, product]);
 
@@ -37,7 +37,7 @@ const ProductDetails = () => {
     (async () => {
       try {
         const response = await axios.get(
-          `/brand-category-info/${product[0]._id}`
+          `/brand-category-info/${product[0]?._id}`
         );
         if (response.data.isAvailable)
           if (product[0].units === 0) {
@@ -130,14 +130,14 @@ const ProductDetails = () => {
         {},
         {
           params: {
-            userId: user._id,
+            userId: user?._id,
           },
         }
       );
       setCartProduct((prev) => {
         if (!prev.includes(product[0]._id)) {
           const updatedCart = [...prev, product[0]._id];
-          localStorage.setItem(`cart_${user._id}`, JSON.stringify(updatedCart));
+          localStorage.setItem(`cart_${user?._id}`, JSON.stringify(updatedCart));
           return updatedCart;
         }
         return prev;
@@ -154,7 +154,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     if (user?._id && cartProduct.length > 0) {
-      localStorage.setItem(`cart_${user._id}`, JSON.stringify(cartProduct));
+      localStorage.setItem(`cart_${user?._id}`, JSON.stringify(cartProduct));
     }
   }, [cartProduct, user?._id]);
 

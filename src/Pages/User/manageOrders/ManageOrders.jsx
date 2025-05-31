@@ -48,7 +48,7 @@ const ManageOrders = () => {
   const handleCancelOrder = async (item) => {
     try {
       const response = await axios.patch(
-        `/cancelOrder?id=${user._id}&itemId=${item._id}`
+        `/cancelOrderItem?id=${user._id}&itemId=${item._id}`
       );
       showToast("success", `${response.data.message}`);
 

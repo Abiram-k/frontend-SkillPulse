@@ -13,6 +13,8 @@ import {
   Settings,
   LogOut,
   Edit,
+  Search,
+  Calendar,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "@/axiosIntercepters/AxiosInstance";
@@ -31,6 +33,9 @@ const OrderManagement = () => {
   const currentPage = useRef();
   const [pageCount, setPageCount] = useState(1);
   const [postPerPage, setPostPerPage] = useState(5);
+
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const dispatch = useDispatch();
 
@@ -56,7 +61,7 @@ const OrderManagement = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get(
-        `/admin/order?search=${search}&filter=${filter}&page=${
+        `/admin/order?startDate=${startDate}&endDate=${endDate}&search=${search}&filter=${filter}&page=${
           currentPage.current || 1
         }&limit=${postPerPage}`
       );
@@ -73,25 +78,21 @@ const OrderManagement = () => {
       alert(error?.response.data.message);
     }
   };
+  const handleStartDateChange = (e) => {
+    setStartDate(e.target.value);
+  };
 
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+  };
+  const clearFilters = () => {
+    setStartDate("");
+    setEndDate("");
+    setSearch("");
+  };
   useEffect(() => {
     fetchOrders();
-    // (async () => {
-    //   try {
-    //     const response = await axios.get(`/admin/order?filter=${filterOrders}`);
-    //     setOrders(response.data?.orderData);
-    //   } catch (error) {
-    //     if (
-    //       error?.response.data.message == "Token not found" ||
-    //       error?.response.data.message == "Failed to authenticate Admin"
-    //     ) {
-    //       dispatch(logoutAdmin());
-    //     }
-    //     console.log(error.message);
-    //     alert(error?.response.data.message);
-    //   }
-    // })();
-  }, [filter]);
+  }, [filter, startDate, endDate]);
 
   const handleUpdatedStatus = (status) => {
     if (status) setUpdatedStatus(status);
@@ -114,24 +115,65 @@ const OrderManagement = () => {
 
   return (
     <>
-      <span className=" px-4 lg:text-3xl font-bold mb-5 text-gray-400">
-        Orders
-      </span>
-      <div className="flex mt-10 flex-col lg:flex-row lg:justify-between lg:items-center mb-6 space-y-4 lg:space-y-0">
+      <span className=" px-4 lg:text-3xl font-bold text-gray-400">Orders</span>
+
+      <div className="flex  flex-col lg:flex-row lg:justify-between lg:items-center mb-6 space-y-4 lg:space-y-0">
         <button
           className="flex items-center text-gray-600 mb-4 lg:mb-0"
           onClick={handleRefresh}
         >
-          <i className="fas fa-sync-alt mr-2"></i> Refresh
+          <i className="fas fa-sync-alt mr-2"></i>
         </button>
+
+        <div className="w-full max-w-4xl mx-auto p-6  rounded-lg shadow-sm font-sans">
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4 items-center">
+              <div className="flex flex-col sm:flex-row gap-4 flex-1">
+                {/* Start Date */}
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Start Date
+                  </label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <input
+                      type="date"
+                      value={startDate}
+                      onChange={handleStartDateChange}
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-black"
+                    />
+                  </div>
+                </div>
+
+                {/* End Date */}
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    End Date
+                  </label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={handleEndDateChange}
+                      min={startDate}
+                      className="w-full pl-10 pr-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={clearFilters}
+                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200 mt-5"
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4 w-full lg:w-auto">
-          {/* <input
-            type="text"
-            placeholder="Search..."
-            className="border rounded text-black px-4 py-2 w-full lg:w-auto"
-            value={search}
-            onChange={handleSearchChange}
-          /> */}
           <div className="flex items-center space-x-4">
             <span className="font-semibold text-gray-600">Filter</span>
             <select
@@ -173,12 +215,15 @@ const OrderManagement = () => {
                 </thead>
                 <tbody>
                   {orders.length > 0 ? (
-                    orders.map((order, index) =>
+                    orders.map((order, orderIdx) =>
                       order.orderItems.map((item, index) => (
                         <tr
                           key={index}
                           className={`border-t  border-gray-800 hover:scale-100 hover:duration-150 cursor-pointer ${
-                            index % 2 == 0 && "bg-gray-900"
+                            orderIdx % 2 == 0 && "bg-gray-900"
+                          } ${
+                            orders?.length == orderIdx + 1 &&
+                            "border-b-2 border-b-gray-800"
                           }`}
                         >
                           <td className="px-6 py-4 text-gray-200">

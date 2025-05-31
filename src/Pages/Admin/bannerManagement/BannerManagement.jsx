@@ -111,7 +111,7 @@ const BannerManagement = () => {
   };
   const handleListing = async (id) => {
     try {
-      const response = await axios.patch(`/admin/brandListing/${id}`);
+      const response = await axios.patch(`/admin/bannerListing/${id}`);
       if (response.data.banner?.isListed) {
         showToast("info", "Banner Listed successfully");
       } else {

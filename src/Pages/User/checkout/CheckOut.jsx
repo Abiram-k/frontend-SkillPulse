@@ -152,7 +152,6 @@ const Checkout = () => {
       try {
         const response = await axios.get(`/cart/${user._id}`);
         setCartItems(response.data.cartItems);
-        console.log("CART ITEMS :", response.data.cartItems);
       } catch (error) {
         if (error?.response.data.isBlocked) {
           dispatch(logoutUser());
@@ -208,7 +207,6 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = async (paymentFailed) => {
-    
     if (
       paymentMethod == "cod" &&
       offerPrice(
@@ -229,7 +227,7 @@ const Checkout = () => {
         params: {
           paymentFailed,
           paymentMethod,
-          totalAmount: cartItems[0]?.grandTotal,
+          totalAmount: cartItems[0]?.grandTotal + calculateDeliveryCharge(),
           appliedCoupon: cartItems[0]?.appliedCoupon?._id || null,
           deliveryCharge: calculateDeliveryCharge(),
         },

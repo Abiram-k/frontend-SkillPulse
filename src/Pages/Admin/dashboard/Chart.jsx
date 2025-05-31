@@ -29,7 +29,7 @@ export default function Chart({ orders, filter }) {
     if (orders && orders.length > 0) {
       processData();
     }
-  }, [orders, filter, selectedMonth])
+  }, [orders, filter, selectedMonth]);
 
   const processData = () => {
     if (filter === "Yearly") {
@@ -132,7 +132,7 @@ export default function Chart({ orders, filter }) {
       {chartData.length > 0 ? (
         <>
           <CardHeader>
-            <CardTitle className="text-gray-600">Total Orders</CardTitle>
+            <CardTitle className="text-gray-600">Total Sales</CardTitle>
             <CardDescription className="text-gray-500">
               {filter === "Yearly"
                 ? "January - December 2024"

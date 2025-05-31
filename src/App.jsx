@@ -160,9 +160,9 @@ function App() {
               <Route
                 path="/user"
                 element={
-                  <ProtectUserHome>
+                  // <ProtectUserHome>
                     <UserLayout />
-                  </ProtectUserHome>
+                  // </ProtectUserHome>
                 }
               >
                 <Route

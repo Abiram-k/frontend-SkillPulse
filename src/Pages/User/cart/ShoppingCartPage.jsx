@@ -143,8 +143,7 @@ const ShoppingCartPage = () => {
   };
   const cartTotalPrice = () => {
     const gstRate = 18;
-    const total =
-      totalPrice() + calculateGST(gstRate) + calculateDeliveryCharge();
+    const total = totalPrice() + calculateDeliveryCharge();
     return total;
   };
 
@@ -346,7 +345,7 @@ const ShoppingCartPage = () => {
                 {!cartItems[0]?.appliedCoupon && (
                   <div className="flex justify-between font-bold pt-3 border-t border-gray-200">
                     <span>Payable Amount</span>
-                    <span>{totalPrice()}</span>
+                    <span>{cartTotalPrice()}</span>
                   </div>
                 )}
               </div>

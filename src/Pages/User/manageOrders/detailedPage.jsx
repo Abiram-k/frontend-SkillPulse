@@ -5,6 +5,8 @@ import { showToast } from "@/Components/ToastNotification";
 import { useSelector } from "react-redux";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import AlertDialogueButton from "@/Components/AlertDialogueButton";
+import axios from "@/axiosIntercepters/AxiosInstance";
 
 const Button = ({ children, variant, className }) => (
   <button
@@ -26,6 +28,7 @@ export default function OrderTrackingPage() {
   const [order, setOrder] = useState({});
   const [spinner, setSpinner] = useState(false);
   const orderId = useSelector((state) => state.users.orderId);
+  const user = useSelector((state) => state.users.user);
 
   useEffect(() => {
     (async () => {
@@ -33,7 +36,6 @@ export default function OrderTrackingPage() {
       try {
         const response = await axiosInstance.get(`/order/details/${orderId}`);
         setOrder(response.data.orderDetails);
-        console.log(response.data.orderDetails);
         setSpinner(false);
       } catch (error) {
         setSpinner(false);
@@ -111,7 +113,10 @@ export default function OrderTrackingPage() {
 
     doc.setFont("Helvetica", "normal");
     const footerData = [
-      ["Delivery Charge:", `Rs. ${order?.deliveryCharge ? order?.deliveryCharge : 0}`],
+      [
+        "Delivery Charge:",
+        `Rs. ${order?.deliveryCharge ? order?.deliveryCharge : 0}`,
+      ],
       ["Tax:", `Rs. ${"100.00"}`],
       ["Total Amount:", `Rs. ${order.totalAmount.toFixed(2)}`],
       [
@@ -133,6 +138,27 @@ export default function OrderTrackingPage() {
     doc.setFontSize(12);
     doc.text(`Thank you for your purchase!`, 14, footerY + 40);
     doc.save(`Invoice_${order.orderId}.pdf`);
+  };
+
+  const handleCancelOrder = async () => {
+    try {
+      const response = await axios.patch(
+        `/cancelOrder?id=${order._id}&userId=${user._id}`
+      );
+      showToast("success", `${response.data.message}`);
+
+      window.location.reload();
+      Toast.fire({
+        icon: "success",
+        title: "Order cancelled",
+      });
+    } catch (error) {
+      console.log(error);
+      Toast.fire({
+        icon: "error",
+        title: `${error?.response?.data.message}`,
+      });
+    }
   };
 
   return (
@@ -193,6 +219,15 @@ export default function OrderTrackingPage() {
               )}
             </div>
           </Card>
+          {order.paymentStatus == "Success" &&
+            order?.status == "processing" && (
+              <div className="bg-red-500 text-white p-2 rounded w-fit h-fit">
+                <AlertDialogueButton
+                  name="Cancel"
+                  onClick={() => handleCancelOrder()}
+                />
+              </div>
+            )}
           {order?.paymentStatus == "Success" &&
             order?.status == "delivered" && (
               <Card className="p-4">
@@ -272,21 +307,24 @@ export default function OrderTrackingPage() {
             </>
           ))}
         {order?.paymentStatus == "Success" && (
-          <div className="flex items-center gap-2 text-sm text-green-600">
-            <svg
-              className="h-5 w-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            Delivery was made with verification
+          <div className="flex items-center gap-2 flex-col md:flex-row">
+            <div className="flex items-center gap-2 text-sm text-green-600">
+              <svg
+                className="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Delivery was made with verification
+            </div>
+            <p className="text-gray-400 tex-md">[ {order?.status} ]</p>
           </div>
         )}
       </div>
