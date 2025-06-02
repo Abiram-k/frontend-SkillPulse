@@ -33,7 +33,10 @@ const LandingPage = () => {
   return (
     <div>
       <header className="flex justify-between items-center p-4 bg-[#1C1C1C]">
-        <div className="text-2xl lg:text-3xl font-bold">SKILL PULSE</div>
+        {/* <div className="text-2xl lg:text-3xl font-bold">SKILL PULSE</div> */}
+        <Link to={"/user/home"} className="text-2xl lg:text-3xl font-bold">
+          SKILL PULSE
+        </Link>
 
         <button
           id="menu-btn"
@@ -61,29 +64,29 @@ const LandingPage = () => {
             menuOpen ? "flex" : "hidden"
           } flex-col lg:flex-row lg:flex lg:space-x-4 lg:items-center absolute lg:static bg-black lg:bg-transparent top-16 left-0 w-full lg:w-auto z-10 text-center space-y-8 lg:space-y-0 pb-8 lg:p-0`}
         >
-          <a href="#" className="hover:text-gray-400">
+          <Link to="/user/home" className="hover:text-gray-400">
             HOME
-          </a>
-          <a href="#" className="hover:text-gray-400">
+          </Link>
+          <Link to="/user/shop" className="hover:text-gray-400">
             SHOP
-          </a>
-          <a href="#" className="hover:text-gray-400">
+          </Link>
+          <Link to="/user/shop" className="hover:text-gray-400">
             CATEGORY
-          </a>
-          <a href="#" className="hover:text-gray-400">
+          </Link>
+          <Link to="/user/contact" className="hover:text-gray-400">
             CONTACT
-          </a>
-          <a href="#" className="hover:text-gray-400">
+          </Link>
+          <Link to="/user/about" className="hover:text-gray-400">
             ABOUT US
-          </a>
-          <div className="lg:flex space-x-1 align-middle justify-center hidden relative font-sans">
+          </Link>
+          {/* <div className="lg:flex space-x-1 align-middle justify-center hidden relative font-sans">
             <i className="fas fa-search absolute right-3 top-3.5 text-gray-200"></i>
             <input
               type="text"
               className="bg-transparent border-2 rounded border-gray-700 text-white p-2  focus:outline-none"
               placeholder="Search for products"
             />
-          </div>
+          </div> */}
           <div className="flex flex-col  lg:flex-row space-x-4 text-center space-y-8 lg:space-y-0 border-t-2 border-gray-500 lg:border-none p-1 lg:p-0">
             <a href="#"></a>
             <Link

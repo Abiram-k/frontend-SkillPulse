@@ -13,12 +13,24 @@ const ForgotPassword = () => {
   const dispatch = useDispatch();
   // const email = useSelector((state) => state.users.forgotEmailVerified);
   const email = localStorage.getItem("verifiedForgotEmail");
-  
+
   const validateForm = () => {
     let error = {};
     if (newPassword.trim() == "") error.newPassword = "Field Cant be empty *";
     else if (newPassword.length < 8)
       error.newPassword = "Password must be 8 charscters *";
+    else if (!/[A-Z]/.test(newPassword))
+      error.newPassword =
+        "Password must include at least one uppercase letter.";
+    else if (!/[a-z]/.test(newPassword))
+      error.newPassword =
+        "Password must include at least one lowercase letter.";
+    else if (!/[0-9]/.test(newPassword))
+      error.newPassword = "Password must include at least one number.";
+    else if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword))
+      error.newPassword =
+        "Password must include at least one special character.";
+
     if (confirmPassword.trim() == "")
       error.confirmPassword = "Field Cant be empty *";
     if (confirmPassword != newPassword)

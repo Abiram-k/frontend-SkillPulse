@@ -157,6 +157,7 @@ const AccountOverview = () => {
       });
       setSpinner(false);
       setEditMode(false);
+      setMessage({});
       setProfileImage(response.data?.updatedUser);
       showToast("success", response?.data?.message);
     } catch (error) {
