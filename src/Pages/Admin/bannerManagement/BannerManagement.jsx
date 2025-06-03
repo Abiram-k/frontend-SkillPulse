@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import { Toast } from "../../../Components/Toast";
 import { logoutAdmin } from "@/redux/adminSlice";
 import { useDispatch } from "react-redux";
 import { showToast } from "@/Components/ToastNotification";
+import { Calendar, Search } from "lucide-react";
+import ReactPaginate from "react-paginate";
 
 const BannerManagement = () => {
   const [description, setDescription] = useState("");
@@ -16,6 +18,15 @@ const BannerManagement = () => {
   const [bannerImage, setBannerImage] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const searchFocus = useRef(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [search, setSearch] = useState("");
+  const currentPage = useRef();
+  const [pageCount, setPageCount] = useState(1);
+  const [postPerPage, setPostPerPage] = useState(5);
+
   const validateForm = () => {
     const error = {};
     if (!image) error.image = "Upload an image *";
@@ -42,28 +53,55 @@ const BannerManagement = () => {
       reader.readAsDataURL(imageFile);
     }
   };
-  useEffect(() => {
-    (async () => {
+
+  const handleStartDateChange = (e) => {
+    setStartDate(e.target.value);
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+  };
+  const clearFilters = () => {
+    setStartDate("");
+    setEndDate("");
+    setSearch("");
+  };
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+  const handlePageClick = async (e) => {
+    currentPage.current = e.selected + 1;
+    fetchCategories();
+  };
+  const fetchBanners = async () => {
+    try {
       setSpinner(true);
-      await axios
-        .get("/admin/banner")
-        .then((response) => {
-          setBanner(response?.data.banner);
-          setSpinner(false);
-        })
-        .catch((error) => {
-          setSpinner(false);
-          if (
-            error?.response?.data.message === "Token not found" ||
-            error?.response?.data.message === "Failed to authenticate Admin"
-          ) {
-            dispatch(logoutAdmin());
-          }
-          console.log(error);
-          alert(error?.response?.data.message);
-        });
-    })();
-  }, [message]);
+      const response = await axios.get(
+        `/admin/banner?search=${search}&page=${currentPage.current}&limit=${postPerPage}&startDate=${startDate}&endDate=${endDate}`
+      );
+      setBanner(response?.data.banner);
+      setPageCount(response.data?.pageCount);
+      setSpinner(false);
+    } catch (error) {
+      setSpinner(false);
+      if (
+        error?.response?.data.message === "Token not found" ||
+        error?.response?.data.message === "Failed to authenticate Admin"
+      ) {
+        dispatch(logoutAdmin());
+      }
+      console.log(error);
+      Toast.fire({
+        icon: "error",
+        title: `${error?.response?.data.message}`,
+      });
+    }
+  };
+  useEffect(() => {
+    currentPage.current = 1;
+    fetchBanners();
+  }, [search, startDate, endDate]);
 
   const handleAddBanner = async (e) => {
     e.preventDefault();
@@ -84,6 +122,7 @@ const BannerManagement = () => {
           },
         });
         setDescription("");
+        window.location.reload();
         setImage(null);
         setSpinner(false);
         showToast("success", `${response.data.message}`);
@@ -102,6 +141,7 @@ const BannerManagement = () => {
       if (result) {
         const response = await axios.delete(`/admin/banner/${id}`);
         showToast("success", `${response.data.message}`);
+        window.location.reload();
       } else {
         showToast("info", "Cancelled Deletion");
       }
@@ -137,6 +177,69 @@ const BannerManagement = () => {
           <div className="spinner"></div>
         </div>
       )}
+
+      <div className="w-full max-w-4xl mx-auto p-6  rounded-lg shadow-sm font-sans">
+        <div className="space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={search}
+              ref={searchFocus}
+              onChange={handleSearchChange}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+          </div>
+
+          {/* Date Filters */}
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <div className="flex flex-col sm:flex-row gap-4 flex-1">
+              {/* Start Date */}
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Start Date
+                </label>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={handleStartDateChange}
+                    className="w-full pl-10 pr-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* End Date */}
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  End Date
+                </label>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={handleEndDateChange}
+                    min={startDate} // Ensure end date is not before start date
+                    className="w-full pl-10 pr-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Clear Filters Button */}
+            <button
+              onClick={clearFilters}
+              className="px-4 py-2 text-sm mt-5 font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200"
+            >
+              Clear Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-gray-200 p-4 rounded shadow-md text-black h-80 overflow-y-scroll">
         <table className="w-full text-left ">
           <thead className="">
@@ -187,6 +290,26 @@ const BannerManagement = () => {
             )}
           </tbody>
         </table>
+
+        <ReactPaginate
+          className="flex justify-center border-gray-700 items-center space-x-2 mt-4"
+          breakLabel="..."
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel="< previous"
+          renderOnZeroPageCount={null}
+          marginPagesDisplayed={2}
+          containerClassName="flex flex-wrap justify-center gap-2"
+          pageClassName="flex items-center"
+          pageLinkClassName="px-4 py-2 border border-gray-400 rounded-md text-sm hover:bg-blue-600 transition duration-200"
+          previousClassName="flex items-center"
+          previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+          nextClassName="flex items-center"
+          nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+          activeClassName="bg-blue-500 text-white"
+        />
       </div>
       <div className="bg-gray-200 p-4 mt-8 rounded shadow-md text-black">
         <h2 className="text-xl font-bold mb-4">Add New Banner</h2>

@@ -218,7 +218,7 @@ const CouponManagement = () => {
                           {coupon.totalLimit}
                         </td>
                         <td className="px-6 py-4 text-black">
-                          {coupon.maxDiscount}
+                          {coupon.maxDiscount || "Nil"}
                         </td>
                         <td className="px-6 py-4 text-black">
                           {coupon.purchaseAmount}

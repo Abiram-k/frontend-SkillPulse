@@ -1,6 +1,6 @@
 import { Button } from "@/Components/ui/button";
 
-import './component.css'
+import "./component.css";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import { Label } from "@/Components/ui/label";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import { Toast } from "./Toast";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function ChangePassword({ id }) {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -22,17 +23,26 @@ export function ChangePassword({ id }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState({});
 
+  const navigate = useNavigate();
+
   const handleFormError = () => {
     const error = {};
     if (currentPassword.length < 8)
       error.currentPassword = "Enter correct password";
     else if (currentPassword.trim() == "")
       error.currentPassword = "Enter you current password";
-
     if (newPassword.length < 8)
       error.newPassword = "Password must be 8 charecters *";
     else if (newPassword.trim() == "")
       error.newPassword = "password must be valid charecters *";
+    else if (!/[a-z]/.test(newPassword))
+      error.newPassword =
+        "Password must include at least one lowercase letter.";
+    else if (!/[0-9]/.test(newPassword))
+      error.newPassword = "Password must include at least one number.";
+    else if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword))
+      error.newPassword =
+        "Password must include at least one special character.";
 
     if (confirmPassword.length < 8)
       error.confirmPassword = "Password must be 8 charecters *";
@@ -47,7 +57,6 @@ export function ChangePassword({ id }) {
         error.confirmPassword = "This password has already been used once.";
       }
     }
-    
 
     return error;
   };
@@ -58,17 +67,24 @@ export function ChangePassword({ id }) {
     if (Object.keys(formError).length > 0) {
       setMessage(formError);
       return;
+    } else {
+      setMessage({});
     }
     try {
-      if(Object.keys(formError).length==0){
-      const response =await axios.patch(`/password/${id}`,
-        { currentPassword, newPassword },
-      );
-      Toast.fire({
-        icon: "success",
-        title: `${response.data.message}`,
-      });
-    }
+      if (Object.keys(formError).length == 0) {
+        const response = await axios.patch(`/password/${id}`, {
+          currentPassword,
+          newPassword,
+        });
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        window.location.reload();
+        Toast.fire({
+          icon: "success",
+          title: `${response.data.message}`,
+        });
+      }
     } catch (error) {
       console.log(error);
       Toast.fire({

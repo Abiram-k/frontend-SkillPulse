@@ -205,9 +205,9 @@ function App() {
                 <Route
                   path="shop"
                   element={
-                    <ProtectUserHome>
+                    // <ProtectUserHome>
                       <Shop />
-                    </ProtectUserHome>
+                    // </ProtectUserHome>
                   }
                 />
                 <Route

@@ -10,11 +10,14 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../../Components/Pagination";
-import { Heart } from "lucide-react";
+import { Heart, Share2, ShoppingCart } from "lucide-react";
 import {
   addToWishList,
   removeFromWishlist,
 } from "../wishlist/addRemoveWishlit";
+import { showToast } from "@/Components/ToastNotification";
+import { useSearchParams } from "react-router-dom";
+
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
@@ -30,6 +33,15 @@ const Shop = () => {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [search, setSearch] = useState("");
   const [trigger, setTrigger] = useState(0);
+
+  const [searchParams] = useSearchParams();
+
+  const categoryIdFromQuery = searchParams.get("categoryId");
+  const [hasSetCategoryFromQuery, setHasSetCategoryFromQuery] = useState(false);
+
+  const [cartProduct, setCartProduct] = useState([]);
+  const [goToCart, setGoToCart] = useState(false);
+
   const user = useSelector((state) => state.users.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -39,9 +51,33 @@ const Shop = () => {
     fetchWishlist();
   }, [filter, trigger]);
 
+  useEffect(() => {
+    if (categoryIdFromQuery && category.length > 0) {
+      const matchedCategory = category.find(
+        (item) => item._id === categoryIdFromQuery
+      );
+
+      if (
+        !filter.category &&
+        matchedCategory &&
+        filter.category !== matchedCategory.name
+      ) {
+        setFilter((prev) => ({ ...prev, category: matchedCategory.name }));
+      }
+    }
+  }, [category, categoryIdFromQuery]);
+
+  useEffect(() => {
+    if (user) {
+      const savedCart =
+        JSON.parse(localStorage.getItem(`cart_${user?._id}`)) || [];
+      setCartProduct(savedCart);
+    }
+  }, [user?._id]);
+
   const fetchProducts = async () => {
     try {
-      setSpinner(true);
+      // setSpinner(true);
       const response = await axios.get("/products", {
         params: filter,
       });
@@ -128,6 +164,68 @@ const Shop = () => {
       }
     }
   };
+
+  const handleShare = async (product, productId) => {
+    const shareData = {
+      title: product.name || "Check out this product",
+      text: product.description || "Amazing product you might like!",
+      url: `${window.location.origin}/user/productDetails?id=${productId}`,
+    };
+
+    try {
+      if (navigator.share && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+        console.log("Link copied to clipboard!");
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        console.log("Link copied to clipboard!");
+      } catch (clipboardError) {
+        console.error("Failed to copy to clipboard:", clipboardError);
+      }
+    }
+  };
+
+  const handleAddToCart = async (id) => {
+    if (!user?._id) {
+      navigate("/login");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `/addToCart/${id}`,
+        {},
+        {
+          params: {
+            userId: user?._id,
+          },
+        }
+      );
+      setCartProduct((prev) => {
+        if (!prev.includes(id)) {
+          const updatedCart = [...prev, id];
+          localStorage.setItem(
+            `cart_${user?._id}`,
+            JSON.stringify(updatedCart)
+          );
+          return updatedCart;
+        }
+        return prev;
+      });
+      showToast("success", `${response?.data.message}`);
+    } catch (error) {
+      if (error?.response.data.isBlocked) {
+        dispatch(logoutUser());
+      }
+      showToast("error", `${error?.response?.data?.message}`);
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       {spinner && (
@@ -310,15 +408,52 @@ const Shop = () => {
                       </span>
                     )}
                   </p>
+                  <div className="absolute top-2 left-2 w-10 h-10 bg-gray-600 hover:bg-gray-700 border-white border-1 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md">
+                    <Share2
+                      className="w-5 h-5 text-white hover:text-blue-700 transition-colors"
+                      onClick={() => handleShare(product, product._id)}
+                    />
+                  </div>
+                  {cartProduct.includes(product._id) ? (
+                    <div className="absolute top-2 right-12 w-10 h-10 bg-green-100 hover:bg-green-200 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md">
+                      <ShoppingCart
+                        className="w-5 h-5 fill-green-600 text-green-600"
+                        onClick={() => {
+                          if (!user?._id) {
+                            navigate("/login");
+                            return;
+                          } else {
+                            navigate("/user/cart");
+                          }
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="absolute top-2 right-12 w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md">
+                      <ShoppingCart
+                        className="w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors"
+                        onClick={() => {
+                          if (user) handleAddToCart(product._id);
+                          else navigate("/login");
+                        }}
+                      />
+                    </div>
+                  )}
                   {wishlistItems.includes(product._id) ? (
                     <Heart
                       className="absolute top-3 right-3 w-7 h-7 fill-red-600 text-red-600 cursor-pointer"
-                      onClick={() => handleRemoveFromWishlist(product._id)}
+                      onClick={() => {
+                        if (user) handleRemoveFromWishlist(product._id);
+                        else navigate("/login");
+                      }}
                     />
                   ) : (
                     <Heart
                       className="absolute top-3 right-3 w-7 h-7 text-gray-300 transition-colors cursor-pointer"
-                      onClick={() => handleAddToWishList(product._id)}
+                      onClick={() => {
+                        if (user) handleAddToWishList(product._id);
+                        else navigate("/login");
+                      }}
                     />
                   )}
 

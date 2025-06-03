@@ -8,6 +8,7 @@ import { Toast } from "../../../Components/Toast";
 import { logoutAdmin } from "@/redux/adminSlice";
 import { useDispatch } from "react-redux";
 import ReactPaginate from "react-paginate";
+import { Calendar, Search } from "lucide-react";
 const Category = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -23,6 +24,10 @@ const Category = () => {
   const currentPage = useRef();
   const [pageCount, setPageCount] = useState(1);
   const [postPerPage, setPostPerPage] = useState(5);
+
+  const searchFocus = useRef(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const { setData } = useContext(context);
   const navigate = useNavigate();
@@ -59,7 +64,7 @@ const Category = () => {
     try {
       setSpinner(true);
       const response = await axios.get(
-        `/admin/category?search=${search}&filter=${filter}&page=${currentPage.current}&limit=${postPerPage}`
+        `/admin/category?search=${search}&filter=${filter}&page=${currentPage.current}&limit=${postPerPage}&startDate=${startDate}&endDate=${endDate}`
       );
       setCategories(response.data.categories);
       setSpinner(false);
@@ -67,31 +72,27 @@ const Category = () => {
     } catch (error) {
       setSpinner(false);
       console.log(error);
+    } finally {
+      searchFocus?.current.focus();
     }
+  };
+  const handleStartDateChange = (e) => {
+    setStartDate(e.target.value);
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+  };
+  const clearFilters = () => {
+    setStartDate("");
+    setEndDate("");
+    setSearch("");
   };
 
   useEffect(() => {
-    // (async () => {
-    //   await axios
-    //     .get("/admin/category")
-    //     .then((response) => {
-    //       setCategories(response.data.categories);
-    //     })
-    //     .catch((error) => {
-    //       if (
-    //         error?.response.data.message == "Token not found" ||
-    //         error?.response.data.message == "Failed to authenticate Admin"
-    //       ) {
-    //         dispatch(logoutAdmin());
-    //       }
-    //       console.log(error);
-    //       alert(error?.response.data.message);
-    //     });
-    // })();
-
     currentPage.current = 1;
     fetchCategories();
-  }, [search, filter]);
+  }, [search, filter, startDate, endDate]);
 
   const handleProductImageChange = (e) => {
     const imageFile = e.target.files[0];
@@ -132,7 +133,8 @@ const Category = () => {
           },
         });
         setSpinner(false);
-        navigate("/admin/category");
+        window.location.reload();
+        // navigate("/admin/category");
         Toast.fire({
           icon: "success",
           title: `${response.data.message}`,
@@ -153,7 +155,11 @@ const Category = () => {
     try {
       if (result) {
         const response = await axios.patch(`/admin/categoryRestore/${id}`);
-        alert(response.data.message);
+        Toast.fire({
+          icon: "success",
+          title: `${response.data.message}`,
+        });
+        window.location.reload();
       }
     } catch (error) {
       alert(error.response?.data.message);
@@ -161,10 +167,10 @@ const Category = () => {
   };
   const handleDelete = async (id) => {
     const result = confirm("Are you sure to delete categorie");
-    // alert(result);
     try {
       if (result) {
         const response = await axios.delete(`/admin/category/${id}`);
+        window.location.reload();
         Toast.fire({
           icon: "success",
           title: `${response.data.message}`,
@@ -216,7 +222,8 @@ const Category = () => {
   };
 
   return (
-    <main className="w-4/5 p-8 font-mono">
+    //w-4/5
+    <main className="w-full p-8 font-mono">
       {spinner && (
         <div className="spinner-overlay">
           <div className="spinner"></div>
@@ -231,22 +238,77 @@ const Category = () => {
           <i className="fas fa-sync-alt mr-2"></i> Refresh
         </button>
         <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4 w-full lg:w-auto">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="border rounded text-black px-4 py-2 w-full lg:w-auto"
-            value={search}
-            onChange={handleSearchChange}
-          />
+          <div className="w-full max-w-4xl mx-auto p-6  rounded-lg shadow-sm font-sans">
+            <div className="space-y-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={search}
+                  ref={searchFocus}
+                  onChange={handleSearchChange}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                />
+              </div>
+
+              {/* Date Filters */}
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
+                <div className="flex flex-col sm:flex-row gap-4 flex-1">
+                  {/* Start Date */}
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Start Date
+                    </label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                      <input
+                        type="date"
+                        value={startDate}
+                        onChange={handleStartDateChange}
+                        className="w-full pl-10 pr-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* End Date */}
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      End Date
+                    </label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                      <input
+                        type="date"
+                        value={endDate}
+                        onChange={handleEndDateChange}
+                        min={startDate} // Ensure end date is not before start date
+                        className="w-full pl-10 pr-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Clear Filters Button */}
+                <button
+                  onClick={clearFilters}
+                  className="px-4 py-2 text-sm mt-5 font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div className="flex items-center space-x-4">
-            <span className="font-semibold text-gray-600">Filter</span>
+            <span className="font-semibold text-gray-600">Sort: </span>
             <select
               className="border rounded px-2 py-1 font-mono text-black  "
               value={filter}
               onChange={handleFilter}
             >
               <option value="">Select Option</option>
-              <option value="Recently Added">Recently Added</option>
+              <option value="oldest">Oldest</option>
               <option value="A-Z">A-Z</option>
               <option value="Z-A">Z-A</option>
             </select>

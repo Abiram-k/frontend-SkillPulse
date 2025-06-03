@@ -2,10 +2,37 @@ import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import paymentTag from "../../../assets/paymentTags.png";
 import { BadgeDemo } from "@/Components/BadgeDemo";
+import axios from "@/axiosIntercepters/AxiosInstance";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "@/redux/userSlice";
 
 function UserLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [profileImage, setProfileImage] = useState(null);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.users.user);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      try {
+        const response = await axios.get(`/user`);
+        setProfileImage(response.data?.userData?.profileImage);
+      } catch (error) {
+        setSpinner(false);
+        if (
+          error?.response.data.isBlocked ||
+          error?.response.data.message == "token not found"
+        ) {
+          dispatch(logoutUser());
+        }
+        console.log(error?.response?.data?.message);
+      }
+    })();
+  }, []);
+
   return (
     <>
       <div className="bg-[#1C1C1C] text-white p-4 flex justify-between items-center sticky top-0 z-50 ">
@@ -85,7 +112,15 @@ function UserLayout() {
             </Link>
           </div>
           <Link to={"profile"}>
-            <i className="fas fa-user-circle lg:text-xl"></i>
+            {profileImage ? (
+              <img
+                src={profileImage || ""}
+                alt="user avatar"
+                className="w-7 h-7 rounded-full"
+              />
+            ) : (
+              <i className="fas fa-user-circle lg:text-xl"></i>
+            )}
           </Link>
         </div>
       </div>
@@ -118,8 +153,12 @@ function UserLayout() {
           <div className="text-center w-1/2 md:w-auto">
             <h3 className="font-bold">CUSTOMER SERVICE</h3>
             <ul className="mt-2 space-y-2">
-              <li>Contact us</li>
-              <li>Shipping & Returns</li>
+              <li>
+                <Link to={"/user/contact"}>Contact us</Link>
+              </li>
+              <li>
+                <Link to={"/user/profile/myOrders"}>Shipping & Returns</Link>
+              </li>
               <li>Terms & Conditions</li>
               <li>Delivery</li>
             </ul>
@@ -128,7 +167,9 @@ function UserLayout() {
           <div className="text-center w-1/2 md:w-auto">
             <h3 className="font-bold">INFORMATION</h3>
             <ul className="mt-2 space-y-2">
-              <li>About</li>
+              <li>
+                <Link to={"/user/about"}>About</Link>
+              </li>
               <li>Payments</li>
               <li>Size guide</li>
               <li>Administrator</li>

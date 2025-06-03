@@ -17,3 +17,10 @@ body{
 form{
   font-family: "Montserrat";
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Thin scrollbar */
+  background-color: rgb(168, 162, 162);
+}
+
+

@@ -84,6 +84,7 @@ function EditCategory() {
       const response = await axios.put("/admin/category", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
       setSpinner(false);
       Toast.fire({
         icon: "success",

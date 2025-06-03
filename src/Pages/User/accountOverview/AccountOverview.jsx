@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   User,
   Package,
@@ -30,9 +30,12 @@ const AccountOverview = () => {
   const [spinner, setSpinner] = useState(false);
   const [message, setMessage] = useState({});
   const [editMode, setEditMode] = useState(false);
+  const dateRef = useRef(null);
+  const editButtonRef = useRef(null);
 
   const [referral, setRefferal] = useState();
   const dispatch = useDispatch();
+  const nameRegex = /^[A-Za-z\s]+$/;
 
   const formValidate = () => {
     let error = {};
@@ -42,21 +45,44 @@ const AccountOverview = () => {
     if (firstName?.trim() == "") error.firstName = "first name is required *";
     else if (!isNaN(firstnameFirstCharecter)) {
       error.firstName = "Name must start with a charecter *";
+    } else if (!nameRegex.test(firstName)) {
+      error.firstName =
+        "First name must not include numbers or special characters.";
     }
 
     if (!isNaN(lastnameFirstCharecter) && lastnameFirstCharecter?.trim()) {
       error.lastName = "Last name must start with a charecter *";
+    } else if (!nameRegex.test(secondName)) {
+      error.lastName =
+        "Last name must not include numbers or special characters.";
     }
 
-    if (mobileNumber?.trim() && mobileNumber?.length !== 10) {
-      error.mobileNumber = "Please enter a 10-digit mobile number *";
+    // if (mobileNumber?.trim() && mobileNumber?.length !== 10) {
+    //   error.mobileNumber = "Please enter a 10-digit mobile number *";
+    // }
+
+    if (mobileNumber?.trim()) {
+      const isOnlyDigits = /^\d{10}$/.test(mobileNumber);
+
+      if (!isOnlyDigits) {
+        error.mobileNumber =
+          "Please enter a valid 10-digit mobile number (digits only) *";
+      }
     }
+
     return error;
   };
 
+  const handleEditToastAlert = () => {
+    Toast.fire({
+      icon: "info",
+      position: "top-start",
+      title: "Click edit button, for edit mode!",
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const handleImageChanges = (e) => {
     handleImageChange(e);
-    // handleImageToDb(e);
   };
 
   const handleImageChange = (e) => {
@@ -159,6 +185,7 @@ const AccountOverview = () => {
       setEditMode(false);
       setMessage({});
       setProfileImage(response.data?.updatedUser);
+      window.location.reload();
       showToast("success", response?.data?.message);
     } catch (error) {
       setSpinner(false);
@@ -201,14 +228,20 @@ const AccountOverview = () => {
             )}
           </label>
           <input
-            disabled={!editMode}
+            onClick={(e) => {
+              if (!editMode) {
+                e.preventDefault();
+                e.stopPropagation();
+                handleEditToastAlert();
+              }
+            }}
             id="fileInput"
             type="file"
             accept="image/*"
             onChange={handleImageChanges}
             style={{ display: "none" }}
           />
-          <span className="font-semibold">{user.firstName || "Abiram k"}</span>
+          <span className="font-semibold">{user.firstName || "User name"}</span>
         </div>
         <div className="flex gap-3">
           {!user.googleid && (
@@ -221,6 +254,7 @@ const AccountOverview = () => {
           <button
             className="bg-green-500 rounded p-2 hover:scale-110 transition-all duration-100 flex gap-2 justify-center items-center"
             onClick={handleEditMode}
+            ref={editButtonRef}
           >
             {editMode ? (
               <>
@@ -258,7 +292,7 @@ const AccountOverview = () => {
               className="w-full bg-gray-700 rounded-lg p-2"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              disabled={!editMode}
+              onClick={() => !editMode && handleEditToastAlert()}
             />
             {message.firstName && (
               <p className="text-red-600">{message.firstName}</p>
@@ -271,7 +305,7 @@ const AccountOverview = () => {
               className="w-full bg-gray-700 rounded-lg p-2"
               value={secondName}
               onChange={(e) => setSecondName(e.target.value)}
-              disabled={!editMode}
+              onClick={() => !editMode && handleEditToastAlert()}
             />
             {message.lastName && (
               <p className="text-red-600">{message.lastName}</p>
@@ -311,11 +345,23 @@ const AccountOverview = () => {
         <div>
           <label className="block mb-2">Date of Birth</label>
           <input
+            ref={dateRef}
             type="date"
-            className="w-full bg-gray-700 rounded-lg p-2"
+            className="w-full bg-gray-700 rounded-lg p-2  "
             value={dateOfBirth?.split("T")[0]}
+            onClick={() => {
+              if (editMode && dateRef.current?.showPicker) {
+                dateRef.current.showPicker();
+              } else {
+                handleEditToastAlert();
+              }
+            }}
+            max={
+              new Date(new Date().setFullYear(new Date().getFullYear() - 10))
+                .toISOString()
+                .split("T")[0]
+            }
             onChange={(e) => setDateOfBirth(e.target.value)}
-            disabled={!editMode}
           />
         </div>
 
@@ -329,7 +375,7 @@ const AccountOverview = () => {
               className="w-full bg-gray-700 rounded-lg p-2"
               value={mobileNumber ? mobileNumber : ""}
               onChange={(e) => setMobileNumber(e.target.value)}
-              disabled={!editMode}
+              onClick={() => !editMode && handleEditToastAlert()}
             />
             {message.mobileNumber && (
               <p className="text-red-600">{message.mobileNumber}</p>

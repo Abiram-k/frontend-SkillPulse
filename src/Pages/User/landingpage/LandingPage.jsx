@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setProductDetails } from "../../../redux/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "@/axiosIntercepters/AxiosInstance";
+import { Toast } from "@/Components/Toast";
 const LandingPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [products, setProducts] = useState([]);
@@ -64,7 +65,7 @@ const LandingPage = () => {
             menuOpen ? "flex" : "hidden"
           } flex-col lg:flex-row lg:flex lg:space-x-4 lg:items-center absolute lg:static bg-black lg:bg-transparent top-16 left-0 w-full lg:w-auto z-10 text-center space-y-8 lg:space-y-0 pb-8 lg:p-0`}
         >
-          <Link to="/user/home" className="hover:text-gray-400">
+          {/* <Link to="/user/home" className="hover:text-gray-400">
             HOME
           </Link>
           <Link to="/user/shop" className="hover:text-gray-400">
@@ -78,7 +79,7 @@ const LandingPage = () => {
           </Link>
           <Link to="/user/about" className="hover:text-gray-400">
             ABOUT US
-          </Link>
+          </Link> */}
           {/* <div className="lg:flex space-x-1 align-middle justify-center hidden relative font-sans">
             <i className="fas fa-search absolute right-3 top-3.5 text-gray-200"></i>
             <input
@@ -120,7 +121,13 @@ const LandingPage = () => {
           </p>
           <button
             className="mt-4 px-6 py-2 bg-red-600 text-white font-bold rounded text-center font-mono "
-            onClick={() => goToDetails()}
+            onClick={() => {
+              Toast.fire({
+                icon: "warning",
+                title: "User not logged in, login now!",
+              });
+              navigate("/login");
+            }}
           >
             ORDER NOW
           </button>
@@ -135,7 +142,9 @@ const LandingPage = () => {
                 <div
                   className="w-full sm:w-1/2 md:w-1/4 lg:w-1/5 text-center mb-8 p-4 bg-gray-900  shadow-lg hover:shadow-xl transition-shadow  rounded duration-300"
                   key={cat._id}
-                  onClick={() => goToDetails()}
+                  onClick={() => {
+                    navigate(`/user/shop?categoryId=${cat._id}`);
+                  }}
                 >
                   <img
                     src={cat.image || "https://placehold.co/150x150"}

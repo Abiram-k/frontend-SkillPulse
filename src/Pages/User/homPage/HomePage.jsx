@@ -157,6 +157,9 @@ const HomePage = () => {
                 <div
                   className="w-full sm:w-1/2 md:w-1/4 lg:w-1/5 text-center mb-8 p-4 bg-gray-900  shadow-lg hover:shadow-xl transition-shadow  rounded duration-300"
                   key={cat._id}
+                  onClick={() => {
+                    navigate(`/user/shop?categoryId=${cat._id}`);
+                  }}
                 >
                   <img
                     src={cat.image || "https://placehold.co/150x150"}

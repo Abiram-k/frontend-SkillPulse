@@ -33,8 +33,10 @@ const EditProduct = () => {
   const [zoom, setZoom] = useState(1);
   const navigate = useNavigate();
   const { data } = useContext(context);
-
   useEffect(() => {
+    if (data && Object.keys(data).length === 0) {
+      navigate("/admin/products");
+    }
     setId(data?._id || "");
     setName(data?.productName || "");
     setCategory(data?.category?.name || "Not fetched");

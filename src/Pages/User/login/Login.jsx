@@ -152,12 +152,12 @@ function Login() {
                   <i class="fa-solid fa-eye-slash"></i>
                 )}
               </button>
+            </div>
               {message.password && (
                 <p className="error text-red-500 text-sm mt-1">
                   {message.password}
                 </p>
               )}
-            </div>
             <div>
               <input
                 type="text"

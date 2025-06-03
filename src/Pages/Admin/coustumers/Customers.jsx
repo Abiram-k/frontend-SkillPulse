@@ -174,20 +174,6 @@ const Customers = () => {
                     Clear Filters
                   </button>
                 </div>
-
-                {/* Filter Summary */}
-                {/* {(startDate || endDate || search) && (
-                  <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-md">
-                    <span className="font-medium">Active filters:</span>
-                    {search && (
-                      <span className="ml-2">Search: "{search}"</span>
-                    )}
-                    {startDate && (
-                      <span className="ml-2">From: {startDate}</span>
-                    )}
-                    {endDate && <span className="ml-2">To: {endDate}</span>}
-                  </div>
-                )} */}
               </div>
             </div>
 

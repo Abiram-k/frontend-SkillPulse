@@ -1,23 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axiosInstance from "@/axiosIntercepters/AxiosInstance";
 import { showToast } from "@/Components/ToastNotification";
+import { Search } from "lucide-react";
 
 const ReturnRequests = () => {
   const [returnedProducts, setReturnedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const searchFocus = useRef(null);
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
 
   // const user = useSelector((state) => state.users.user);
   useEffect(() => {
     const fetchReturnedProducts = async () => {
       try {
-        const response = await axiosInstance.get(`admin/order`);
+        const response = await axiosInstance.get(
+          `admin/order?search=${search}&isForReturned=${true}`
+        );
         setReturnedProducts(() => {
           return response.data.orderData
             .map((order) => ({
               ...order,
-              orderItems: order.orderItems.filter(
-                (item) => item.returnDescription
-              ),
+              orderItems: order.orderItems
+                .filter(
+                  (item) =>
+                    item.returnDescription &&
+                    (!search ||
+                      item.product?.productName
+                        ?.toLowerCase()
+                        .includes(search.toLowerCase()))
+                )
+                .reverse(),
             }))
             .filter((order) => order.orderItems.length > 0);
         });
@@ -29,8 +44,7 @@ const ReturnRequests = () => {
     };
 
     fetchReturnedProducts();
-  }, [returnedProducts]);
-
+  }, [search]);
 
   const handleApprove = async (id) => {
     try {
@@ -39,6 +53,7 @@ const ReturnRequests = () => {
         itemId: id,
       });
       showToast("success", response.data.message);
+      window.location.reload();
     } catch (error) {
       console.log(error);
       showToast("error", error.response?.data.message);
@@ -47,7 +62,9 @@ const ReturnRequests = () => {
 
   return (
     <div className="p-6 bg-white min-h-screen font-mono">
-      <h1 className="text-2xl font-bold text-black mb-4">Returned Products</h1>
+      <h1 className="text-2xl font-bold text-black mb-4">
+        Return Product Requests
+      </h1>
 
       {loading ? (
         <div className="flex items-center justify-center h-64">
@@ -59,6 +76,18 @@ const ReturnRequests = () => {
         </div>
       ) : (
         <div className="overflow-x-auto bg-white shadow rounded">
+          <div className="relative mb-3">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={search}
+              ref={searchFocus}
+              onChange={handleSearchChange}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 text-black rounded-md outline-none"
+            />
+          </div>
+
           <table className="min-w-full text-left border-collapse border border-black">
             <thead className="bg-gray-100 text-black font-bold">
               <tr>

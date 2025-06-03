@@ -5,6 +5,7 @@ import "./otp.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { otpSuccess } from "../../../redux/userSlice";
+import { Toast } from "@/Components/Toast";
 
 function Otp() {
   const [input, setInput] = useState(true);
@@ -40,12 +41,19 @@ function Otp() {
   const handleOtpChange = (value) => {
     setOtp(value);
   };
+  useEffect(() => {
+    if (otp.length == 6) handleClick();
+  }, [otp]);
 
   const handleClick = async () => {
     try {
       const response = await axios.post("/otp", { otp });
       if (response.status === 200) {
         dispatch(otpSuccess());
+        Toast.fire({
+          icon: "sucess",
+          title: `${"Signup successfull, Login now!"}`,
+        });
         navigate("/login");
         localStorage.removeItem("otpTimer");
       }
@@ -82,7 +90,7 @@ function Otp() {
   }, [message]);
 
   return (
-    <div className="text-center flex items-center flex-col justify-center h-screen px-4 transition-transform duration-300" >
+    <div className="text-center flex items-center flex-col justify-center h-screen px-4 transition-transform duration-300">
       {message.serverError && (
         <div
           id="notification"
@@ -116,7 +124,10 @@ function Otp() {
       </h1>
       <div
         className="bg-gray-900 text-gray-200 p-10 rounded-lg w-full sm:w-2/3 md:w-1/2 lg:w-1/3 "
-        style={{ boxShadow: "0 0 5px 5px rgba(255, 0, 0, 0.1)" ,fontFamily: "Montserrat" }}
+        style={{
+          boxShadow: "0 0 5px 5px rgba(255, 0, 0, 0.1)",
+          fontFamily: "Montserrat",
+        }}
       >
         <h2 className="text-2xl font-bold mb-2">OTP Verification</h2>
         <p className="mb-6">Enter the OTP to confirm [Email]</p>
@@ -141,13 +152,13 @@ function Otp() {
           </p>
         )}
 
-        <button
+        {/* <button
           className="bg-red-600 text-white py-2 px-6 mt-2 rounded-full hover:bg-red-700"
           onClick={handleClick}
           disabled={!input}
         >
           CONFIRM
-        </button>
+        </button> */}
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "./signup.css";
 import { useDispatch } from "react-redux";
 import { signUpSuccess } from "../../../redux/userSlice";
-const Signup = () => {
+const Signup = () => { 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

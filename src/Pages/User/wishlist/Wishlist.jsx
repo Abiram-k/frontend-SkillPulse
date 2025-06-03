@@ -1,6 +1,5 @@
 import { Toast } from "@/Components/Toast";
 import { logoutUser } from "@/redux/userSlice";
-// import axios from "axios";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,14 +19,19 @@ const Wishlist = () => {
   const [trigger, setTrigger] = useState(0);
   useEffect(() => {
     (async () => {
-      
       try {
         const response = await axios.get(`/wishlist`);
-        setWishlist(response?.data.wishlist);
+        const wishlistData = response.data.wishlist;
+        if (wishlistData?.length)
+          wishlistData.products = wishlistData[0]?.products?.reverse();
+        setWishlist(wishlistData);
+        // console.log("Wishlist Data: ", wishlistData);
+        // setWishlist(response?.data.wishlist);
+        // response?.data?.wishlist?.products?.reverse();
       } catch (error) {
         if (
           error?.response.data.isBlocked ||
-          error?.response.data.message == "Token not found" 
+          error?.response.data.message == "Token not found"
         ) {
           dispatch(logoutUser());
         }
@@ -37,7 +41,7 @@ const Wishlist = () => {
         });
       }
     })();
-  }, [trigger,wishlist]);
+  }, [trigger, wishlist]);
 
   const handleDeleteItem = async (product) => {
     try {
@@ -68,7 +72,7 @@ const Wishlist = () => {
         return prev;
       });
       setTrigger((prev) => prev + 1);
-      showToast("success",response.data.message)
+      showToast("success", response.data.message);
     } catch (error) {
       if (error?.response.data.isBlocked) {
         dispatch(logoutUser());

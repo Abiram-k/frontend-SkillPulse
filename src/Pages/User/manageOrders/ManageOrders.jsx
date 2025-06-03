@@ -160,7 +160,7 @@ const ManageOrders = () => {
         />
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 bg-gray-900 overflow-y-scroll custom-scrollbar">
         {orders.length > 0 ? (
           filteredOrders.length > 0 ? (
             filteredOrders?.map((order) => (
