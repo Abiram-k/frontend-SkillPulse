@@ -25,7 +25,7 @@ const Customers = () => {
     (async () => {
       try {
         const response = await axios.get(
-          `/admin/customers?sort=${filterUser}&startDate=${startDate}&endDate=${endDate}`
+          `/admin/customers?sort=${filterUser}&startDate=${startDate}&endDate=${endDate}&search=${search}`
         );
         console.log(response.data.users);
         setSpinner(false);
@@ -42,7 +42,7 @@ const Customers = () => {
       }
     })();
     searchFocus?.current.focus();
-  }, [filterUser, startDate, endDate]);
+  }, [filterUser, startDate, endDate, search]);
 
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
@@ -121,7 +121,7 @@ const Customers = () => {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <input
                     type="text"
-                    placeholder="Search..."
+                    placeholder="Search by email..."
                     value={search}
                     ref={searchFocus}
                     onChange={(e) => setSearch(e.target.value)}

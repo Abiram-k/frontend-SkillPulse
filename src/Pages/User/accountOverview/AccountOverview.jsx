@@ -88,12 +88,13 @@ const AccountOverview = () => {
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-    const maxSize = 1 * 1024 * 1024 * 1024; // 1MB
+    const maxSize = 1 * 1024 * 1024; // 1MB
     if (
       imageFile &&
       allowedTypes.includes(imageFile.type) &&
       imageFile.size <= maxSize
     ) {
+      setMessage({});
       setDbImage(imageFile);
       const reader = new FileReader();
       reader.onloadend = () => {

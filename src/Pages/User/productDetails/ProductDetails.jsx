@@ -61,11 +61,11 @@ const ProductDetails = () => {
         console.log(error.message);
       }
     })();
-
+    if (id) return;
     (async () => {
       try {
         const response = await axios.get(
-          `/getSimilarProduct/${product[0]._id}`
+          `/getSimilarProduct/${product[0]?._id}`
         );
         setSimilarProducts(response.data.similarProducts);
       } catch (error) {
@@ -397,6 +397,7 @@ const ProductDetails = () => {
             </div>
           ))
         )}
+        {!id &&
         <section className="mt-16">
           <h2 className="text-2xl font-bold mb-8">Similar Products</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -440,7 +441,7 @@ const ProductDetails = () => {
               ))}
             {error && <div className="text-red-500">{error}</div>}
           </div>
-        </section>
+        </section>}
         <section className="mt-16">
           <h2 className="text-2xl font-bold mb-8">Customer Reviews</h2>
           <div className="space-y-8">

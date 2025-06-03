@@ -329,8 +329,12 @@ const LandingPage = () => {
           <div>
             <h3 className="font-bold">CUSTOMER SERVICE</h3>
             <ul className="mt-2 space-y-2">
-              <li>Contact us</li>
-              <li>Shipping & Returns</li>
+              <li>
+                <Link to={"/user/contact"}>Contact us</Link>
+              </li>
+              <li>
+                <Link to={"/user/profile/myOrders"}>Shipping & Returns</Link>
+              </li>
               <li>Terms & Conditions</li>
               <li>Delivery</li>
             </ul>
@@ -338,12 +342,14 @@ const LandingPage = () => {
           <div>
             <h3 className="font-bold">INFORMATION</h3>
             <ul className="mt-2 space-y-2">
-              <li>About</li>
+              <li>
+                <Link to={"/user/about"}>About</Link>
+              </li>
               <li>Affiliates</li>
               <li>Privacy Policy</li>
             </ul>
           </div>
-          <div>
+          {/* <div>
             <h3 className="font-bold">NEWSLETTER</h3>
             <input
               type="email"
@@ -353,10 +359,10 @@ const LandingPage = () => {
             <button className="w-full mt-2 px-4 py-2 bg-red-600 text-white font-bold rounded">
               Subscribe
             </button>
-          </div>
+          </div> */}
         </div>
         <p className="text-center mt-8">
-          © 2023 FutureTech. All rights reserved.
+          © {new Date().getFullYear()}. All rights reserved - Abiram.
         </p>
       </footer>
     </div>

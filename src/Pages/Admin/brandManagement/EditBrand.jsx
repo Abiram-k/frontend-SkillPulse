@@ -41,13 +41,31 @@ function EditBrand() {
 
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
-    if (imageFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBrandImage(reader.result);
-      };
-      reader.readAsDataURL(imageFile);
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+    const maxSize = 1 * 1024 * 1024;
+
+    if (!imageFile) return;
+
+    if (!allowedTypes.includes(imageFile.type)) {
+      Toast.fire({
+        icon: "error",
+        title: "Please upload a JPEG, JPG, or PNG file.",
+      });
+      return;
     }
+
+    if (imageFile.size > maxSize) {
+      Toast.fire({
+        icon: "error",
+        title: "File size must be under 1MB.",
+      });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setBrandImage(reader.result);
+    };
+    reader.readAsDataURL(imageFile);
   };
 
   const handleEditBrand = async (e) => {
@@ -66,13 +84,9 @@ function EditBrand() {
     formData.append("file", image);
 
     try {
-      const response = await axios.put(
-        "/admin/brand",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" }
-        }
-      );
+      const response = await axios.put("/admin/brand", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       setSpinner(false);
       Toast.fire({
         icon: "success",

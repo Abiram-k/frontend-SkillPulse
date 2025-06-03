@@ -77,6 +77,9 @@ export const ChangeStatus = ({
               {/* {currentStatus == "processing" && (
                 <option value="processing">processing</option>
               )} */}
+              <option value="" disabled hidden>
+                Select status
+              </option>
               {currentStatus == "processing" && (
                 <option value="shipped">shipped</option>
               )}

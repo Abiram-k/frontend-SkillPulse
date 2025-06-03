@@ -55,13 +55,29 @@ function EditCategory() {
 
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
-    if (imageFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCategoryImage(reader.result);
-      };
-      reader.readAsDataURL(imageFile);
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+    const maxSize = 1 * 1024 * 1024;
+    if (!imageFile) return;
+    if (!allowedTypes.includes(imageFile.type)) {
+      Toast.fire({
+        icon: "error",
+        title: "Please upload a JPEG, JPG, or PNG file.",
+      });
+      return;
     }
+
+    if (imageFile.size > maxSize) {
+      Toast.fire({
+        icon: "error",
+        title: "File size must be under 1MB.",
+      });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCategoryImage(reader.result);
+    };
+    reader.readAsDataURL(imageFile);
   };
 
   const handleEditCategory = async (e) => {

@@ -51,7 +51,7 @@ function Otp() {
       if (response.status === 200) {
         dispatch(otpSuccess());
         Toast.fire({
-          icon: "sucess",
+          icon: "success",
           title: `${"Signup successfull, Login now!"}`,
         });
         navigate("/login");

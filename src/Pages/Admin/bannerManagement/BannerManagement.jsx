@@ -45,13 +45,31 @@ const BannerManagement = () => {
 
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
-    if (imageFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBannerImage(reader.result);
-      };
-      reader.readAsDataURL(imageFile);
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+    const maxSize = 1 * 1024 * 1024;
+
+    if (!imageFile) return;
+
+    if (!allowedTypes.includes(imageFile.type)) {
+      Toast.fire({
+        icon: "error",
+        title: "Please upload a JPEG, JPG, or PNG file.",
+      });
+      return;
     }
+
+    if (imageFile.size > maxSize) {
+      Toast.fire({
+        icon: "error",
+        title: "File size must be under 1MB.",
+      });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setBannerImage(reader.result);
+    };
+    reader.readAsDataURL(imageFile);
   };
 
   const handleStartDateChange = (e) => {
@@ -184,7 +202,7 @@ const BannerManagement = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search by description..."
               value={search}
               ref={searchFocus}
               onChange={handleSearchChange}
