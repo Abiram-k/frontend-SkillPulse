@@ -36,6 +36,7 @@ const ForgotPassword = () => {
     if (confirmPassword != newPassword)
       error.newPassword = "Password is not matching *";
     return error;
+    
   };
 
   const handleSubmit = async (e) => {
@@ -59,7 +60,6 @@ const ForgotPassword = () => {
         dispatch(passwordReseted());
       }
     } catch (error) {
-      alert(error.message);
       console.log(error);
       Toast.fire({
         icon: "error",
