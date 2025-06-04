@@ -152,6 +152,7 @@ const ProductDetails = () => {
 
   const handleAddToCart = async () => {
     try {
+      setSpinner(true);
       const response = await axios.post(
         `/addToCart/${product[0]._id}`,
         {},
@@ -179,6 +180,8 @@ const ProductDetails = () => {
       }
       showToast("error", `${error?.response?.data?.message}`);
       console.log(error);
+    } finally {
+      setSpinner(false);
     }
   };
 
@@ -316,9 +319,11 @@ const ProductDetails = () => {
                   <span className="text-2xl font-bold text-green-500">
                     ₹{product.salesPrice.toFixed(0)}
                   </span>
-                  <span className="text-gray-400 line-through">
-                    ₹{product.regularPrice}
-                  </span>
+                  {!!product?.offer == true && (
+                    <span className="text-gray-400 line-through">
+                      ₹{product.regularPrice}
+                    </span>
+                  )}
                   <span className="text-green-500 text-sm">
                     {product.offer ? product.offer + " % off" : ""}
                   </span>
@@ -397,51 +402,52 @@ const ProductDetails = () => {
             </div>
           ))
         )}
-        {!id &&
-        <section className="mt-16">
-          <h2 className="text-2xl font-bold mb-8">Similar Products</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {similarProducts
-              .filter((product) => product._id !== product[0]?._id)
-              .map((product) => (
-                <div
-                  key={product._id}
-                  className="bg-gray-900 rounded-lg p-4 relative"
-                >
-                  <img
-                    src={product?.productImage?.[0]}
-                    alt={product.productName}
-                    className="w-full h-48 object-contain mb-4"
-                    onClick={() => {
-                      window.location.reload();
-                      gotoDetails(product);
-                    }}
-                  />
-                  <div className="space-y-2">
-                    <h3 className="text-sm text-gray-400">
-                      {product.brand?.name}
-                    </h3>
-                    <p className="font-semibold">{product.productName}</p>
-                    <div className="flex items-baseline space-x-2">
-                      <span className="font-bold">
-                        {product.salesPrice.toFixed(0)}
-                      </span>
-                      <span className="text-sm text-gray-400 line-through">
-                        {product.regularPrice}
-                      </span>
-                      <span className="text-green-500 text-sm">
-                        {product.offer + "% off" || "99% off"}
-                      </span>
+        {!id && (
+          <section className="mt-16">
+            <h2 className="text-2xl font-bold mb-8">Similar Products</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {similarProducts
+                .filter((product) => product._id !== product[0]?._id)
+                .map((product) => (
+                  <div
+                    key={product._id}
+                    className="bg-gray-900 rounded-lg p-4 relative"
+                  >
+                    <img
+                      src={product?.productImage?.[0]}
+                      alt={product.productName}
+                      className="w-full h-48 object-contain mb-4"
+                      onClick={() => {
+                        window.location.reload();
+                        gotoDetails(product);
+                      }}
+                    />
+                    <div className="space-y-2">
+                      <h3 className="text-sm text-gray-400">
+                        {product.brand?.name}
+                      </h3>
+                      <p className="font-semibold">{product.productName}</p>
+                      <div className="flex items-baseline space-x-2">
+                        <span className="font-bold">
+                          {product.salesPrice.toFixed(0)}
+                        </span>
+                        <span className="text-sm text-gray-400 line-through">
+                          {product.regularPrice}
+                        </span>
+                        <span className="text-green-500 text-sm">
+                          {product.offer + "% off" || "99% off"}
+                        </span>
+                      </div>
+                      {product.salesPrice > 1000 && (
+                        <p className="text-sm text-gray-400">Free Delivery</p>
+                      )}
                     </div>
-                    {product.salesPrice > 1000 && (
-                      <p className="text-sm text-gray-400">Free Delivery</p>
-                    )}
                   </div>
-                </div>
-              ))}
-            {error && <div className="text-red-500">{error}</div>}
-          </div>
-        </section>}
+                ))}
+              {error && <div className="text-red-500">{error}</div>}
+            </div>
+          </section>
+        )}
         <section className="mt-16">
           <h2 className="text-2xl font-bold mb-8">Customer Reviews</h2>
           <div className="space-y-8">

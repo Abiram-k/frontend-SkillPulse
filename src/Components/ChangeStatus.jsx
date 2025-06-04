@@ -29,7 +29,7 @@ export const ChangeStatus = ({
   const user = useSelector((state) => state.users.user);
 
   const handleChangeStatus = async () => {
-    updatedState(updatedStatus);
+    updatedState(updatedStatus,productId);
     try {
       const response = await axios.patch(`/admin/status?id=${user?._id}`, {
         orderId,
@@ -37,7 +37,7 @@ export const ChangeStatus = ({
         updatedStatus,
       });
       showToast("success", response.data.message);
-      window.location.reload();
+      // window.location.reload();
       setOpen(false);
     } catch (error) {
       console.log(error);

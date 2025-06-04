@@ -10,7 +10,7 @@ export const addToWishList = async (product, user, dispatch) => {
     const response = await axios.post("/wishList", { product });
     showToast("success", response.data.message)
   } catch (error) {
-    
+
     console.log(error);
     if (error?.response?.data?.isBlocked) {
       dispatch(logoutUser());
@@ -25,8 +25,7 @@ export const removeFromWishlist = async (product, user, dispatch) => {
     );
     if (response.status == 200) {
       showToast("success", response.data.message)
-
-      dispatch(removefromWishlist(product));
+      // dispatch(removefromWishlist(product));
       // window.location.reload();
     }
   } catch (error) {

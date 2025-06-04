@@ -26,8 +26,8 @@ function EditCategory() {
       error.maxDiscount = "Max discount is required *";
 
     if (isNaN(offer)) error.offer = "offer price must a number";
-    else if (offer < 0 || offer > 100)
-      error.offer = "offer must between 0% and 100%";
+    else if (offer < 0 || offer > 99)
+      error.offer = "offer must between 0% and 99%";
     return error;
   };
 

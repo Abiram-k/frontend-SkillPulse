@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import productBanner from "../../../assets/homeProductBanner.webp";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import { Toast } from "../../../Components/Toast";
@@ -17,6 +17,7 @@ import {
 } from "../wishlist/addRemoveWishlit";
 import { showToast } from "@/Components/ToastNotification";
 import { useSearchParams } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -28,19 +29,20 @@ const Shop = () => {
     brand: "",
     price: "",
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(8);
+
   const [wishlistItems, setWishlistItems] = useState([]);
   const [search, setSearch] = useState("");
   const [trigger, setTrigger] = useState(0);
 
   const [searchParams] = useSearchParams();
 
+  const currentPage = useRef();
+  const [pageCount, setPageCount] = useState(1);
+  const [postPerPage, setPostPerPage] = useState(8);
+
   const categoryIdFromQuery = searchParams.get("categoryId");
-  const [hasSetCategoryFromQuery, setHasSetCategoryFromQuery] = useState(false);
 
   const [cartProduct, setCartProduct] = useState([]);
-  const [goToCart, setGoToCart] = useState(false);
 
   const user = useSelector((state) => state.users.user);
   const dispatch = useDispatch();
@@ -49,7 +51,7 @@ const Shop = () => {
   useEffect(() => {
     fetchProducts();
     fetchWishlist();
-  }, [filter, trigger]);
+  }, [filter, trigger, search]);
 
   useEffect(() => {
     if (categoryIdFromQuery && category.length > 0) {
@@ -67,6 +69,11 @@ const Shop = () => {
     }
   }, [category, categoryIdFromQuery]);
 
+  const handlePageClick = async (e) => {
+    currentPage.current = e.selected + 1;
+    fetchProducts();
+  };
+
   useEffect(() => {
     if (user) {
       const savedCart =
@@ -78,13 +85,19 @@ const Shop = () => {
   const fetchProducts = async () => {
     try {
       // setSpinner(true);
-      const response = await axios.get("/products", {
-        params: filter,
-      });
+      const response = await axios.get(
+        `/products?search=${search}&page=${
+          currentPage.current || 1
+        }&limit=${postPerPage}`,
+        {
+          params: filter,
+        }
+      );
       setSpinner(false);
       setProducts(response.data.products);
       setCategory(response.data.categoryDoc);
       setBrand(response.data.brandDoc);
+      setPageCount(response.data?.pageCount);
     } catch (error) {
       setSpinner(false);
       if (error?.response.data.isBlocked) {
@@ -109,12 +122,6 @@ const Shop = () => {
       [name]: value,
     }));
   };
-  const filteredProduct = products.filter((product, index) =>
-    product.productName.toLowerCase().includes(search.toLowerCase())
-  );
-  const lastPostIndex = currentPage * postPerPage;
-  const firstPostIndex = lastPostIndex - postPerPage;
-  const currentProduct = filteredProduct.slice(firstPostIndex, lastPostIndex);
 
   const handleAddToWishList = async (product) => {
     try {
@@ -132,10 +139,11 @@ const Shop = () => {
     try {
       setSpinner(true);
       await removeFromWishlist(product, user, dispatch);
+      setWishlistItems((prev) => prev.filter((pr) => (pr = !product)));
       setTrigger((prev) => prev + 1);
-      window.location.reload();
       setSpinner(false);
     } catch (error) {
+      alert("Error while remove wishlist");
       setSpinner(false);
       console.log(error);
     }
@@ -196,6 +204,7 @@ const Shop = () => {
       return;
     }
     try {
+      setSpinner(true);
       const response = await axios.post(
         `/addToCart/${id}`,
         {},
@@ -214,6 +223,7 @@ const Shop = () => {
           );
           return updatedCart;
         }
+
         return prev;
       });
       showToast("success", `${response?.data.message}`);
@@ -223,6 +233,8 @@ const Shop = () => {
       }
       showToast("error", `${error?.response?.data?.message}`);
       console.log(error);
+    } finally {
+      setSpinner(false);
     }
   };
 
@@ -350,8 +362,8 @@ const Shop = () => {
         />
       </div>
       <div className="products grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4 font-mono">
-        {currentProduct.length > 0 ? (
-          currentProduct.map((product, index) =>
+        {products?.length > 0 ? (
+          products?.map((product, index) =>
             product?.isListed &&
             !product?.isDeleted &&
             product?.category?.isListed &&
@@ -368,15 +380,6 @@ const Shop = () => {
                   className="w-full h-40 object-cover rounded-t-lg cursor-pointer transition-opacity hover:opacity-90"
                   onClick={() => goToDetails(product)}
                 />
-
-                {/* <Heart
-                  className="absolute top-3 right-3 w-7 h-7 text-gray-300 hover:text-red-500 transition-colors cursor-pointer"
-                  onClick={() =>
-                    addedToWishlist
-                      ? handleRemoveFromWishlist()
-                      : handleAddToWishlist()
-                  }
-                /> */}
 
                 <div className="p-3 text-center">
                   <p className="text-sm  text-white truncate lg:text-lg font-bold">
@@ -433,6 +436,9 @@ const Shop = () => {
                       <ShoppingCart
                         className="w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors"
                         onClick={() => {
+                          // if (spinner) {
+                          //   return;
+                          // }
                           if (user) handleAddToCart(product._id);
                           else navigate("/login");
                         }}
@@ -484,11 +490,25 @@ const Shop = () => {
           </div>
         )}
       </div>
-      <Pagination
-        totalPosts={products.length}
-        postsPerPage={postPerPage}
-        setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
+
+      <ReactPaginate
+        className="flex justify-center border-gray-700 items-center space-x-2 mt-4 mb-3 font-mono"
+        breakLabel="..."
+        nextLabel="next >"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={5}
+        pageCount={pageCount}
+        previousLabel="< previous"
+        renderOnZeroPageCount={null}
+        marginPagesDisplayed={2}
+        containerClassName="flex flex-wrap justify-center gap-2"
+        pageClassName="flex items-center"
+        pageLinkClassName="px-4 py-2 border border-gray-400 rounded-md text-sm hover:bg-blue-600 transition duration-200"
+        previousClassName="flex items-center"
+        previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+        nextClassName="flex items-center"
+        nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+        activeClassName="bg-blue-500 text-white"
       />
     </div>
   );

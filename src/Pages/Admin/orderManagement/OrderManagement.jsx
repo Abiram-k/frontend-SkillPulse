@@ -25,7 +25,7 @@ import ReactPaginate from "react-paginate";
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
-  const [updatedStatus, setUpdatedStatus] = useState("");
+  const [updatedStatus, setUpdatedStatus] = useState({ item: "", status: "" });
   const [spinner, setSpinner] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -94,11 +94,19 @@ const OrderManagement = () => {
     fetchOrders();
   }, [filter, startDate, endDate]);
 
-  const handleUpdatedStatus = (status) => {
-    if (status) setUpdatedStatus(status);
+  const handleUpdatedStatus = (status, item) => {
+    if (status) setUpdatedStatus({ item, status });
   };
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status, itemId) => {
+    if (
+      updatedStatus.item &&
+      updatedStatus.status &&
+      itemId == updatedStatus.item
+    ) {
+      status = updatedStatus.status;
+    }
+
     if (status === "processing") return "text-yellow-500";
     if (status === "shipped") return "text-blue-500";
     if (status === "delivered") return "text-green-500";
@@ -246,17 +254,23 @@ const OrderManagement = () => {
                           </td>
                           <td
                             className={`px-6 py-4 ${getStatusColor(
-                              item.productStatus
+                              item.productStatus,
+                              item?._id
                             )}`}
                           >
-                            {item.productStatus}
+                            {updatedStatus.item &&
+                            updatedStatus.status &&
+                            item._id == updatedStatus.item
+                              ? updatedStatus.status
+                              : item.productStatus}
+                            {/* {updatedStatus || item.productStatus} */}
                           </td>
                           <td className="px-6 py-4">
                             {item.productStatus !== "delivered" && (
                               <ChangeStatus
                                 updatedState={handleUpdatedStatus}
                                 orderId={order.orderId}
-                                productId={item._id}
+                                productId={item?._id}
                                 currentStatus={item.productStatus}
                               />
                             )}

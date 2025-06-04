@@ -147,6 +147,16 @@ const Checkout = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    showToast(`is checkout items: ${checkoutItems ? "Yes" : "Not"}`);
+
+    if (!checkoutItems) {
+      navigate("/user/profile/myOrders");
+      return;
+    }
+  }, []);
+
   useEffect(() => {
     (async () => {
       try {
@@ -221,8 +231,8 @@ const Checkout = () => {
       showToast("error", "Add an address");
       return;
     }
-
     try {
+      setSpinner(true);
       const response = await axios.post(`/order/${user._id}`, cartItems, {
         params: {
           paymentFailed,
@@ -236,13 +246,17 @@ const Checkout = () => {
       localStorage.removeItem(`cart_${user._id}`);
       localStorage.removeItem("checkoutItems");
       if (paymentFailed && paymentMethod == "Razorpay") {
-        showToast("error", `Payment Failed`);
+        showToast("error", `Payment Failed.`);
         navigate("/user/profile/myOrders");
       } else {
         showToast("success", `${response?.data.message}`);
       }
     } catch (error) {
+      navigate("/user/profile/myOrders");
       showToast("error", `${error?.response?.data.message}`);
+    } finally {
+      navigate("/user/profile/myOrders");
+      setSpinner(false);
     }
   };
   const handlePaymentMethod = (e) => {
@@ -294,9 +308,9 @@ const Checkout = () => {
                       <p className="text-gray-100">
                         {parseFloat(item.offeredPrice).toFixed(0) || 999}
                       </p>
-                      <p className="text-gray-500 line-through">
+                      {/* <p className="text-gray-500 line-through">
                         {item?.totalPrice || 1999}
-                      </p>
+                      </p> */}
                     </div>
                     <div className="mt-2 flex items-center">
                       <span className="mr-4">Quantity:</span>

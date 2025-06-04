@@ -111,7 +111,7 @@ function Products() {
   useEffect(() => {
     currentPage.current = 1;
     fetchProducts();
-  }, [filterProduct]);
+  }, [filterProduct, search]);
 
   const handlePageClick = async (e) => {
     currentPage.current = e.selected + 1;
@@ -121,7 +121,7 @@ function Products() {
     try {
       setSpinner(true);
       const response = await axios.get(
-        `/admin/product?filter=${filterProduct}&page=${currentPage.current}&limit=${postPerPage}`
+        `/admin/product?filter=${filterProduct}&page=${currentPage.current}&limit=${postPerPage}&search=${search}`
       );
       setSpinner(false);
       setProduct(response.data.results);
@@ -206,97 +206,89 @@ function Products() {
 
             <tbody>
               {product?.products?.length > 0 ? (
-                product.products
-                  .filter(
-                    (product) =>
-                      search.length === 0 ||
-                      product.productName
-                        .toLowerCase()
-                        .startsWith(search.toLowerCase())
-                  )
-                  .map((product, index) => (
-                    <tr className="border-b" key={index}>
-                      <td className="p-2">{index + 1}</td>
-                      {product.isDeleted ? (
-                        <>
-                          <td className="p-2 line-through">
-                            {product.productName}
-                          </td>
-                          <td className="p-2 line-through">
-                            {product.category?.name || "not Fetched"}
-                          </td>
-                          <td className="p-2 line-through">
-                            {product.productDescription}
-                          </td>
-                          <td className="p-2 line-through">
-                            {product.salesPrice}
-                          </td>
-                          <td className="p-2 line-through">{product.units}</td>
-                        </>
-                      ) : (
-                        <>
-                          <td className="p-2 ">{product.productName}</td>
-                          <td className="p-2 ">
-                            {product.category?.name || "not Fetched"}
-                          </td>
-                          <td className="p-2 whitespace-normal">
-                            {product.productDescription
-                              .split(" ")
-                              .slice(0, 2)
-                              .join(" ")}
-                            ...
-                          </td>
-                          <td className="p-2 ">{product.salesPrice}</td>
-                          <td className="p-2 ">{product.units}</td>
-                        </>
-                      )}
-                      <td className="p-2">
-                        <img
-                          src={
-                            product.productImage[0] ||
-                            "https://placehold.co/50x50"
-                          }
-                          alt={product.productName}
-                          className="w-12 h-12 object-cover mx-auto"
-                        />
-                      </td>
-                      <td className="p-2 flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2 align-middl justify-center relative">
-                        {!product.isDeleted && (
-                          <Link to="edit">
-                            <i
-                              className="fas fa-edit mr-2"
-                              onClick={() => sendDataToEdit(product)}
-                            ></i>
-                          </Link>
-                        )}
-                        {!product.isDeleted && (
-                          <button
-                            className={
-                              product.isListed
-                                ? "bg-red-600 hover:bg-red-700 lg:p-2 p-1 rounded w-22  font-mono"
-                                : "bg-blue-600 hover:bg-blue-700 lg:p-2 p-1 rounded w-17 font-mono"
-                            }
-                            onClick={() => handleListing(product._id)}
-                          >
-                            {product.isListed ? "Unlist" : "List"}
-                          </button>
-                        )}
-                        {product.isDeleted ? (
-                          <button
-                            onClick={() => handleRestore(product._id)}
-                            className="rounded bg-green-600 p-2  font-mono "
-                          >
-                            Restore
-                          </button>
-                        ) : (
+                product.products?.map((product, index) => (
+                  <tr className="border-b" key={index}>
+                    <td className="p-2">{index + 1}</td>
+                    {product.isDeleted ? (
+                      <>
+                        <td className="p-2 line-through">
+                          {product.productName}
+                        </td>
+                        <td className="p-2 line-through">
+                          {product.category?.name || "not Fetched"}
+                        </td>
+                        <td className="p-2 line-through">
+                          {product?.productDescription}
+                        </td>
+                        <td className="p-2 line-through">
+                          {product.salesPrice}
+                        </td>
+                        <td className="p-2 line-through">{product.units}</td>
+                      </>
+                    ) : (
+                      <>
+                        <td className="p-2 ">{product.productName}</td>
+                        <td className="p-2 ">
+                          {product.category?.name || "not Fetched"}
+                        </td>
+                        <td className="p-2 whitespace-normal">
+                          {product.productDescription
+                            .split(" ")
+                            .slice(0, 2)
+                            .join(" ")}
+                          ...
+                        </td>
+                        <td className="p-2 ">{product.salesPrice}</td>
+                        <td className="p-2 ">{product.units}</td>
+                      </>
+                    )}
+                    <td className="p-2">
+                      <img
+                        src={
+                          product.productImage[0] ||
+                          "https://placehold.co/50x50"
+                        }
+                        alt={product.productName}
+                        className="w-12 h-12 object-cover mx-auto"
+                      />
+                    </td>
+                    <td className="p-2 flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2 align-middl justify-center relative">
+                      {!product.isDeleted && (
+                        <Link to="edit">
                           <i
-                            className="fas fa-trash-alt top-5 right-0 absolute"
-                            onClick={() => handleDelete(product._id)}
+                            className="fas fa-edit mr-2"
+                            onClick={() => sendDataToEdit(product)}
                           ></i>
-                        )}
-                      </td>
-                    </tr>
-                  ))
+                        </Link>
+                      )}
+                      {!product.isDeleted && (
+                        <button
+                          className={
+                            product.isListed
+                              ? "bg-red-600 hover:bg-red-700 lg:p-2 p-1 rounded w-22  font-mono"
+                              : "bg-blue-600 hover:bg-blue-700 lg:p-2 p-1 rounded w-17 font-mono"
+                          }
+                          onClick={() => handleListing(product._id)}
+                        >
+                          {product.isListed ? "Unlist" : "List"}
+                        </button>
+                      )}
+                      {product.isDeleted ? (
+                        <button
+                          onClick={() => handleRestore(product._id)}
+                          className="rounded bg-green-600 p-2  font-mono "
+                        >
+                          Restore
+                        </button>
+                      ) : (
+                        <i
+                          className="fas fa-trash-alt top-5 right-0 absolute"
+                          onClick={() => handleDelete(product._id)}
+                        ></i>
+                      )}
+                    </td>
+                  </tr>
+                ))
               ) : (
                 <tr>
                   <td className="p-2">No product were listed yet</td>

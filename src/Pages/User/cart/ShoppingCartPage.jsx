@@ -88,6 +88,10 @@ const ShoppingCartPage = () => {
               setTrigger((t) => t + 1);
             } catch (error) {
               setSpinner(false);
+              showToast(
+                "error",
+                error?.response?.data?.message || "Failed to update quantity"
+              );
               setCouponMessage(error?.response.data?.couponMessage);
               console.log(error);
             }

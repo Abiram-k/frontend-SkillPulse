@@ -11,10 +11,11 @@ const SearchProducts = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get("/products");
+        const response = await axios.get(`/products?search=${search}`);
         setProducts(response.data.products);
         setCategory(response.data.category);
       } catch (error) {
@@ -28,12 +29,7 @@ const SearchProducts = () => {
         console.log(error.message);
       }
     })();
-  }, []);
-
-  const filteredProducts = products.filter(
-    (product) =>
-      product.productName.toLowerCase().includes(search.toLowerCase()) //when no search is ther , the search is "empty" and empty string is actully return true in all string , so it return all the product as expected .😁
-  );
+  }, [search]);
 
   const goToDetails = (product) => {
     dispatch(setProductDetails(product));
@@ -67,8 +63,8 @@ const SearchProducts = () => {
 
       {/* Product Grid */}
       <div className="product-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-20 font-mono">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map(
+        {products?.length > 0 ? (
+          products?.map(
             (product, index) =>
               product.isListed &&
               !product.isDeleted &&

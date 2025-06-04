@@ -161,7 +161,7 @@ function App() {
                 path="/user"
                 element={
                   // <ProtectUserHome>
-                    <UserLayout />
+                  <UserLayout />
                   // </ProtectUserHome>
                 }
               >
@@ -206,16 +206,16 @@ function App() {
                   path="shop"
                   element={
                     // <ProtectUserHome>
-                      <Shop />
+                    <Shop />
                     // </ProtectUserHome>
                   }
                 />
                 <Route
                   path="contact"
                   element={
-                    <ProtectUserHome>
-                      <Contact />
-                    </ProtectUserHome>
+                    // <ProtectUserHome>
+                    <Contact />
+                    // </ProtectUserHome>
                   }
                 />
                 <Route
@@ -229,9 +229,9 @@ function App() {
                 <Route
                   path="about"
                   element={
-                    <ProtectUserHome>
-                      <About />
-                    </ProtectUserHome>
+                    // <ProtectUserHome>
+                    <About />
+                    // </ProtectUserHome>
                   }
                 />
 
@@ -246,14 +246,14 @@ function App() {
                   }
                 />
 
-                <Route
+                {/* <Route
                   path="cart/checkout"
                   element={
                     <ProtectUserHome>
                       <Checkout />
                     </ProtectUserHome>
                   }
-                />
+                /> */}
 
                 <Route
                   path="productDetails"

@@ -65,7 +65,7 @@ const LandingPage = () => {
             menuOpen ? "flex" : "hidden"
           } flex-col lg:flex-row lg:flex lg:space-x-4 lg:items-center absolute lg:static bg-black lg:bg-transparent top-16 left-0 w-full lg:w-auto z-10 text-center space-y-8 lg:space-y-0 pb-8 lg:p-0`}
         >
-          {/* <Link to="/user/home" className="hover:text-gray-400">
+          <Link to="/" className="hover:text-gray-400">
             HOME
           </Link>
           <Link to="/user/shop" className="hover:text-gray-400">
@@ -79,7 +79,7 @@ const LandingPage = () => {
           </Link>
           <Link to="/user/about" className="hover:text-gray-400">
             ABOUT US
-          </Link> */}
+          </Link>
           {/* <div className="lg:flex space-x-1 align-middle justify-center hidden relative font-sans">
             <i className="fas fa-search absolute right-3 top-3.5 text-gray-200"></i>
             <input
