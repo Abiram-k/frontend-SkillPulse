@@ -178,7 +178,7 @@ export default function Dashboard() {
                     <div className="flex items-center gap-3">
                       <img
                         src={
-                          sale.user.profileImage ||
+                          sale.user?.profileImage ||
                           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhCuoop0MD3fNefnFp8SWPdfnsXdOzFBeAQg&s"
                         }
                         alt=""
