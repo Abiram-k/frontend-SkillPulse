@@ -153,9 +153,8 @@ const ManageOrders = () => {
           value={search}
           onChange={(e) => {
             const inputValue = e.target.value;
-            if (inputValue.length <= 10) {
-              setSearch(inputValue);
-            }
+            if (inputValue.length >= 20) return;
+            setSearch(inputValue);
           }}
         />
       </div>
@@ -170,19 +169,19 @@ const ManageOrders = () => {
               >
                 <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between items-start lg:items-center text-xs lg:text-base gap-4">
                   <div className="font-medium">
-                    <strong>Order Date:</strong> {order.orderDate}
+                    <strong>Order Date:</strong> <p>{order.orderDate}</p>
                   </div>
                   <div
                     className={`font-semibold ${
-                      order.paymentStatus !== "Failed"
+                      order.paymentStatus == "Success"
                         ? "text-green-600"
                         : "text-red-600"
                     }`}
                   >
-                    <strong>Status:</strong>{" "}
-                    {order.paymentStatus !== "Failed"
+                    <strong className="text-gray-200">Payment Status:</strong>{" "}
+                    {order.paymentStatus == "Success"
                       ? "Paid"
-                      : "Payment Failed"}
+                      : `${order.paymentStatus || "Not paid"} `}
                   </div>
                   {order.paymentStatus === "Failed" && (
                     <div className="w-full lg:w-fit">

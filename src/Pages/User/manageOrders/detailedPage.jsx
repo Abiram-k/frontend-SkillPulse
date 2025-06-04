@@ -206,7 +206,7 @@ export default function OrderTrackingPage() {
                   </div>
                 </div>
               )}
-              {order?.paymentStatus == "Success" && (
+              {/* {order?.paymentStatus == "Success" && ( */}
                 <div className="flex items-start gap-3">
                   <span className="text-primary">⚡</span>
                   <div>
@@ -216,7 +216,7 @@ export default function OrderTrackingPage() {
                     </p>
                   </div>
                 </div>
-              )}
+              {/* )} */}
             </div>
           </Card>
           {order.paymentStatus == "Success" &&
@@ -299,7 +299,7 @@ export default function OrderTrackingPage() {
                     </div>
                   ) : (
                     <h3 className="text-lg font-semibold text-red-600">
-                      Payment Failed ⚠️
+                      Payment {order?.paymentStatus || "Not completed"} ⚠️
                     </h3>
                   )}
                 </div>

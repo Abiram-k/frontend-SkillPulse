@@ -317,16 +317,33 @@ const ProductDetails = () => {
                 </h2>
                 <div className="flex items-baseline space-x-4">
                   <span className="text-2xl font-bold text-green-500">
-                    ₹{product.salesPrice.toFixed(0)}
+                    ₹{product.salesPrice}
                   </span>
-                  {!!product?.offer == true && (
+
+                  {(product?.offer || product?.categoryOffer) &&
+                    product?.salesPrice < product?.regularPrice && (
+                      <>
+                        <span className="text-gray-400 line-through">
+                          ₹{product?.regularPrice}
+                        </span>
+                        <span className="text-green-500 text-sm">
+                          {Math.max(
+                            product?.offer || 0,
+                            product?.categoryOffer || 0
+                          )}
+                          % off
+                        </span>
+                      </>
+                    )}
+
+                  {/* {!!product?.offer == true && (
                     <span className="text-gray-400 line-through">
                       ₹{product.regularPrice}
                     </span>
                   )}
                   <span className="text-green-500 text-sm">
                     {product.offer ? product.offer + " % off" : ""}
-                  </span>
+                  </span> */}
                 </div>
                 <h6 className="text-orange-500 text-sm font-sans">
                   {product.units

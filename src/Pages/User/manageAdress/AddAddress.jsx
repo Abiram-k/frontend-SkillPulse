@@ -1,7 +1,7 @@
 import axios from "@/axiosIntercepters/AxiosInstance";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Toast } from "../../../Components/Toast";
 import { showToast } from "@/Components/ToastNotification";
 
@@ -17,6 +17,8 @@ const AddAddress = () => {
   const [type, setType] = useState("Home");
   const [message, setMessage] = useState({});
   const user = useSelector((state) => state.users.user);
+  const [searchParams] = useSearchParams();
+  const checkoutRedirect = searchParams.get("checkout-redirect");
   const navigate = useNavigate();
   const formValidate = () => {
     let error = {};
@@ -27,51 +29,52 @@ const AddAddress = () => {
     const addressRegex = /^.{8,}$/; // Minimum 8 characters
 
     if (!firstName.trim()) {
-        error.firstName = "First name is required *";
+      error.firstName = "First name is required *";
     } else if (!nameRegex.test(firstName)) {
-        error.firstName = "First name must start with a letter and contain only letters *";
+      error.firstName =
+        "First name must start with a letter and contain only letters *";
     }
     if (!secondName.trim()) {
-        error.secondName = "Last name is required *";
+      error.secondName = "Last name is required *";
     } else if (!nameRegex.test(secondName)) {
-        error.secondName = "Last name must start with a letter and contain only letters *";
+      error.secondName =
+        "Last name must start with a letter and contain only letters *";
     }
     if (!mobileNumber.trim()) {
-        error.mobileNumber = "Mobile number is required *";
+      error.mobileNumber = "Mobile number is required *";
     } else if (!mobileRegex.test(mobileNumber)) {
-        error.mobileNumber = "Please enter a valid 10-digit mobile number *";
+      error.mobileNumber = "Please enter a valid 10-digit mobile number *";
     }
 
     if (alternativeMobile.trim() && !mobileRegex.test(alternativeMobile)) {
-        error.alternativeMobile = "Please enter a valid 10-digit mobile number *";
+      error.alternativeMobile = "Please enter a valid 10-digit mobile number *";
     }
     if (!city.trim()) {
-        error.city = "City is required *";
+      error.city = "City is required *";
     } else if (!nameRegex.test(city)) {
-        error.city = "City must contain only letters and spaces *";
+      error.city = "City must contain only letters and spaces *";
     }
 
     if (!state.trim()) {
-        error.state = "State is required *";
+      error.state = "State is required *";
     } else if (!nameRegex.test(state)) {
-        error.state = "State must contain only letters and spaces *";
+      error.state = "State must contain only letters and spaces *";
     }
 
     if (!address.trim()) {
-        error.address = "Address is required *";
+      error.address = "Address is required *";
     } else if (!addressRegex.test(address.replace(/\n/g, " ").trim())) {
-        error.address = "Address must be at least 8 characters *";
+      error.address = "Address must be at least 8 characters *";
     }
 
     if (!pincode.trim()) {
-        error.pincode = "Pincode is required *";
+      error.pincode = "Pincode is required *";
     } else if (!pincodeRegex.test(pincode)) {
-        error.pincode = "Enter a valid 6-digit pincode *";
+      error.pincode = "Enter a valid 6-digit pincode *";
     }
 
     return error;
-};
-
+  };
 
   const handleAddAddress = async (e) => {
     e.preventDefault();
@@ -96,12 +99,15 @@ const AddAddress = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      showToast("success",response.data.message)
-     
+      showToast("success", response.data.message);
+      if (checkoutRedirect) {
+        navigate("/user/checkout");
+        return;
+      }
       navigate("/user/profile/manageAddress");
     } catch (error) {
       console.log(error.message);
-      showToast("error",error?.response.data.message)
+      showToast("error", error?.response.data.message);
     }
   };
 
@@ -138,7 +144,7 @@ const AddAddress = () => {
             )}
           </div>
         </div>
-  
+
         {/* Mobile and Alternate Mobile Numbers */}
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="w-full lg:w-1/2">
@@ -162,11 +168,13 @@ const AddAddress = () => {
               onChange={(e) => setAlternativeMobile(e.target.value)}
             />
             {message.alternativeMobile && (
-              <p className="text-red-500 text-xs">{message.alternativeMobile}</p>
+              <p className="text-red-500 text-xs">
+                {message.alternativeMobile}
+              </p>
             )}
           </div>
         </div>
-  
+
         {/* City and State */}
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="w-full lg:w-1/2">
@@ -194,7 +202,7 @@ const AddAddress = () => {
             )}
           </div>
         </div>
-  
+
         {/* Address */}
         <div>
           <textarea
@@ -207,7 +215,7 @@ const AddAddress = () => {
             <p className="text-red-500 text-xs">{message.address}</p>
           )}
         </div>
-  
+
         {/* Pin Code and Address Type */}
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="w-full lg:w-1/2">
@@ -235,7 +243,7 @@ const AddAddress = () => {
             </select>
           </div>
         </div>
-  
+
         {/* Submit Button */}
         <button
           type="submit"
@@ -246,7 +254,6 @@ const AddAddress = () => {
       </form>
     </div>
   );
-  
 };
 
 export default AddAddress;

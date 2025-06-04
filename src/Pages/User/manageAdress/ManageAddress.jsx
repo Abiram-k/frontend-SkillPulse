@@ -33,6 +33,7 @@ const ManageAddress = () => {
     try {
       const response = await axios.delete(`/address?id=${id}`);
       showToast("success", response.data.message);
+      window.location.reload();
     } catch (error) {
       console.log(error);
       Toast.fire({
@@ -54,7 +55,7 @@ const ManageAddress = () => {
         </p>
         <div className="flex justify-center mb-6">
           <Link
-            to="/user/profile/addNew"
+            to="/user/profile/addNewAdress"
             className="bg-blue-600 text-white py-2 px-4 rounded flex items-center hover:bg-blue-500 transition duration-200"
           >
             <i className="fas fa-plus mr-2"></i> Add New Address

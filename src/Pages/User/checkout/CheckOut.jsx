@@ -365,7 +365,7 @@ const Checkout = () => {
               {Object.keys(selectedAddress).length === 0 ? (
                 <div className="bg-gray-900 p-4 rounded">
                   <Link
-                    to={"/user/profile/addNew"}
+                    to={`/user/profile/addNewAdress?checkout-redirect=${true}`}
                     className="lg:p-3 p-2 text-white rounded bg-blue-500 font-semibold"
                   >
                     Add Address

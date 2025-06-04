@@ -324,7 +324,7 @@ function App() {
                     }
                   />
                   <Route
-                    path="addNew"
+                    path="addNewAdress"
                     element={
                       <ProtectUserHome>
                         <AddAddress />

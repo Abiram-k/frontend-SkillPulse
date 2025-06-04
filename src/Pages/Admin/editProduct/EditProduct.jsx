@@ -58,10 +58,13 @@ const EditProduct = () => {
     if (category.trim() === "") error.category = "Category is required *";
     if (description.trim() === "")
       error.description = "description is required *";
+
     if (String(regularPrice)?.trim() === "")
       error.regularPrice = "regularPrice is required *";
     else if (isNaN(regularPriceInt))
       error.regularPrice = "regular price must a number";
+    else if (regularPrice < 1)
+      error.regularPrice = "regular price must be greater than 1₹";
 
     if (isNaN(offerPrice)) error.offerPrice = "offerPrice price must a number";
     else if (offerPrice < 0 || offerPrice > 99)
