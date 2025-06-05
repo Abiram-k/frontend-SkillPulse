@@ -269,9 +269,15 @@ const OrderManagement = () => {
                             {item.productStatus !== "delivered" && (
                               <ChangeStatus
                                 updatedState={handleUpdatedStatus}
-                                orderId={order.orderId}
+                                orderId={order?.orderId}
                                 productId={item?._id}
-                                currentStatus={item.productStatus}
+                                // currentStatus={item.productStatus}
+                                currentStatus={
+                                  updatedStatus.item === item?._id &&
+                                  updatedStatus.status
+                                    ? updatedStatus.status
+                                    : item.productStatus
+                                }
                               />
                             )}
                           </td>
