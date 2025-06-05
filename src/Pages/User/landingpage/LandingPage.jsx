@@ -71,9 +71,9 @@ const LandingPage = () => {
           <Link to="/user/shop" className="hover:text-gray-400">
             SHOP
           </Link>
-          <Link to="/user/shop" className="hover:text-gray-400">
+          {/* <Link to="/user/shop" className="hover:text-gray-400">
             CATEGORY
-          </Link>
+          </Link> */}
           <Link to="/user/contact" className="hover:text-gray-400">
             CONTACT
           </Link>

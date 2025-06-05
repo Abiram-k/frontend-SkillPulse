@@ -147,7 +147,7 @@ const Brand = () => {
     }
 
     const formData = new FormData();
-    formData.append("name", name);
+    formData.append("name", name.trim());
     formData.append("description", description);
     formData.append("file", image);
     try {
@@ -158,8 +158,13 @@ const Brand = () => {
             "Content-Type": "multipart/form-data",
           },
         });
-        window.location.reload();
+
         setSpinner(false);
+        setBrands((prev) => [response.data?.brand, ...prev]);
+        setName("");
+        setDescription("");
+        setBrandImage("");
+
         Toast.fire({
           icon: "success",
           title: `${response.data.message}`,
@@ -182,12 +187,16 @@ const Brand = () => {
         const response = await axios.patch(`/admin/brandRestore/${id}`);
         Toast.fire({
           icon: "success",
-          title: `${response.data.message}`,
+          title: `${response?.data.message}`,
         });
-        window.location.reload();
+        setBrands((prev) =>
+          prev?.map((brand) =>
+            brand?._id === id ? { ...brand, isDeleted: false } : brand
+          )
+        );
       }
     } catch (error) {
-      alert(error.response?.data.message);
+      alert(error?.response?.data.message);
     }
   };
 
@@ -196,11 +205,14 @@ const Brand = () => {
     try {
       if (result) {
         const response = await axios.delete(`/admin/brand/${id}`);
-        window.location.reload();
-
+        setBrands((prev) =>
+          prev?.map((brand) =>
+            brand?._id === id ? { ...brand, isDeleted: true } : brand
+          )
+        );
         Toast.fire({
           icon: "success",
-          title: `${response.data.message}`,
+          title: `${response.data?.message}`,
         });
       } else {
         Toast.fire({
@@ -211,7 +223,7 @@ const Brand = () => {
     } catch (error) {
       Toast.fire({
         icon: "success",
-        title: `${response.data.message}`,
+        title: `${error?.response?.data?.message}`,
       });
     }
   };
@@ -263,14 +275,6 @@ const Brand = () => {
           <i className="fas fa-sync-alt mr-2"></i> Refresh
         </button>
         <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4 w-full lg:w-auto">
-          {/* <input
-            type="text"
-            placeholder="Search..."
-            className="border rounded text-black px-4 py-2 w-full lg:w-auto"
-            value={search}
-            onChange={handleSearchChange}
-          /> */}
-
           <div className="w-full max-w-4xl mx-auto p-6  rounded-lg shadow-sm font-sans">
             <div className="space-y-4">
               <div className="relative">

@@ -113,9 +113,11 @@ const ShoppingCartPage = () => {
     }
   };
 
+  console.log("CARTTTT : ", cartItems);
   const handleCheckout = () => {
-    if (!cartItems[0]) {
+    if (!cartItems || !cartItems.length || !cartItems[0].products.length) {
       showToast("error", "Add some items and checkout");
+      return;
     } else {
       dispatch(checkoutItems(cartItems));
       navigate("/user/checkout");

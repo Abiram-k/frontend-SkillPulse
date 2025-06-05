@@ -7,12 +7,12 @@ const ReturnRequests = () => {
   const [returnedProducts, setReturnedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [trigger, setTrigger] = useState(0);
   const searchFocus = useRef(null);
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
 
-  // const user = useSelector((state) => state.users.user);
   useEffect(() => {
     const fetchReturnedProducts = async () => {
       try {
@@ -44,16 +44,16 @@ const ReturnRequests = () => {
     };
 
     fetchReturnedProducts();
-  }, [search]);
+  }, [search, trigger]);
 
   const handleApprove = async (id) => {
     try {
       const response = await axiosInstance.patch(`admin/returnProduct`, {
-        // id: user._id,
         itemId: id,
       });
       showToast("success", response.data.message);
-      window.location.reload();
+      setTrigger((prev) => prev + 1);
+      // window.location.reload();
     } catch (error) {
       console.log(error);
       showToast("error", error.response?.data.message);

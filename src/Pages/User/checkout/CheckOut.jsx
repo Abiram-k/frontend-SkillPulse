@@ -154,7 +154,8 @@ const Checkout = () => {
     if (!checkoutItems) {
       navigate("/user/profile/myOrders");
       return;
-    }
+    } 
+    
   }, []);
 
   useEffect(() => {
@@ -183,7 +184,6 @@ const Checkout = () => {
       }
     })();
     const calcs = calculations();
-    console.log(calcs, "CALCS");
     if (Object.keys(calcs).length > 0) {
       setSummary(calculations());
       return;

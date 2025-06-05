@@ -187,7 +187,7 @@ export default function Dashboard() {
                       <div>
                         <p className="font-medium text-black">
                           {sale?.user?.firstName}
-                          {""}
+                          &nbsp;
                           {sale?.user?.lastName}
                         </p>
                         <p className="text-sm text-gray-500">

@@ -140,7 +140,9 @@ const BannerManagement = () => {
           },
         });
         setDescription("");
-        window.location.reload();
+        setBanner((prev) => [, response.data?.banner, ...prev]);
+        setBannerImage(null);
+        setImage("");
         setImage(null);
         setSpinner(false);
         showToast("success", `${response.data.message}`);
@@ -159,7 +161,7 @@ const BannerManagement = () => {
       if (result) {
         const response = await axios.delete(`/admin/banner/${id}`);
         showToast("success", `${response.data.message}`);
-        window.location.reload();
+        setBanner((prev) => prev?.filter((banner) => banner?._id !== id));
       } else {
         showToast("info", "Cancelled Deletion");
       }

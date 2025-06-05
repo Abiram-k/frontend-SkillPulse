@@ -100,16 +100,6 @@ const Category = () => {
       setImage(imageFile);
     }
   };
-  // const handleImageChange = (e) => {
-  //   const imageFile = e.target.files[0];
-  //   if (imageFile) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setCategoryImage(reader.result);
-  //     };
-  //     reader.readAsDataURL(imageFile);
-  //   }
-  // };
 
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
@@ -149,7 +139,7 @@ const Category = () => {
     }
 
     const formData = new FormData();
-    formData.append("name", name);
+    formData.append("name", name.trim());
     formData.append("description", description);
     formData.append("file", image);
     try {
@@ -162,8 +152,10 @@ const Category = () => {
           },
         });
         setSpinner(false);
-        window.location.reload();
-        // navigate("/admin/category");
+        setCategories((prev) => [, response.data?.category, ...prev]);
+        setName("");
+        setDescription("");
+        setCategoryImage("");
         Toast.fire({
           icon: "success",
           title: `${response.data.message}`,
@@ -188,18 +180,28 @@ const Category = () => {
           icon: "success",
           title: `${response.data.message}`,
         });
-        window.location.reload();
+        setCategories((prev) =>
+          prev?.map((cat) =>
+            cat?._id === id ? { ...cat, isDeleted: false } : cat
+          )
+        );
+
+        // window.location.reload();
       }
     } catch (error) {
       alert(error.response?.data.message);
     }
   };
-  const handleDelete = async (id) => {
+  const handleDelete = async (id) => { 
     const result = confirm("Are you sure to delete categorie");
     try {
       if (result) {
         const response = await axios.delete(`/admin/category/${id}`);
-        window.location.reload();
+        setCategories((prev) =>
+          prev?.map((cat) =>
+            cat?._id === id ? { ...cat, isDeleted: true } : cat
+          )
+        );
         Toast.fire({
           icon: "success",
           title: `${response.data.message}`,

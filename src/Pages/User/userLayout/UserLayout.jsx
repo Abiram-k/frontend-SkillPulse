@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { useLocation, Link, Outlet, useLoaderData } from "react-router-dom";
 import paymentTag from "../../../assets/paymentTags.png";
 import { BadgeDemo } from "@/Components/BadgeDemo";
 import axios from "@/axiosIntercepters/AxiosInstance";
@@ -11,6 +11,7 @@ function UserLayout() {
   const [cartCount, setCartCount] = useState(0);
   const [profileImage, setProfileImage] = useState(null);
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const user = useSelector((state) => state.users.user);
 
@@ -68,31 +69,47 @@ function UserLayout() {
         >
           <Link
             to="/user/home"
-            className="text-white no-underline hover:bg-slate-600 rounded p-1 transition duration-200"
+            className={`text-white no-underline hover:bg-slate-600 rounded p-1 transition duration-200 ${
+              location.pathname.includes("home")
+                ? " border-b-2 border-white"
+                : ""
+            }`}
           >
             HOME
           </Link>
           <Link
             to="/user/shop"
-            className="text-white no-underline hover:bg-slate-600 rounded p-1 transition duration-200"
+            className={`text-white no-underline hover:bg-slate-600 rounded p-1 transition duration-200 ${
+              location.pathname.includes("shop")
+                ? " border-b-2 border-white"
+                : ""
+            }`}
           >
             SHOP
           </Link>
-          <Link
+          {/* <Link
             to="/user/shop"
-            className="text-white no-underline hover:bg-slate-600 rounded p-1 transition duration-200"
+            className={`text-white no-underline hover:bg-slate-600 rounded p-1 transition duration-200 `}
           >
             CATEGORY
-          </Link>
+          </Link> */}
           <Link
             to="/user/contact"
-            className="text-white no-underline hover:bg-slate-600 rounded p-1"
+            className={`text-white no-underline hover:bg-slate-600 rounded p-1 ${
+              location.pathname.includes("contact")
+                ? " border-b-2 border-white"
+                : ""
+            }`}
           >
             CONTACT
           </Link>
           <a
             href="/user/about"
-            className="text-white no-underline hover:bg-slate-600 rounded p-1"
+            className={`text-white no-underline hover:bg-slate-600 rounded p-1 ${
+              location.pathname.includes("about")
+                ? " border-b-2 border-white"
+                : ""
+            }`}
           >
             ABOUT US
           </a>

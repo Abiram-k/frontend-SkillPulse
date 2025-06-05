@@ -23,7 +23,7 @@ const Razorpay = ({
           setRazorpayOrderId(response.data.orderId);
         } catch (error) {
           // alert(error);
-          console.error(error);
+          // console.error(error);
         }
       };
       fetchOrderId();
@@ -41,7 +41,6 @@ const Razorpay = ({
       description: "Skill Pulse Order Transaction",
       handler: async (response) => {
         try {
-          
           const res = await axios.post(
             "/verify-payment",
             {
@@ -49,7 +48,7 @@ const Razorpay = ({
               orderId: response.razorpay_order_id,
               signature: response.razorpay_signature,
               actuallOrder: orderId,
-              retry
+              retry,
             },
             {
               headers: {
@@ -61,7 +60,6 @@ const Razorpay = ({
         } catch (error) {
           alert("Payment verification failed. Please try again.");
         }
-
       },
       prefill: {
         name: "Abiram k",
@@ -77,8 +75,8 @@ const Razorpay = ({
     razorpayInstance.on("payment.failed", (response) => {
       handlePlaceOrder(true, orderId);
     });
-    if(!isAddressSelected?.firstName && !retry){
-      showToast("error","Add delivery address")
+    if (!isAddressSelected?.firstName && !retry) {
+      showToast("error", "Add delivery address");
       return;
     }
 
