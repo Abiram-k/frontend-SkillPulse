@@ -18,8 +18,7 @@ import axiosInstance from "@/axiosIntercepters/AxiosInstance";
 import { showToast } from "./ToastNotification";
 import { useSelector } from "react-redux";
 
-export function ReturnProduct({ item }) {
-
+export function ReturnProduct({ item, setTrigger }) {
   const [returnDescription, setReturnDescription] = useState("");
   const [error, setError] = useState("");
   const validateReason = () => {
@@ -51,6 +50,7 @@ export function ReturnProduct({ item }) {
         `/returnProduct?id=${user._id}&itemId=${item._id}`,
         { returnDescription }
       );
+      setTrigger((prev) => prev + 1);
       showToast("success", response.data.message);
     } catch (error) {
       console.log(error);

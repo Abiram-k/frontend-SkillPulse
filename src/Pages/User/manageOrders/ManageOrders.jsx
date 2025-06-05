@@ -30,6 +30,7 @@ const ManageOrders = () => {
   const searchFocus = useRef(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [trigger, setTrigger] = useState(0);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const ManageOrders = () => {
   useEffect(() => {
     currentPage.current = 1;
     fetchOrders();
-  }, [refresh, search, filter, sort, startDate, endDate]);
+  }, [refresh, search, filter, sort, startDate, endDate, trigger]);
 
   const handleCancelOrder = async (item) => {
     try {
@@ -166,6 +167,7 @@ const ManageOrders = () => {
           },
         }
       );
+      setTrigger((prev) => prev + 1);
       showToast("success", `${response?.data.message}`);
     } catch (error) {
       showToast("error", error?.response?.data.message);
@@ -401,7 +403,7 @@ const ManageOrders = () => {
                           return dayDiff <= 3;
                         })() && (
                           <div className="bg-red-500 text-white p-2 rounded-md">
-                            <ReturnProduct item={item} />
+                            <ReturnProduct item={item} setTrigger={setTrigger}/>
                           </div>
                         )}
 
