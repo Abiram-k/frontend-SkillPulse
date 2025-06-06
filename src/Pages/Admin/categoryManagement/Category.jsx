@@ -354,6 +354,8 @@ const Category = () => {
               <th className="p-2">S.No</th>
               <th className="p-2">Category Name</th>
               <th className="p-2">Description</th>
+              <th className="p-2">Offer</th>
+              <th className="p-2">Max discount</th>
               <th className="p-2">image</th>
               <th className="p-2">List / Unlist</th>
             </tr>
@@ -375,7 +377,18 @@ const Category = () => {
                   <td
                     className={category.isDeleted ? "line-through p-2" : "p-2"}
                   >
-                    {category.description}
+                    {category.description?.slice(0, 12)}{" "}
+                    {category.description.length > 12 && "..."}
+                  </td>
+                  <td
+                    className={category.isDeleted ? "line-through p-2" : "p-2"}
+                  >
+                    {category?.offer} %
+                  </td>
+                  <td
+                    className={category.isDeleted ? "line-through p-2" : "p-2"}
+                  >
+                    {category?.maxDiscount || 0} ₹
                   </td>
                   <td className="p-2">
                     <img

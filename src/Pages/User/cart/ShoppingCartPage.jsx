@@ -113,7 +113,6 @@ const ShoppingCartPage = () => {
     }
   };
 
-  console.log("CARTTTT : ", cartItems);
   const handleCheckout = () => {
     if (!cartItems || !cartItems.length || !cartItems[0].products.length) {
       showToast("error", "Add some items and checkout");
@@ -148,9 +147,8 @@ const ShoppingCartPage = () => {
     );
   };
   const cartTotalPrice = () => {
-    const gstRate = 18;
     const total = totalPrice() + calculateDeliveryCharge();
-    return total;
+    return isNaN(total) ? 0 : total;
   };
 
   const offerPrice = (couponAmount = 0, couponType) => {
@@ -304,10 +302,7 @@ const ShoppingCartPage = () => {
                       : calculateDeliveryCharge() + " ₹"}
                   </span>
                 </div>
-                {/* <div className="flex justify-between">
-                  <span>GST Amount (18%)</span>
-                  <span>{calculateGST(18)} ₹</span>
-                </div> */}
+
                 {cartItems[0]?.appliedCoupon && (
                   <>
                     <div className="flex justify-between">
@@ -322,7 +317,7 @@ const ShoppingCartPage = () => {
                     </div>
                     <div className="flex justify-between font-bold">
                       <span>Sub Total</span>
-                      <span>{cartTotalPrice().toFixed(2)}</span>
+                      <span>{cartTotalPrice().toFixed(2)} ₹</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Saved Amount</span>
@@ -334,7 +329,7 @@ const ShoppingCartPage = () => {
                               cartItems[0]?.appliedCoupon?.couponAmount,
                               cartItems[0]?.appliedCoupon?.couponType
                             )
-                        )}
+                        )} ₹
                       </span>
                     </div>
                     <div className="flex justify-between font-bold pt-3 border-t border-gray-200">
@@ -343,15 +338,15 @@ const ShoppingCartPage = () => {
                         {offerPrice(
                           cartItems[0]?.appliedCoupon?.couponAmount,
                           cartItems[0]?.appliedCoupon?.couponType
-                        ).toFixed(2)}
+                        ).toFixed(2) || 0} ₹
                       </span>
                     </div>
                   </>
                 )}
                 {!cartItems[0]?.appliedCoupon && (
                   <div className="flex justify-between font-bold pt-3 border-t border-gray-200">
-                    <span>Payable Amount</span>
-                    <span>{cartTotalPrice()}</span>
+                    <span>Payable Amount </span>
+                    <span>{cartTotalPrice()} ₹</span>
                   </div>
                 )}
               </div>

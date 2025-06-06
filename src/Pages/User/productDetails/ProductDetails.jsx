@@ -312,16 +312,19 @@ const ProductDetails = () => {
                 <h2 className="text-sm text-gray-300 font-semibold">
                   Brand : {product.brand?.name || "Brand not added"}
                 </h2>
-                <h2 className="text-sm text-gray-300 font-semibold">
-                  category : {product.category?.name || "Brand not added"}
-                </h2>
+                {product.category?.name && (
+                  <h2 className="text-sm text-gray-300 font-semibold">
+                    category : {product.category?.name || "Category not added"}
+                  </h2>
+                )}
                 <div className="flex items-baseline space-x-4">
                   <span className="text-2xl font-bold text-green-500">
                     ₹{Math.round(product.salesPrice) || "Not available"}
                   </span>
 
-                  {(product?.offer || product?.categoryOffer) &&
-                    product?.salesPrice < product?.regularPrice && (
+                  {(product?.offer > 0 || product?.categoryOffer > 0) &&
+                    // product?.salesPrice < product?.regularPrice && 
+                    (
                       <>
                         <span className="text-gray-400 line-through">
                           ₹{product?.regularPrice}
@@ -335,15 +338,6 @@ const ProductDetails = () => {
                         </span>
                       </>
                     )}
-
-                  {/* {!!product?.offer == true && (
-                    <span className="text-gray-400 line-through">
-                      ₹{product.regularPrice}
-                    </span>
-                  )}
-                  <span className="text-green-500 text-sm">
-                    {product.offer ? product.offer + " % off" : ""}
-                  </span> */}
                 </div>
                 <h6 className="text-orange-500 text-sm font-sans">
                   {product.units
@@ -384,11 +378,6 @@ const ProductDetails = () => {
                       Product is Unavailable
                     </button>
                   )}
-                  {/* {isAvailable && (
-                    <button className="bg-red-900 text-white  px-6 py-2 rounded-full hover:bg-red-700 text-sm w-full md:w-auto">
-                      Add To Wishlist
-                    </button>
-                  )} */}
 
                   {isAvailable && (
                     <button
@@ -452,7 +441,16 @@ const ProductDetails = () => {
                           {product.regularPrice}
                         </span>
                         <span className="text-green-500 text-sm">
-                          {product.offer + "% off" || "99% off"}
+                          {/* {product.offer + "% off" || "99% off"} */}
+
+                          {(product?.categoryOffer || product?.offer > 0) && (
+                            <span className="text-red-500 ml-2 text-xs">
+                              {product?.categoryOffer >= product?.offer
+                                ? product.categoryOffer
+                                : product?.offer}{" "}
+                              % off
+                            </span>
+                          )}
                         </span>
                       </div>
                       {product.salesPrice > 1000 && (
@@ -461,7 +459,7 @@ const ProductDetails = () => {
                     </div>
                   </div>
                 ))}
-              {error && <div className="text-red-500">{error}</div>}
+              {error && <div className="text-blue-500">{error}</div>}
             </div>
           </section>
         )}

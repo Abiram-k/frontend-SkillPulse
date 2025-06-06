@@ -8,7 +8,7 @@ function EditCategory() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [id, setId] = useState("");
-  const [offer, setOffer] = useState("");
+  const [offer, setOffer] = useState(0);
   const [message, setMessage] = useState({});
   const [existingImage, setExistingImage] = useState("");
   const [categoryImage, setCategoryImage] = useState("");
@@ -22,7 +22,7 @@ function EditCategory() {
   const validateForm = () => {
     if (name.trim() === "") error.name = "Category name is required *";
 
-    if (maxDiscount.trim() === "" && offer?.length > 0 && Number(offer) !== 0)
+    if ((maxDiscount == 0 || !maxDiscount) && Number(offer) !== 0)
       error.maxDiscount = "Max discount is required *";
 
     if (isNaN(offer)) error.offer = "offer price must a number";
@@ -43,6 +43,7 @@ function EditCategory() {
       setId(data._id || "");
       setExistingImage(data.image);
       setOffer(data.offer);
+      setMaxDiscount(data?.maxDiscount || 0);
     }
   }, [data]);
 
@@ -83,9 +84,9 @@ function EditCategory() {
   const handleEditCategory = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
+    console.log("Form errors: ", formErrors);
     if (Object.keys(formErrors).length > 0) {
       setMessage(formErrors);
-      console.log("Form errors: ", formErrors);
       return;
     }
     setSpinner(true);
@@ -140,7 +141,7 @@ function EditCategory() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        {offer?.length > 0 && Number(offer) !== 0 && (
+        {Number(offer) > 0 && (
           <>
             <label className="mr-2">Max Discount :</label>
             <input
