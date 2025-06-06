@@ -29,7 +29,7 @@ export const ChangeStatus = ({
   const user = useSelector((state) => state.users.user);
 
   const handleChangeStatus = async () => {
-    updatedState(updatedStatus,productId);
+    updatedState(updatedStatus, productId);
     try {
       const response = await axios.patch(`/admin/status?id=${user?._id}`, {
         orderId,
@@ -38,6 +38,7 @@ export const ChangeStatus = ({
       });
       showToast("success", response.data.message);
       // window.location.reload();
+      setUpdatedStatus("");
       setOpen(false);
     } catch (error) {
       console.log(error);
@@ -74,9 +75,6 @@ export const ChangeStatus = ({
               value={updatedStatus}
               onChange={(e) => setUpdatedStatus(e.target.value)}
             >
-              {/* {currentStatus == "processing" && (
-                <option value="processing">processing</option>
-              )} */}
               <option value="" disabled hidden>
                 Select status
               </option>

@@ -317,7 +317,7 @@ const ProductDetails = () => {
                 </h2>
                 <div className="flex items-baseline space-x-4">
                   <span className="text-2xl font-bold text-green-500">
-                    ₹{product.salesPrice}
+                    ₹{Math.round(product.salesPrice) || "Not available"}
                   </span>
 
                   {(product?.offer || product?.categoryOffer) &&

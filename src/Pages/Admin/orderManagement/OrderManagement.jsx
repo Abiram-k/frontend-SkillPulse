@@ -266,20 +266,46 @@ const OrderManagement = () => {
                             {/* {updatedStatus || item.productStatus} */}
                           </td>
                           <td className="px-6 py-4">
-                            {item.productStatus !== "delivered" && (
-                              <ChangeStatus
-                                updatedState={handleUpdatedStatus}
-                                orderId={order?.orderId}
-                                productId={item?._id}
-                                // currentStatus={item.productStatus}
-                                currentStatus={
-                                  updatedStatus.item === item?._id &&
-                                  updatedStatus.status
-                                    ? updatedStatus.status
-                                    : item.productStatus
-                                }
-                              />
-                            )}
+                            {/* {(item.productStatus !== "delivered" &&
+                              updatedStatus.item == item?._id &&
+                              updatedStatus.status !== "delivered") ||
+                              (updatedStatus.status !== "cancelled" &&
+                                item.productStatus !== "cancelled" && (
+                                  <ChangeStatus
+                                    updatedState={handleUpdatedStatus}
+                                    orderId={order?.orderId}
+                                    productId={item?._id}
+                                    // currentStatus={item.productStatus}
+                                    currentStatus={
+                                      updatedStatus.item === item?._id &&
+                                      updatedStatus.status
+                                        ? updatedStatus.status
+                                        : item.productStatus
+                                    }
+                                  />
+                                ))} */}
+                            {(() => {
+                              const status =
+                                updatedStatus.item === item?._id &&
+                                updatedStatus.status
+                                  ? updatedStatus.status
+                                  : item.productStatus;
+
+                              if (
+                                status === "delivered" ||
+                                status === "cancelled"
+                              )
+                                return null;
+
+                              return (
+                                <ChangeStatus
+                                  updatedState={handleUpdatedStatus}
+                                  orderId={order?.orderId}
+                                  productId={item?._id}
+                                  currentStatus={status}
+                                />
+                              );
+                            })()}
                           </td>
                         </tr>
                       ))
