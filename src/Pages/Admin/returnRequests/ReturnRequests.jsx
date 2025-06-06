@@ -91,7 +91,7 @@ const ReturnRequests = () => {
           <table className="min-w-full text-left border-collapse border border-black">
             <thead className="bg-gray-100 text-black font-bold">
               <tr>
-                <th className="px-4 py-2 border border-black">#</th>
+                <th className="px-4 py-2 border border-black">Order Id</th>
                 <th className="px-4 py-2 border border-black">Product Name</th>
                 <th className="px-4 py-2 border border-black">User</th>
                 <th className="px-4 py-2 border border-black">Reason</th>
@@ -120,7 +120,7 @@ const ReturnRequests = () => {
                       className="hover:bg-gray-200 transition duration-200"
                     >
                       <td className="px-4 py-2 border border-black">
-                        {productIndex + 1}
+                        {orders.orderId}
                       </td>
                       <td className="px-4 py-2 border border-black">
                         {product.product.productName}
