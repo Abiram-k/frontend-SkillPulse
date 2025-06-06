@@ -192,7 +192,7 @@ const Category = () => {
       alert(error.response?.data.message);
     }
   };
-  const handleDelete = async (id) => { 
+  const handleDelete = async (id) => {
     const result = confirm("Are you sure to delete categorie");
     try {
       if (result) {
@@ -361,7 +361,7 @@ const Category = () => {
           <tbody className="">
             {categories?.length > 0 ? (
               categories.map((category, index) => (
-                <tr className="border-t" key={category._id}>
+                <tr className="border-2 border-b-gray-300" key={category._id}>
                   <td
                     className={category.isDeleted ? "line-through p-2" : "p-2"}
                   >

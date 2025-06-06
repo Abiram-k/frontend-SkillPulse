@@ -22,6 +22,7 @@ export function ChangePassword({ id }) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState({});
+  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -53,8 +54,14 @@ export function ChangePassword({ id }) {
       error.confirmPassword = "Password not matching";
 
     if (confirmPassword === newPassword) {
-      if (newPassword === currentPassword) {
-        error.confirmPassword = "This password has already been used once.";
+      if (
+        newPassword === currentPassword &&
+        newPassword.trim() &&
+        currentPassword.trim() &&
+        !error.confirmPassword &&
+        !error.newPassword
+      ) {
+        error.confirmPassword = "New password looks similar like current one!";
       }
     }
 
@@ -79,7 +86,7 @@ export function ChangePassword({ id }) {
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
-        window.location.reload();
+        setOpen(false);
         Toast.fire({
           icon: "success",
           title: `${response.data.message}`,
@@ -94,7 +101,7 @@ export function ChangePassword({ id }) {
     }
   };
   return (
-    <Dialog className="mt-5">
+    <Dialog className="mt-5" open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="font-mono">
           Change Password

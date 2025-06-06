@@ -204,7 +204,7 @@ const CouponManagement = () => {
                         .includes(search.toLowerCase())
                     )
                     .map((coupon) => (
-                      <tr className="border-b">
+                      <tr className=" border-2 border-b-gray-300">
                         <td className="px-6 py-4 text-black">
                           {coupon.couponCode}
                         </td>

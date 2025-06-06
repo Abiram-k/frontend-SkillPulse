@@ -21,7 +21,7 @@ const AccountOverview = () => {
   const user = useSelector((state) => state.users.user);
   const [profileImage, setProfileImage] = useState(null);
   const [dbImage, setDbImage] = useState(null);
-  const [userProfile, setUserProfile] = useState([]);
+  // const [userProfile, setUserProfile] = useState([]);
   const [firstName, setFirstName] = useState("");
   const [secondName, setSecondName] = useState("");
   const [email, setEmail] = useState("");
@@ -52,7 +52,7 @@ const AccountOverview = () => {
 
     if (!isNaN(lastnameFirstCharecter) && lastnameFirstCharecter?.trim()) {
       error.lastName = "Last name must start with a charecter *";
-    } else if (!nameRegex.test(secondName)) {
+    } else if (!nameRegex.test(secondName) && secondName.trim()) {
       error.lastName =
         "Last name must not include numbers or special characters.";
     }
@@ -142,7 +142,7 @@ const AccountOverview = () => {
         setDateOfBirth(response.data?.userData.dateOfBirth);
         setEmail(response.data?.userData?.email);
         setMobileNumber(response.data?.userData.mobileNumber);
-        setUserProfile(response.data?.userData);
+        // setUserProfile(response.data?.userData);
         setProfileImage(response.data?.userData.profileImage);
         setRefferal(response.data?.userData.referralCode);
         setSpinner(false);
@@ -169,11 +169,11 @@ const AccountOverview = () => {
     }
     try {
       const formData = new FormData();
-      formData.append("firstName", firstName);
-      formData.append("lastName", secondName);
+      formData.append("firstName", firstName.trim());
+      formData.append("lastName", secondName.trim());
       formData.append("email", email);
       formData.append("file", dbImage);
-      formData.append("mobileNumber", mobileNumber);
+      formData.append("mobileNumber", mobileNumber.trim());
       formData.append("dateOfBirth", dateOfBirth);
       setSpinner(true);
       const response = await axios.post("/user", formData, {
@@ -185,8 +185,12 @@ const AccountOverview = () => {
       setSpinner(false);
       setEditMode(false);
       setMessage({});
-      setProfileImage(response.data?.updatedUser);
-      window.location.reload();
+      setFirstName(response.data?.updatedUser.firstName);
+      setSecondName(response.data?.updatedUser.lastName);
+      setDateOfBirth(response.data?.updatedUser.dateOfBirth);
+      setEmail(response.data?.updatedUser?.email);
+      setMobileNumber(response.data?.updatedUser.mobileNumber);
+      setProfileImage(response.data?.updatedUser?.profileImage);
       showToast("success", response?.data?.message);
     } catch (error) {
       setSpinner(false);
@@ -245,7 +249,7 @@ const AccountOverview = () => {
           <span className="font-semibold">{user.firstName || "User name"}</span>
         </div>
         <div className="flex gap-3">
-          {!user.googleid && (
+          {user.password && (
             <ChangePassword
               name="Change Password"
               className="mt-5"
@@ -312,7 +316,7 @@ const AccountOverview = () => {
               <p className="text-red-600">{message.lastName}</p>
             )}
           </div>
-          {!user.googleid && (
+          {user.password && (
             <div>
               <label className="block mb-2">Password</label>
               <input
@@ -374,7 +378,11 @@ const AccountOverview = () => {
             <input
               type="tel"
               className="w-full bg-gray-700 rounded-lg p-2"
-              value={mobileNumber ? mobileNumber : ""}
+              value={
+                mobileNumber && mobileNumber !== "undefined"
+                  ? mobileNumber
+                  : " "
+              }
               onChange={(e) => setMobileNumber(e.target.value)}
               onClick={() => !editMode && handleEditToastAlert()}
             />

@@ -366,7 +366,7 @@ const Brand = () => {
           <tbody>
             {brands?.length > 0 ? (
               brands.map((brand, index) => (
-                <tr className="border-t" key={brand._id}>
+                <tr className="border-2 border-b-gray-300" key={brand._id}>
                   <td className={brand.isDeleted ? "line-through p-2" : "p-2"}>
                     {index + 1}
                   </td>

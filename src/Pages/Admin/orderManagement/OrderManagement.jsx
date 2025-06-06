@@ -247,7 +247,10 @@ const OrderManagement = () => {
                             {order.orderDate}
                           </td>
                           <td className="px-6 py-4 text-white">
-                            {item.product.salesPrice * item.quantity}
+                            {Math.round(
+                              item.product.salesPrice * item.quantity +
+                                (order?.deliveryCharge || 0)
+                            )}
                           </td>
                           <td className="px-6 py-4 text-white whitespace-pre-line">
                             {order.address.address},{order.address.pincode}
@@ -266,24 +269,6 @@ const OrderManagement = () => {
                             {/* {updatedStatus || item.productStatus} */}
                           </td>
                           <td className="px-6 py-4">
-                            {/* {(item.productStatus !== "delivered" &&
-                              updatedStatus.item == item?._id &&
-                              updatedStatus.status !== "delivered") ||
-                              (updatedStatus.status !== "cancelled" &&
-                                item.productStatus !== "cancelled" && (
-                                  <ChangeStatus
-                                    updatedState={handleUpdatedStatus}
-                                    orderId={order?.orderId}
-                                    productId={item?._id}
-                                    // currentStatus={item.productStatus}
-                                    currentStatus={
-                                      updatedStatus.item === item?._id &&
-                                      updatedStatus.status
-                                        ? updatedStatus.status
-                                        : item.productStatus
-                                    }
-                                  />
-                                ))} */}
                             {(() => {
                               const status =
                                 updatedStatus.item === item?._id &&
