@@ -21,8 +21,11 @@ const Wallet = () => {
   const fetchWalletHistory = async () => {
     try {
       const response = await axios.get(
-        `/wallet/${user._id}?&page=${currentPage.current}&limit=${postPerPage}`
+        `/wallet?&page=${currentPage.current}&limit=${postPerPage}`
       );
+      // const response = await axios.get(
+      //   `/wallet/${user._id}?&page=${currentPage.current}&limit=${postPerPage}`
+      // );
       setWalletData(response.data.wallet);
       // response.data.wallet?.transaction?.reverse();
       setPageCount(response.data?.pageCount);

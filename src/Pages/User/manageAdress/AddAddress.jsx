@@ -95,9 +95,12 @@ const AddAddress = () => {
     formData.append("type", type);
 
     try {
-      const response = await axios.post(`/address?id=${user?._id}`, formData, {
+      const response = await axios.post(`/address`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      // const response = await axios.post(`/address?id=${user?._id}`, formData, {
+      //   headers: { "Content-Type": "multipart/form-data" },
+      // });
 
       showToast("success", response.data.message);
       if (checkoutRedirect) {

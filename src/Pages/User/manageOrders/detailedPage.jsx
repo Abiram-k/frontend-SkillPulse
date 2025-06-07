@@ -143,8 +143,11 @@ export default function OrderTrackingPage() {
   const handleCancelOrder = async () => {
     try {
       const response = await axios.patch(
-        `/cancelOrder?id=${order._id}&userId=${user._id}`
+        `/cancelOrder?id=${order._id}`
       );
+      // const response = await axios.patch(
+      //   `/cancelOrder?id=${order._id}&userId=${user._id}`
+      // );
       showToast("success", `${response.data.message}`);
 
       window.location.reload();

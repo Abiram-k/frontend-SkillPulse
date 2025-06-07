@@ -11,6 +11,7 @@ import { showToast } from "@/Components/ToastNotification";
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState({});
   const user = useSelector((state) => state.users.user);
+  const [spinner, setSpinner] = useState(false);
   const [cartProduct, setCartProduct] = useState(
     JSON.parse(localStorage.getItem(`cart_${user._id}`)) || []
   );
@@ -20,6 +21,7 @@ const Wishlist = () => {
   useEffect(() => {
     (async () => {
       try {
+        setSpinner(true);
         const response = await axios.get(`/wishlist`);
         const wishlistData = response.data.wishlist;
         if (wishlistData?.length)
@@ -39,29 +41,35 @@ const Wishlist = () => {
           icon: "error",
           title: `${error?.response?.data?.message}`,
         });
+      } finally {
+        setSpinner(false);
       }
     })();
-  }, [trigger, wishlist]);
+  }, [trigger]);
 
   const handleDeleteItem = async (product) => {
     try {
+      setSpinner(true);
       await removeFromWishlist(product, user, dispatch);
       setTrigger((prev) => prev + 1);
     } catch (error) {
       console.log(error);
+    } finally {
+      setSpinner(false);
     }
   };
 
   const handleAddToCart = async (id) => {
     try {
+      setSpinner(true);
       const response = await axios.post(
         `/addToCart/${id}`,
-        {},
-        {
-          params: {
-            userId: user._id,
-          },
-        }
+        {}
+        // {
+        //   params: {
+        //     userId: user._id,
+        //   },
+        // }
       );
       setCartProduct((prev) => {
         if (!prev.includes(id)) {
@@ -82,6 +90,8 @@ const Wishlist = () => {
         title: `${error?.response?.data?.message}`,
       });
       console.log(error);
+    } finally {
+      setSpinner(false);
     }
   };
   return (
@@ -89,6 +99,11 @@ const Wishlist = () => {
       className="p-6 flex justify-center h-screen overflow-y-scroll font-mono mb-3"
       style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
     >
+      {spinner && (
+        <div className="spinner-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
       <div className="w-full max-w-3xl space-y-6">
         {wishlist.length > 0 ? (
           <>

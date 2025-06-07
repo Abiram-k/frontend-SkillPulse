@@ -30,7 +30,7 @@ const HomePage = () => {
   const [addedToWishlist, setAddedToWishlist] = useState(false);
   const [banners, setBanners] = useState([]);
   const [spinner, setSpinner] = useState(false);
-  const [trigger, setTrigger] = useState(0);
+  const [trigger, setTrigger] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.users.user);
@@ -87,10 +87,13 @@ const HomePage = () => {
 
   const handleRemoveFromWishlist = async (product) => {
     try {
+      setSpinner(true);
       await removeFromWishlist(product, user, dispatch);
+      setSpinner(false);
       setTrigger((prev) => prev + 1);
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
+      setSpinner(false);
       console.log(error);
     }
   };
@@ -116,7 +119,7 @@ const HomePage = () => {
       }
     })();
     fetchWishlist();
-  }, [trigger]);
+  }, [trigger, wishlistItems]);
   return (
     <div>
       {spinner && (
@@ -242,7 +245,10 @@ const HomePage = () => {
                   {wishlistItems.includes(product._id) ? (
                     <Heart
                       className="absolute top-3 right-3 w-6 h-6 fill-red-600 text-red-600 cursor-pointer"
-                      onClick={() => handleRemoveFromWishlist(product._id)}
+                      // onClick={() => handleRemoveFromWishlist(product._id)}
+                      onClick={() => {
+                        navigate("/user/wishlist");
+                      }}
                     />
                   ) : (
                     <Heart

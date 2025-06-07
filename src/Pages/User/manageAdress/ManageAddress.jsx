@@ -15,7 +15,8 @@ const ManageAddress = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(`/address?id=${user?._id}`);
+        const response = await axios.get(`/address`);
+        // const response = await axios.get(`/address?id=${user?._id}`);
         setAddresses(response.data.addresses);
       } catch (error) {
         if (

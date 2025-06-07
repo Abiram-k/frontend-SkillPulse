@@ -94,9 +94,10 @@ const ManageOrders = () => {
 
   const handleCancelOrder = async (item) => {
     try {
-      const response = await axios.patch(
-        `/cancelOrderItem?id=${user._id}&itemId=${item._id}`
-      );
+      const response = await axios.patch(`/cancelOrderItem?itemId=${item._id}`);
+      // const response = await axios.patch(
+      //   `/cancelOrderItem?id=${user._id}&itemId=${item._id}`
+      // );
       showToast("success", `${response.data.message}`);
 
       setRefresh((prev) => prev + 1);
@@ -154,8 +155,10 @@ const ManageOrders = () => {
       (order, index) => order?._id.toString() == orderId
     );
     try {
+      // const response = await axios.post(
+      //   `/order/${user._id}`,
       const response = await axios.post(
-        `/order/${user._id}`,
+        `/order`,
         { checkoutItems: orderForRetry },
         {
           params: {
@@ -403,7 +406,10 @@ const ManageOrders = () => {
                           return dayDiff <= 3;
                         })() && (
                           <div className="bg-red-500 text-white p-2 rounded-md">
-                            <ReturnProduct item={item} setTrigger={setTrigger}/>
+                            <ReturnProduct
+                              item={item}
+                              setTrigger={setTrigger}
+                            />
                           </div>
                         )}
 

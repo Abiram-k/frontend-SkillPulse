@@ -178,9 +178,9 @@ const AccountOverview = () => {
       setSpinner(true);
       const response = await axios.post("/user", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-        params: {
-          id: user._id,
-        },
+        // params: {
+        //   id: user._id,
+        // },
       });
       setSpinner(false);
       setEditMode(false);

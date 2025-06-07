@@ -143,8 +143,8 @@ function UserLayout() {
       </div>
       <Outlet context={{ setCartCount }} />
       <footer
-        style={{ fontfamily: "Montserrat" }}
-        className="bg-black text-gray-400 py-8 flex flex-col space-y-11 border-t-2 border-gray-700"
+        // style={{ fontfamily: "Montserrat" }}
+        className="bg-black text-gray-400 font-mono py-8 flex flex-col space-y-11 border-t-2 mt-5 md:mt-10 border-gray-700"
       >
         <div className="flex flex-wrap justify-around gap-8">
           <div className="text-center flex flex-col items-center w-1/3 md:w-auto">

@@ -155,12 +155,12 @@ const ProductDetails = () => {
       setSpinner(true);
       const response = await axios.post(
         `/addToCart/${product[0]._id}`,
-        {},
-        {
-          params: {
-            userId: user?._id,
-          },
-        }
+        {}
+        // {
+        //   params: {
+        //     userId: user?._id,
+        //   },
+        // }
       );
       setCartProduct((prev) => {
         if (!prev.includes(product[0]._id)) {
@@ -209,7 +209,8 @@ const ProductDetails = () => {
 
   const fetchWishlist = async () => {
     try {
-      const response = await axios.get(`/wishlist?user=${user._id}`);
+      // const response = await axios.get(`/wishlist?user=${user._id}`);
+      const response = await axios.get(`/wishlist`);
       const isWishlisted = response.data.wishlist[0].products.some(
         (p) => p.product?._id == product[0]?._id
       );
@@ -322,22 +323,21 @@ const ProductDetails = () => {
                     ₹{Math.round(product.salesPrice) || "Not available"}
                   </span>
 
-                  {(product?.offer > 0 || product?.categoryOffer > 0) &&
-                    // product?.salesPrice < product?.regularPrice && 
-                    (
-                      <>
-                        <span className="text-gray-400 line-through">
-                          ₹{product?.regularPrice}
-                        </span>
-                        <span className="text-green-500 text-sm">
-                          {Math.max(
-                            product?.offer || 0,
-                            product?.categoryOffer || 0
-                          )}
-                          % off
-                        </span>
-                      </>
-                    )}
+                  {(product?.offer > 0 || product?.categoryOffer > 0) && (
+                    // product?.salesPrice < product?.regularPrice &&
+                    <>
+                      <span className="text-gray-400 line-through">
+                        ₹{product?.regularPrice}
+                      </span>
+                      <span className="text-green-500 text-sm">
+                        {Math.max(
+                          product?.offer || 0,
+                          product?.categoryOffer || 0
+                        )}
+                        % off
+                      </span>
+                    </>
+                  )}
                 </div>
                 <h6 className="text-orange-500 text-sm font-sans">
                   {product.units

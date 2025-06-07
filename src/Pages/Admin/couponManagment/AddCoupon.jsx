@@ -40,12 +40,15 @@ function AddCoupon() {
     if (couponAmount < 0) error.couponAmount = "Must be positive value *";
 
     if (!description.trim()) error.description = "Required *";
+
     if (!totalLimit.trim() || isNaN(totalLimit))
       error.totalLimit = "Enter number";
-    if (totalLimit < 0) error.totalLimit = "Must be positive value *";
+    if (totalLimit < 1) error.totalLimit = "Must be positive value *";
     if (!perUserLimit.trim() || isNaN(perUserLimit))
       error.perUserLimit = "Enter number";
-
+    if (perUserLimit < 1) error.perUserLimit = "Must be positive value *";
+    if (perUserLimit >= totalLimit)
+      error.perUserLimit = "Must be lesser than total";
     if (!purchaseAmount.trim() || isNaN(purchaseAmount))
       error.purchaseAmount = "Enter amount";
     if (purchaseAmount < 0) error.purchaseAmount = "Must be positive value *";
@@ -163,13 +166,15 @@ function AddCoupon() {
               htmlFor="amount"
               className="block text-sm font-medium text-gray-700"
             >
-              Coupon amount:
+              Coupon {couponType == "Amount" ? "amount" : "percent"}:
             </label>
             <input
               type="text"
               id="amount"
               className="border p-3 rounded text-black focus:outline-none w-full"
-              placeholder="Coupon Amount"
+              placeholder={`Coupon ${
+                couponType == "Amount" ? "amount" : "percent"
+              }`}
               value={couponAmount}
               onChange={(e) => setCouponAmount(e.target.value)}
             />

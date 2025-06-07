@@ -151,7 +151,8 @@ const Shop = () => {
 
   const fetchWishlist = async () => {
     try {
-      const response = await axios.get(`/wishlist?user=${user._id}`);
+      const response = await axios.get(`/wishlist`);
+      // const response = await axios.get(`/wishlist?user=${user._id}`);
       const uniqueWishlistItems = [
         ...new Set(
           response.data.wishlist[0].products.map(
@@ -208,11 +209,11 @@ const Shop = () => {
       const response = await axios.post(
         `/addToCart/${id}`,
         {},
-        {
-          params: {
-            userId: user?._id,
-          },
-        }
+        // {
+        //   params: {
+        //     userId: user?._id,
+        //   },
+        // }
       );
       setCartProduct((prev) => {
         if (!prev.includes(id)) {
@@ -246,7 +247,7 @@ const Shop = () => {
         </div>
       )}
       <div
-        className="py-8 bg-cover bg-center mb-10 w-full h-96 md:h-[500px] lg:h-[600px] relative"
+        className="py-8 bg-cover  bg-center mb-10  w-full h-96 md:h-[500px] lg:h-[600px] relative"
         style={{
           backgroundImage: `url(${
             "https://digitalalliance.co.id/wp-content/uploads/2021/05/banner-category-gaming-gear-accessories-stands.jpg" ||

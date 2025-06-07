@@ -96,14 +96,12 @@ const Checkout = () => {
 
   const offerPrice = (couponAmount = 0, couponType) => {
     const basePrice =
-      cartItems[0]?.totalDiscount !== 0
-        ? cartItems[0]?.totalDiscount
-        : cartItems[0]?.grandTotal;
+      cartItems[0]?.grandTotal !== 0
+        ? cartItems[0]?.grandTotal
+        : cartItems[0]?.totalDiscount;
 
-    const gstRate = 18;
     const totalPrice = Math.abs(
       parseInt(basePrice) +
-        // parseInt(calculateGST(gstRate)) +
         parseInt(calculateDeliveryCharge()) -
         parseInt(couponAmount)
     );
@@ -113,9 +111,10 @@ const Checkout = () => {
   const handleCouponDelete = async () => {
     try {
       setSpinner(true);
-      const response = await axiosInstance.patch(
-        `/cartCouponRemove/${user._id}`
-      );
+      // const response = await axiosInstance.patch(
+      //   `/cartCouponRemove/${user._id}`
+      // );
+      const response = await axiosInstance.patch(`/cartCouponRemove`);
       setTrigger((prev) => prev + 1);
       setSpinner(false);
       showToast("success", `${response.data.message}`);
@@ -138,8 +137,11 @@ const Checkout = () => {
     try {
       setSpinner(true);
       const response = await axios.patch(
-        `/cartCouponApply?id=${user._id}&couponId=${selectedCoupon}`
+        `/cartCouponApply?couponId=${selectedCoupon}`
       );
+      // const response = await axios.patch(
+      //   `/cartCouponApply?id=${user._id}&couponId=${selectedCoupon}`
+      // );
       setTrigger((prev) => prev + 1);
       setSpinner(false);
     } catch (error) {
@@ -154,14 +156,14 @@ const Checkout = () => {
     if (!checkoutItems) {
       navigate("/user/profile/myOrders");
       return;
-    } 
-    
+    }
   }, []);
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(`/cart/${user._id}`);
+        // const response = await axios.get(`/cart/${user._id}`);
+        const response = await axios.get(`/cart`);
         setCartItems(response.data.cartItems);
       } catch (error) {
         if (error?.response.data.isBlocked) {
@@ -177,7 +179,8 @@ const Checkout = () => {
 
     (async () => {
       try {
-        const response = await axios.get(`/wallet/${user._id}`);
+        const response = await axios.get(`/wallet`);
+        // const response = await axios.get(`/wallet/${user._id}`);
         setWalletData(response.data.wallet);
       } catch (error) {
         console.error(error);
@@ -194,10 +197,13 @@ const Checkout = () => {
     (async () => {
       try {
         const response = await axios.get(
-          `/address?id=${user?._id}${
-            selectedAddressId ? `&addrId=${selectedAddressId}` : ""
-          }`
+          `/address?${selectedAddressId ? `&addrId=${selectedAddressId}` : ""}`
         );
+        // const response = await axios.get(
+        //   `/address?id=${user?._id}${
+        //     selectedAddressId ? `&addrId=${selectedAddressId}` : ""
+        //   }`
+        // );
         setAddresses(response?.data.addresses);
         setSelectedAddress(response.data.selectedAddress);
       } catch (error) {
@@ -222,7 +228,7 @@ const Checkout = () => {
       offerPrice(
         cartItems[0]?.appliedCoupon?.couponAmount,
         cartItems[0]?.appliedCoupon?.couponType
-      ) >= 5000
+      ) >= 20000
     ) {
       showToast("error", "Cash on delivery is not applicable");
       return;
@@ -233,7 +239,8 @@ const Checkout = () => {
     }
     try {
       setSpinner(true);
-      const response = await axios.post(`/order/${user._id}`, cartItems, {
+      // const response = await axios.post(`/order/${user._id}`, cartItems, {
+      const response = await axios.post(`/order`, cartItems, {
         params: {
           paymentFailed,
           paymentMethod,
@@ -252,10 +259,13 @@ const Checkout = () => {
         showToast("success", `${response?.data.message}`);
       }
     } catch (error) {
-      navigate("/user/profile/myOrders");
+      if (
+        !error?.response?.data.message == "Coupon usage limit per user exceeded"
+      )
+        navigate("/user/profile/myOrders");
       showToast("error", `${error?.response?.data.message}`);
     } finally {
-      navigate("/user/profile/myOrders");
+      // navigate("/user/profile/myOrders");
       setSpinner(false);
     }
   };
@@ -584,13 +594,14 @@ const Checkout = () => {
                           cartItems[0]?.appliedCoupon?.couponAmount,
                           cartItems[0]?.appliedCoupon?.couponType
                         )}
+                        ₹
                       </span>
                     </div>
                   </>
                 ) : (
                   <div className="flex justify-between font-bold border-gray-200">
                     <span>Payable Amount</span>
-                    <span>{cartTotalPrice()}</span>
+                    <span>{cartTotalPrice()} ₹</span>
                   </div>
                 )}
               </div>
