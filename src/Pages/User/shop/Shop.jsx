@@ -34,7 +34,7 @@ const Shop = () => {
   const [search, setSearch] = useState("");
   const [trigger, setTrigger] = useState(0);
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const currentPage = useRef();
   const [pageCount, setPageCount] = useState(1);
@@ -117,10 +117,16 @@ const Shop = () => {
 
   const handleFilter = (e) => {
     const { name, value } = e.target;
+
     setFilter((prev) => ({
       ...prev,
       [name]: value,
     }));
+    const newParams = new URLSearchParams(searchParams);
+    if (name === "category") {
+      newParams.delete("categoryId");
+    }
+    setSearchParams(newParams);
   };
 
   const handleAddToWishList = async (product) => {
@@ -208,7 +214,7 @@ const Shop = () => {
       setSpinner(true);
       const response = await axios.post(
         `/addToCart/${id}`,
-        {},
+        {}
         // {
         //   params: {
         //     userId: user?._id,
