@@ -162,7 +162,7 @@ const Shop = () => {
       const uniqueWishlistItems = [
         ...new Set(
           response.data.wishlist[0].products.map(
-            (product) => product.product._id
+            (product) => product?.product?._id
           )
         ),
       ];
@@ -182,8 +182,8 @@ const Shop = () => {
 
   const handleShare = async (product, productId) => {
     const shareData = {
-      title: product.name || "Check out this product",
-      text: product.description || "Amazing product you might like!",
+      title: product?.name || "Check out this product",
+      text: product?.description || "Amazing product you might like!",
       url: `${window.location.origin}/user/productDetails?id=${productId}`,
     };
 
@@ -377,43 +377,52 @@ const Shop = () => {
             !product?.category?.isDeleted ? (
               <div
                 className="relative bg-gray-800 p-4 rounded shadow-lg transform hover:scale-105 transition-transform duration-300"
-                key={product._id}
+                key={product?._id}
               >
                 <img
                   src={
-                    product.productImage[0] || "https://placehold.co/300x200"
+                    product?.productImage[0] || "https://placehold.co/300x200"
                   }
-                  alt={product.productDescription}
+                  alt={product?.productDescription}
                   className="w-full h-40 object-cover rounded-t-lg cursor-pointer transition-opacity hover:opacity-90"
                   onClick={() => goToDetails(product)}
                 />
 
                 <div className="p-3 text-center">
-                  <p className="text-sm  text-white truncate lg:text-lg font-bold">
-                    {product.productName}
+                  <p
+                    className="text-sm  text-white truncate lg:text-lg font-bold cursor-pointer"
+                    onClick={() => goToDetails(product)}
+                  >
+                    {product?.productName}
                   </p>
-                  <p className="text-sm font-medium text-gray-400 ">
-                    {product.productDescription}
+
+                  <p
+                    className="text-sm font-medium text-gray-400 cursor-pointer"
+                    onClick={() => goToDetails(product)}
+                  >
+                    {product?.productDescription.length > 60
+                      ? product?.productDescription.slice(0, 60) + "..."
+                      : product?.productDescription}
                   </p>
 
                   <p className="text-lg font-bold text-green-400 mt-1">
-                    {product.salesPrice < product.regularPrice && (
-                      <span>₹ {product.salesPrice.toFixed(0)}</span>
+                    {product?.salesPrice < product?.regularPrice && (
+                      <span>₹ {product?.salesPrice.toFixed(0)}</span>
                     )}
                     <span
                       className={`${
-                        product.salesPrice < product.regularPrice
+                        product?.salesPrice < product?.regularPrice
                           ? "line-through text-gray-500"
                           : "text-green-400"
                       }  ml-2`}
                     >
-                      ₹ {product.regularPrice}
+                      ₹ {product?.regularPrice}
                     </span>
-                    {(product.categoryOffer || product?.offer > 0) && (
+                    {(product?.categoryOffer || product?.offer > 0) && (
                       <span className="text-red-500 ml-2 text-xs">
-                        {product.categoryOffer >= product.offer
-                          ? product.categoryOffer
-                          : product.offer}{" "}
+                        {product?.categoryOffer >= product?.offer
+                          ? product?.categoryOffer
+                          : product?.offer}{" "}
                         % off
                       </span>
                     )}
@@ -421,42 +430,46 @@ const Shop = () => {
                   <div className="absolute top-2 left-2 w-10 h-10 bg-gray-600 hover:bg-gray-700 border-white border-1 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md">
                     <Share2
                       className="w-5 h-5 text-white hover:text-blue-700 transition-colors"
-                      onClick={() => handleShare(product, product._id)}
+                      onClick={() => handleShare(product, product?._id)}
                     />
                   </div>
-                  {cartProduct.includes(product._id) ? (
-                    <div className="absolute top-2 right-12 w-10 h-10 bg-green-100 hover:bg-green-200 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md">
-                      <ShoppingCart
-                        className="w-5 h-5 fill-green-600 text-green-600"
-                        onClick={() => {
-                          if (!user?._id) {
-                            navigate("/login");
-                            return;
-                          } else {
-                            navigate("/user/cart");
-                          }
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="absolute top-2 right-12 w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md">
-                      <ShoppingCart
-                        className="w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors"
-                        onClick={() => {
-                          // if (spinner) {
-                          //   return;
-                          // }
-                          if (user) handleAddToCart(product._id);
-                          else navigate("/login");
-                        }}
-                      />
+                  {product?.units > 0 && (
+                    <div>
+                      {cartProduct.includes(product?._id) ? (
+                        <div className="absolute top-2 right-12 w-10 h-10 bg-green-100 hover:bg-green-200 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md">
+                          <ShoppingCart
+                            className="w-5 h-5 fill-green-600 text-green-600"
+                            onClick={() => {
+                              if (!user?._id) {
+                                navigate("/login");
+                                return;
+                              } else {
+                                navigate("/user/cart");
+                              }
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div className="absolute top-2 right-12 w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md">
+                          <ShoppingCart
+                            className="w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors"
+                            onClick={() => {
+                              // if (spinner) {
+                              //   return;
+                              // }
+                              if (user) handleAddToCart(product?._id);
+                              else navigate("/login");
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                   )}
-                  {wishlistItems.includes(product._id) ? (
+                  {wishlistItems.includes(product?._id) ? (
                     <Heart
                       className="absolute top-3 right-3 w-7 h-7 fill-red-600 text-red-600 cursor-pointer"
                       onClick={() => {
-                        if (user) handleRemoveFromWishlist(product._id);
+                        if (user) handleRemoveFromWishlist(product?._id);
                         else navigate("/login");
                       }}
                     />
@@ -464,16 +477,31 @@ const Shop = () => {
                     <Heart
                       className="absolute top-3 right-3 w-7 h-7 text-gray-300 transition-colors cursor-pointer"
                       onClick={() => {
-                        if (user) handleAddToWishList(product._id);
+                        if (user) handleAddToWishList(product?._id);
                         else navigate("/login");
                       }}
                     />
                   )}
 
                   <p className="text-xs text-gray-400 mt-1">
-                    {product.salesPrice > 1000
+                    {product?.salesPrice > 1000
                       ? "Free Delivery"
                       : "Delivery Charges Apply"}
+                  </p>
+                  <p
+                    className={`text-xs mt-1 font-medium ${
+                      product.units <= 0 ? "text-red-500" : "text-green-600"
+                    }`}
+                  >
+                    {product.units <= 0 ? (
+                      "Out of stock"
+                    ) : (
+                      <>
+                        Only{" "}
+                        <span className="font-bold">{product.units || 1}</span>{" "}
+                        stocks Left!
+                      </>
+                    )}
                   </p>
                 </div>
               </div>

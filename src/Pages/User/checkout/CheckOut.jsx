@@ -18,7 +18,7 @@ const Checkout = () => {
   const [selectedAddressId, setSelectedAddressId] = useState("");
   const [selectedAddress, setSelectedAddress] = useState({});
   const [checkoutComplete, setCheckoutComplete] = useState(false);
-  const checkoutItems = useSelector((state) => state.users.checkoutItems);
+  let checkoutItems = useSelector((state) => state.users.checkoutItems);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users.user);
   const [addresses, setAddresses] = useState([]);
@@ -151,14 +151,10 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    // showToast(`is checkout items: ${checkoutItems ? "Yes" : "Not"}`);
-    if (!checkoutItems) {
+    if (!checkoutItems || !checkoutItems[0]?.products?.length) {
       navigate("/user/profile/myOrders");
       return;
     }
-  }, []);
-
-  useEffect(() => {
     (async () => {
       try {
         // const response = await axios.get(`/cart/${user._id}`);
@@ -222,6 +218,7 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = async (paymentFailed) => {
+    let isPaymentSuccess = false;
     if (
       paymentMethod == "cod" &&
       offerPrice(
@@ -248,13 +245,15 @@ const Checkout = () => {
           deliveryCharge: calculateDeliveryCharge(),
         },
       });
-      setCheckoutComplete((prev) => !prev);
       localStorage.removeItem(`cart_${user._id}`);
       localStorage.removeItem("checkoutItems");
+
       if (paymentFailed && paymentMethod == "Razorpay") {
         showToast("error", `Payment Failed.`);
         navigate("/user/profile/myOrders");
       } else {
+        isPaymentSuccess = true;
+        setCheckoutComplete(true);
         showToast("success", `${response?.data.message}`);
       }
     } catch (error) {
@@ -262,9 +261,11 @@ const Checkout = () => {
         !error?.response?.data.message == "Coupon usage limit per user exceeded"
       )
         navigate("/user/profile/myOrders");
-      showToast("error", `${error?.response?.data.message}`);
+      showToast("error", `from catch ${error?.response?.data.message}`);
     } finally {
-      // navigate("/user/profile/myOrders");
+      if (!isPaymentSuccess) {
+        navigate("/user/profile/myOrders");
+      }
       setSpinner(false);
     }
   };
