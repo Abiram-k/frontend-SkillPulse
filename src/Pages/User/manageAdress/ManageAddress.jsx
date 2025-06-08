@@ -34,7 +34,8 @@ const ManageAddress = () => {
     try {
       const response = await axios.delete(`/address?id=${id}`);
       showToast("success", response.data.message);
-      window.location.reload();
+      setAddresses((prev) => prev.filter((addr) => addr?._id != id));
+      // window.location.reload();
     } catch (error) {
       console.log(error);
       Toast.fire({

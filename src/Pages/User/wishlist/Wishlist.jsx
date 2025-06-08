@@ -96,7 +96,7 @@ const Wishlist = () => {
   };
   return (
     <main
-      className="p-6 flex justify-center h-screen overflow-y-scroll font-mono mb-3"
+      className="p-6 flex justify-center h-screen overflow-y-scroll font-mono mb-3 shadow-md "
       style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
     >
       {spinner && (
@@ -104,10 +104,17 @@ const Wishlist = () => {
           <div className="spinner"></div>
         </div>
       )}
-      <div className="w-full max-w-3xl space-y-6">
+      <div
+        // style={{
+        //   overflowY: "scroll",
+        //   scrollbarWidth: "thin",
+        //   msOverflowStyle: "none", 
+        // }}
+        className="w-full max-w-3xl space-y-6 shadow-md shadow-gray-400"
+      >
         {wishlist.length > 0 ? (
           <>
-            <div className="wishlist p-6 bg-gray-800 rounded-lg  flex items-center  space-x-4 justify-center text-xl font-semibold">
+            <div className="wishlist p-6 bg-gray-800 rounded-lg   flex items-center  space-x-4 justify-center text-xl font-semibold">
               <i className="fas fa-heart text-red-600"></i>
               <span>My Wishlist ({wishlist[0].products.length})</span>
             </div>
@@ -115,7 +122,7 @@ const Wishlist = () => {
             {wishlist[0].products.map((product, index) => (
               <div
                 key={index}
-                className="wishlist-item p-4 bg-gray-800 shadow-md rounded flex flex-col lg:flex-row items-center lg:items-center space-y-4 lg:space-y-0 lg:space-x-6 lg:justify-center"
+                className="wishlist-item p-4  bg-gray-800 shadow-md rounded flex flex-col lg:flex-row items-center lg:items-center space-y-4 lg:space-y-0 lg:space-x-6 lg:justify-center"
               >
                 <img
                   src={

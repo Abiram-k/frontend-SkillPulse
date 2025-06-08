@@ -21,7 +21,7 @@ const Breadcrumbs = () => {
     return null;
   }
   return (
-    <div className="breadcrumbs mt-16 lg:mt-20 ms-5 z-30 absolute text-white font-semibold ">
+    <div className="breadcrumbs mt-16  lg:mt-20 ms-5 z-30 absolute  text-gray-200 font-semibold ">
       {pathnames.length > 0 && (
         <Link to="/user/home" className="border-b- border-orange-500">
           Home
@@ -31,7 +31,7 @@ const Breadcrumbs = () => {
         breadcrumbPath += `/${name}`;
         const isLast = index === pathnames.length - 1;
         return isLast ? (
-          <span className="text-gray-400" key={breadcrumbPath}>
+          <span className="text-gray-400 " key={breadcrumbPath}>
             {" "}
             {"> " + name}
           </span>

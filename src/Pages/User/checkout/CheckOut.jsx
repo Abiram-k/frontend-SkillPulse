@@ -151,8 +151,7 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    showToast(`is checkout items: ${checkoutItems ? "Yes" : "Not"}`);
-
+    // showToast(`is checkout items: ${checkoutItems ? "Yes" : "Not"}`);
     if (!checkoutItems) {
       navigate("/user/profile/myOrders");
       return;
@@ -228,7 +227,7 @@ const Checkout = () => {
       offerPrice(
         cartItems[0]?.appliedCoupon?.couponAmount,
         cartItems[0]?.appliedCoupon?.couponType
-      ) >= 20000
+      ) >= 5000
     ) {
       showToast("error", "Cash on delivery is not applicable");
       return;

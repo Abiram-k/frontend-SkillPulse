@@ -184,7 +184,7 @@ const ManageOrders = () => {
 
   return (
     // <div className="flex">
-    <main className="w-full  md:w-full md:p-4 p-1 font-mono h-screen overflow-y-scroll no-scrollbar">
+    <main className="w-3/4   md:w-full md:p-4 p-1 font-mono h-screen overflow-y-scroll no-scrollbar">
       {spinner && (
         <div className="spinner-overlay">
           <div className="spinner"></div>

@@ -512,9 +512,9 @@ const Shop = () => {
         pageClassName="flex items-center"
         pageLinkClassName="px-4 py-2 border border-gray-400 rounded-md text-sm hover:bg-blue-600 transition duration-200"
         previousClassName="flex items-center"
-        previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+        previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-800 transition duration-200"
         nextClassName="flex items-center"
-        nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+        nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-800 transition duration-200"
         activeClassName="bg-blue-500 text-white"
       />
     </div>

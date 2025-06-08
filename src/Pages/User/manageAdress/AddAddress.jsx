@@ -123,6 +123,9 @@ const AddAddress = () => {
       >
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="w-full lg:w-1/2">
+            <label className="block mb-1 text-sm text-gray-500">
+              First Name
+            </label>
             <input
               className="w-full py-2 px-3 border border-gray-300 rounded text-black"
               placeholder="First Name"
@@ -135,6 +138,9 @@ const AddAddress = () => {
             )}
           </div>
           <div className="w-full lg:w-1/2">
+            <label className="block mb-1 text-sm text-gray-500">
+              Last Name
+            </label>
             <input
               className="w-full py-2 px-3 border border-gray-300 rounded text-black"
               placeholder="Last Name"
@@ -151,6 +157,7 @@ const AddAddress = () => {
         {/* Mobile and Alternate Mobile Numbers */}
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="w-full lg:w-1/2">
+            <label className="block mb-1 text-sm text-gray-500">Mobile</label>
             <input
               className="w-full py-2 px-3 border border-gray-300 rounded text-black"
               placeholder="Mobile Number"
@@ -163,6 +170,9 @@ const AddAddress = () => {
             )}
           </div>
           <div className="w-full lg:w-1/2">
+            <label className="block mb-1 text-sm text-gray-500">
+              Alternative Mobile
+            </label>
             <input
               className="w-full py-2 px-3 border border-gray-300 rounded text-black"
               placeholder="Alternate Number (Optional)"
@@ -181,6 +191,7 @@ const AddAddress = () => {
         {/* City and State */}
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="w-full lg:w-1/2">
+            <label className="block mb-1 text-sm text-gray-500">City</label>
             <input
               className="w-full py-2 px-3 border border-gray-300 rounded text-black"
               placeholder="City / District / Town"
@@ -193,6 +204,7 @@ const AddAddress = () => {
             )}
           </div>
           <div className="w-full lg:w-1/2">
+            <label className="block mb-1 text-sm text-gray-500">State</label>
             <input
               className="w-full py-2 px-3 border border-gray-300 rounded text-black"
               placeholder="State"
@@ -208,6 +220,7 @@ const AddAddress = () => {
 
         {/* Address */}
         <div>
+          <label className="block mb-1 text-sm text-gray-500">Address</label>
           <textarea
             className="w-full py-2 px-3 border border-gray-300 rounded mb-4 text-black"
             placeholder="Address"
@@ -222,6 +235,7 @@ const AddAddress = () => {
         {/* Pin Code and Address Type */}
         <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
           <div className="w-full lg:w-1/2">
+            <label className="block mb-1 text-sm text-gray-500">Pincode</label>
             <input
               className="w-full py-2 px-3 border border-gray-300 rounded text-black"
               placeholder="Pin Code"
@@ -234,6 +248,9 @@ const AddAddress = () => {
             )}
           </div>
           <div className="w-full lg:w-1/2">
+            <label className="block mb-1 text-sm text-gray-500">
+              Address Type
+            </label>
             <select
               name="type"
               id="type"
