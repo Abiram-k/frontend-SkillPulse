@@ -62,8 +62,8 @@ const AccountOverview = () => {
     // }
 
     if (mobileNumber?.trim()) {
-      const isOnlyDigits = /^\d{10}$/.test(mobileNumber);
-
+      const trimmedMobile = mobileNumber?.trim();
+      const isOnlyDigits = /^\d{10}$/.test(trimmedMobile);
       if (!isOnlyDigits) {
         error.mobileNumber =
           "Please enter a valid 10-digit mobile number (digits only) *";
