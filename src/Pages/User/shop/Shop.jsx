@@ -50,7 +50,7 @@ const Shop = () => {
 
   useEffect(() => {
     fetchProducts();
-    fetchWishlist();
+    if (user) fetchWishlist();
   }, [filter, trigger, search]);
 
   useEffect(() => {
