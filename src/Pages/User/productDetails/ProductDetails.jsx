@@ -155,7 +155,7 @@ const ProductDetails = () => {
       if (!user) {
         navigate("/login");
         showToast("warning", `Login for add to cart`);
-        return
+        return;
       }
       setSpinner(true);
       const response = await axios.post(
@@ -235,7 +235,7 @@ const ProductDetails = () => {
     const savedCart =
       JSON.parse(localStorage.getItem(`cart_${user?._id}`)) || [];
     setCartProduct(savedCart);
-    fetchWishlist();
+    if (user) fetchWishlist();
   }, [user?._id]);
 
   return (
@@ -384,7 +384,7 @@ const ProductDetails = () => {
                     </button>
                   )}
 
-                  {isAvailable && (
+                  {isAvailable && user && (
                     <button
                       className="flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-600 text-white px-6 py-2 rounded-full transition-colors duration-300 text-sm w-full md:w-auto"
                       onClick={() => {
