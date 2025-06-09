@@ -253,7 +253,7 @@ const EditProduct = () => {
               type="text"
               className="ml-2 p-2 border rounded w-full focus:outline-none"
               value={units}
-              onChange={(e) => setUnits(e.target.value)}
+              onChange={(e) => setUnits(e.target.value )}
             />
           </label>
           {message.units && <p className="text-red-600">{message.units}</p>}

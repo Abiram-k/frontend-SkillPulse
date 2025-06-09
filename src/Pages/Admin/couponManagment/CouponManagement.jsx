@@ -69,7 +69,7 @@ const CouponManagement = () => {
     (async () => {
       setSpinner(true);
       try {
-        const response = await axios.get(`/admin/coupon`);
+        const response = await axios.get(`/admin/coupon?search=${search}`);
         setCoupons(response?.data);
         setSpinner(false);
       } catch (error) {
@@ -81,7 +81,7 @@ const CouponManagement = () => {
         });
       }
     })();
-  }, [message, trigger]);
+  }, [message, trigger, search]);
 
   const handleEditCoupon = async () => {
     setMessage({});
@@ -186,6 +186,7 @@ const CouponManagement = () => {
                 <th className="px-6 py-3 text-black text-left">Description</th>
                 <th className="px-6 py-3 text-black text-left">Amount</th>
                 <th className="px-6 py-3 text-black text-left">Limit</th>
+                <th className="px-6 py-3 text-black text-left">User.Lim</th>
                 <th className="px-6 py-3 text-black text-left">Max.disc</th>
                 <th className="px-6 py-3 text-black text-left">Min.Purc</th>
                 <th className="px-6 py-3 text-black text-left">Expiry</th>
@@ -194,41 +195,45 @@ const CouponManagement = () => {
             </thead>
             <tbody>
               {coupons.length > 0 ? (
-                coupons.filter((coupon) =>
-                  coupon.couponCode.toLowerCase().includes(search.toLowerCase())
-                ).length > 0 ? (
-                  coupons
-                    .filter((coupon) =>
-                      coupon.couponCode
-                        .toLowerCase()
-                        .includes(search.toLowerCase())
-                    )
-                    .map((coupon) => (
-                      <tr className=" border-2 border-b-gray-300">
-                        <td className="px-6 py-4 text-black">
-                          {coupon.couponCode}
-                        </td>
-                        <td className="px-6 py-4 text-black">
-                          {coupon.description}
-                        </td>
-                        <td className="px-6 py-4 text-black">
-                          {coupon.couponAmount}
-                        </td>
-                        <td className="px-6 py-4 text-black">
-                          {coupon.totalLimit}
-                        </td>
-                        <td className="px-6 py-4 text-black">
-                          {coupon.maxDiscount || "Nil"}
-                        </td>
-                        <td className="px-6 py-4 text-black">
-                          {coupon.purchaseAmount}
-                        </td>
-                        <td className="px-6 py-4 text-black">
-                          {getDate(coupon.expirationDate)}
-                        </td>
-                        <td className="px-6 py-4 text-center text-black">
-                          <div className="flex gap-3 justify-center items-center ">
-                            {/* <Pencil
+                coupons
+                  // .filter((coupon) =>
+                  //   coupon.couponCode.toLowerCase().includes(search.toLowerCase())
+                  // ).length > 0 ? (
+                  //   coupons
+                  //     .filter((coupon) =>
+                  //       coupon.couponCode
+                  //         .toLowerCase()
+                  //         .includes(search.toLowerCase())
+                  //     )
+                  .map((coupon) => (
+                    <tr className=" border-2 border-b-gray-300">
+                      <td className="px-6 py-4 text-black">
+                        {coupon.couponCode}
+                      </td>
+                      <td className="px-6 py-4 text-black">
+                        {coupon?.description}
+                      </td>
+                      <td className="px-6 py-4 text-black">
+                        {coupon?.couponAmount}
+                      </td>
+                      <td className="px-6 py-4 text-black">
+                        {coupon?.totalLimit}
+                      </td>
+                      <td className="px-6 py-4 text-black">
+                        {coupon?.perUserLimit}
+                      </td>
+                      <td className="px-6 py-4 text-black">
+                        {coupon?.maxDiscount || "Nil"}
+                      </td>
+                      <td className="px-6 py-4 text-black">
+                        {coupon?.purchaseAmount}
+                      </td>
+                      <td className="px-6 py-4 text-black">
+                        {getDate(coupon?.expirationDate)}
+                      </td>
+                      <td className="px-6 py-4 text-center text-black">
+                        <div className="flex gap-3 justify-center items-center ">
+                          {/* <Pencil
                               className="w-4 text-blue-500"
                               onClick={() => {
                                 setIsEdit(true);
@@ -236,22 +241,22 @@ const CouponManagement = () => {
                               }}
                             /> */}
 
-                            <i
-                              className="fas fa-times cursor-pointer text-red-600"
-                              onClick={() => handleCouponDelete(coupon._id)}
-                            ></i>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                ) : (
-                  <tr>
-                    <td className="px-6 py-4 text-black" colSpan="8">
-                      "{search}" Coupon code not found !
-                    </td>
-                  </tr>
-                )
+                          <i
+                            className="fas fa-times cursor-pointer text-red-600"
+                            onClick={() => handleCouponDelete(coupon._id)}
+                          ></i>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
               ) : (
+                // ) : (
+                //   <tr>
+                //     <td className="px-6 py-4 text-black" colSpan="8">
+                //       "{search}" Coupon code not found !
+                //     </td>
+                //   </tr>
+                // )
                 <tr>
                   <td className="px-6 py-4 text-black" colSpan="8">
                     No coupons available

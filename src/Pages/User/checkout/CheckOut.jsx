@@ -95,6 +95,7 @@ const Checkout = () => {
   };
 
   const offerPrice = (couponAmount = 0, couponType) => {
+    // Percentage
     const basePrice =
       cartItems[0]?.grandTotal !== 0
         ? cartItems[0]?.grandTotal
@@ -174,8 +175,9 @@ const Checkout = () => {
 
     (async () => {
       try {
-        const response = await axios.get(`/wallet`);
+        const response = await axios.get(`/wallet?isForCheckout=${true}`);
         // const response = await axios.get(`/wallet/${user._id}`);
+        console.log("Wallet data: ", response.data.wallet);
         setWalletData(response.data.wallet);
       } catch (error) {
         console.error(error);
@@ -217,14 +219,15 @@ const Checkout = () => {
     setSelectedAddressId(selectedAddress);
   };
 
-  const handlePlaceOrder = async (paymentFailed) => {
+  const handlePlaceOrder = async (paymentFailed = false, orderId) => {
     let isPaymentSuccess = false;
+    console.log("Payment Failed: ", paymentFailed);
     if (
       paymentMethod == "cod" &&
       offerPrice(
         cartItems[0]?.appliedCoupon?.couponAmount,
         cartItems[0]?.appliedCoupon?.couponType
-      ) >= 5000
+      ) >= 10000
     ) {
       showToast("error", "Cash on delivery is not applicable");
       return;
@@ -238,7 +241,7 @@ const Checkout = () => {
       // const response = await axios.post(`/order/${user._id}`, cartItems, {
       const response = await axios.post(`/order`, cartItems, {
         params: {
-          paymentFailed,
+          paymentFailed: paymentMethod == "Razorpay" ? paymentFailed : false,
           paymentMethod,
           totalAmount: cartItems[0]?.grandTotal + calculateDeliveryCharge(),
           appliedCoupon: cartItems[0]?.appliedCoupon?._id || null,
@@ -261,7 +264,8 @@ const Checkout = () => {
         !error?.response?.data.message == "Coupon usage limit per user exceeded"
       )
         navigate("/user/profile/myOrders");
-      showToast("error", `from catch ${error?.response?.data.message}`);
+      isPaymentSuccess = true;
+      showToast("error", ` ${error?.response?.data.message}`);
     } finally {
       if (!isPaymentSuccess) {
         navigate("/user/profile/myOrders");
@@ -590,10 +594,13 @@ const Checkout = () => {
                     <div className="flex justify-between font-bold pt-3 border-t border-gray-200">
                       <span>Payable Amount</span>
                       <span>
-                        {offerPrice(
-                          cartItems[0]?.appliedCoupon?.couponAmount,
-                          cartItems[0]?.appliedCoupon?.couponType
-                        )}
+                        {cartItems[0]?.appliedCoupon?.couponType == "Percentage"
+                          ? cartItems[0]?.totalDiscount +
+                            calculateDeliveryCharge()
+                          : offerPrice(
+                              cartItems[0]?.appliedCoupon?.couponAmount,
+                              cartItems[0]?.appliedCoupon?.couponType
+                            )}
                         ₹
                       </span>
                     </div>

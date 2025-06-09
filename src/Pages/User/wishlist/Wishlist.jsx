@@ -108,9 +108,9 @@ const Wishlist = () => {
         // style={{
         //   overflowY: "scroll",
         //   scrollbarWidth: "thin",
-        //   msOverflowStyle: "none", 
+        //   msOverflowStyle: "none",
         // }}
-        className="w-full max-w-3xl space-y-6 shadow-md shadow-gray-400"
+        className="w-full max-w-3xl space-y-6 "
       >
         {wishlist.length > 0 ? (
           <>
@@ -120,65 +120,73 @@ const Wishlist = () => {
             </div>
 
             {wishlist[0].products.map((product, index) => (
-              <div
-                key={index}
-                className="wishlist-item p-4  bg-gray-800 shadow-md rounded flex flex-col lg:flex-row items-center lg:items-center space-y-4 lg:space-y-0 lg:space-x-6 lg:justify-center"
-              >
-                <img
-                  src={
-                    product.product?.productImage[0] ||
-                    "https://placehold.co/100x100"
-                  }
-                  alt={product.product?.productName}
-                  className="w-20 h-20 lg:w-24 lg:h-24 rounded-lg object-cover"
-                />
-                <div className="flex-1 text-center lg:text-left">
-                  <div className="text-lg lg:text-xl mb-2 font-bold">
-                    {product.product?.productName}
-                  </div>
-                  <div className="text-sm lg:text-base">
-                    {product.product?.productDescription}
-                  </div>
-                  <div className="flex flex-col lg:flex-row items-center lg:items-start lg:gap-3">
-                    <div className="text-lg lg:text-xl font-semi-bold mt-2 text-gray-200">
-                      ₹{product.product?.salesPrice}
-                    </div>
-                    <div className="text-base lg:text-xl mt-2 text-gray-400 line-through">
-                      ₹{product.product?.regularPrice}
-                    </div>
-                  </div>
-                  <div className="text-sm text-orange-500">
-                    {product.product?.units === 0 ? "Out of Stock" : ""}
-                  </div>
-                </div>
-                <div className="flex flex-col lg:flex-row items-center  lg:gap-3 space-y-4 lg:space-y-0">
-                  {!cartProduct.includes(product.product?._id) ? (
-                    <button
-                      className={`${
-                        product.product?.units === 0
-                          ? "bg-red-800 line-through"
-                          : "bg-red-500 hover:bg-red-600"
-                      } text-white px-4 py-2 rounded shadow transition duration-200`}
-                      disabled={product.product?.units === 0}
-                      onClick={() => handleAddToCart(product.product?._id)}
-                    >
-                      Add to cart
-                    </button>
-                  ) : (
-                    <Link
-                      to={"/user/cart"}
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition duration-200 "
-                    >
-                      Go to Cart
-                    </Link>
-                  )}
-                  <AlertDialogueButton
-                    name="Delete"
-                    onClick={() => handleDeleteItem(product.product?._id)}
-                    className="text-white px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded shadow"
-                  />
-                </div>
-              </div>
+              // <div
+              //   key={index}
+              //   className="wishlist-item p-4  bg-gray-800 shadow-md rounded flex flex-col lg:flex-row items-center lg:items-center space-y-4 lg:space-y-0 lg:space-x-6 lg:justify-center"
+              // >
+              //   <img
+              //     src={
+              //       product.product?.productImage[0] ||
+              //       "https://placehold.co/100x100"
+              //     }
+              //     alt={product.product?.productName}
+              //     className="w-20 h-20 lg:w-24 lg:h-24 rounded-lg object-cover"
+              //   />
+              //   <div className="flex-1 text-center lg:text-left">
+              //     <div className="text-lg lg:text-xl mb-2 font-bold">
+              //       {product.product?.productName}
+              //     </div>
+              //     <div className="text-sm lg:text-base">
+              //       {product.product?.productDescription}
+              //     </div>
+              //     <div className="flex flex-col lg:flex-row items-center lg:items-start lg:gap-3">
+              //       <div className="text-lg lg:text-xl font-semi-bold mt-2 text-gray-200">
+              //         ₹{product.product?.salesPrice}
+              //       </div>
+              //       <div className="text-base lg:text-xl mt-2 text-gray-400 line-through">
+              //         ₹{product.product?.regularPrice}
+              //       </div>
+              //     </div>
+              //     <div className="text-sm text-orange-500">
+              //       {product.product?.units === 0 ? "Out of Stock" : ""}
+              //     </div>
+              //   </div>
+              //   <div className="flex flex-col lg:flex-row items-center  lg:gap-3 space-y-4 lg:space-y-0">
+              //     {!cartProduct.includes(product.product?._id) ? (
+              //       <button
+              //         className={`${
+              //           product.product?.units === 0
+              //             ? "bg-red-800 line-through"
+              //             : "bg-red-500 hover:bg-red-600"
+              //         } text-white px-4 py-2 rounded shadow transition duration-200`}
+              //         disabled={product.product?.units === 0}
+              //         onClick={() => handleAddToCart(product.product?._id)}
+              //       >
+              //         Add to cart
+              //       </button>
+              //     ) : (
+              //       <Link
+              //         to={"/user/cart"}
+              //         className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition duration-200 "
+              //       >
+              //         Go to Cart
+              //       </Link>
+              //     )}
+              //     <AlertDialogueButton
+              //       name="Delete"
+              //       onClick={() => handleDeleteItem(product.product?._id)}
+              //       className="text-white px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded shadow"
+              //     />
+              //   </div>
+              // </div>
+
+              <WishListItem
+                index={index}
+                product={product}
+                cartProduct={cartProduct}
+                handleAddToCart={handleAddToCart}
+                handleDeleteItem={handleDeleteItem}
+              />
             ))}
           </>
         ) : (
@@ -200,3 +208,70 @@ const Wishlist = () => {
 };
 
 export default Wishlist;
+
+const WishListItem = ({
+  index,
+  product,
+  cartProduct,
+  handleAddToCart,
+  handleDeleteItem,
+}) => {
+  return (
+    <div
+      key={index}
+      className="wishlist-item p-4  bg-gray-800 shadow-md rounded flex flex-col lg:flex-row items-center lg:items-center space-y-4 lg:space-y-0 lg:space-x-6 lg:justify-center"
+    >
+      <img
+        src={product.product?.productImage[0] || "https://placehold.co/100x100"}
+        alt={product.product?.productName}
+        className="w-20 h-20 lg:w-24 lg:h-24 rounded-lg object-cover"
+      />
+      <div className="flex-1 text-center lg:text-left">
+        <div className="text-lg lg:text-xl mb-2 font-bold">
+          {product.product?.productName}
+        </div>
+        <div className="text-sm lg:text-base">
+          {product.product?.productDescription}
+        </div>
+        <div className="flex flex-col lg:flex-row items-center lg:items-start lg:gap-3">
+          <div className="text-lg lg:text-xl font-semi-bold mt-2 text-gray-200">
+            ₹{product.product?.salesPrice}
+          </div>
+          <div className="text-base lg:text-xl mt-2 text-gray-400 line-through">
+            ₹{product.product?.regularPrice}
+          </div>
+        </div>
+        <div className="text-sm text-orange-500">
+          {product.product?.units === 0 ? "Out of Stock" : ""}
+        </div>
+      </div>
+      <div className="flex flex-col lg:flex-row items-center  lg:gap-3 space-y-4 lg:space-y-0">
+        {!cartProduct.includes(product.product?._id) ? (
+          <button
+            className={`${
+              product.product?.units === 0
+                ? "bg-red-800 line-through"
+                : "bg-red-500 hover:bg-red-600"
+            } text-white px-4 py-2 rounded shadow transition duration-200`}
+            disabled={product.product?.units === 0}
+            onClick={() => handleAddToCart(product.product?._id)}
+          >
+            Add to cart
+          </button>
+        ) : (
+          <Link
+            to={"/user/cart"}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition duration-200 "
+          >
+            Go to Cart
+          </Link>
+        )}
+        <AlertDialogueButton
+          name="Delete"
+          onClick={() => handleDeleteItem(product.product?._id)}
+          className="text-white px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded shadow"
+        />
+      </div>
+    </div>
+  );
+};

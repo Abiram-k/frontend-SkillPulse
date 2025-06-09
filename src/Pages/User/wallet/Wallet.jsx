@@ -72,51 +72,52 @@ const Wallet = () => {
         </div>
 
         {walletData?.transaction?.map((transact) => (
-          <div
-            key={transact.transactionId}
-            className="flex flex-col sm:grid sm:grid-cols-4 gap-4 mt-3 lg:mt-6 text-sm sm:text-base text-gray-300 border-b border-gray-700 pb-3 sm:pb-0"
-          >
-            <div className="sm:hidden flex flex-col space-y-2">
-              <div>
-                <strong>DESCRIPTION:</strong> {transact.description}
-              </div>
-              <div>
-                <strong>DATE:</strong> {format(transact.date, "dd-MM-yyyy")}
-              </div>
-              <div>
-                <strong>AMOUNT:</strong>{" "}
-                <span
-                  className={`${
-                    transact.amount > 0 ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {parseInt(transact.amount).toFixed(2)} ₹
-                </span>
-              </div>
-              <div className="hidden lg:block">
-                <strong>TRANSACTION ID:</strong> {transact.transactionId}
-              </div>
-            </div>
+          // <div
+          //   key={transact.transactionId}
+          //   className="flex flex-col sm:grid sm:grid-cols-4 gap-4 mt-3 lg:mt-6 text-sm sm:text-base text-gray-300 border-b border-gray-700 pb-3 sm:pb-0"
+          // >
+          //   <div className="sm:hidden flex flex-col space-y-2">
+          //     <div>
+          //       <strong>DESCRIPTION:</strong> {transact.description}
+          //     </div>
+          //     <div>
+          //       <strong>DATE:</strong> {format(transact.date, "dd-MM-yyyy")}
+          //     </div>
+          //     <div>
+          //       <strong>AMOUNT:</strong>{" "}
+          //       <span
+          //         className={`${
+          //           transact.amount > 0 ? "text-green-600" : "text-red-600"
+          //         }`}
+          //       >
+          //         {parseInt(transact.amount).toFixed(2)} ₹
+          //       </span>
+          //     </div>
+          //     <div className="hidden lg:block">
+          //       <strong>TRANSACTION ID:</strong> {transact.transactionId}
+          //     </div>
+          //   </div>
 
-            <div className="hidden sm:block sm:col-span-1">
-              {transact.description}
-            </div>
-            <div className="hidden sm:block sm:col-span-1">
-              {format(transact.date, "dd-MM-yyyy")}
-            </div>
-            <div
-              className={`hidden sm:block sm:col-span-1 ${
-                transact.amount > 0 ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {parseInt(transact.amount).toFixed(2)} ₹
-            </div>
-            <div className="hidden sm:block sm:col-span-1">
-              {transact.transactionId}
-            </div>
-          </div>
+          //   <div className="hidden sm:block sm:col-span-1">
+          //     {transact.description}
+          //   </div>
+          //   <div className="hidden sm:block sm:col-span-1">
+          //     {format(transact.date, "dd-MM-yyyy")}
+          //   </div>
+          //   <div
+          //     className={`hidden sm:block sm:col-span-1 ${
+          //       transact.amount > 0 ? "text-green-600" : "text-red-600"
+          //     }`}
+          //   >
+          //     {parseInt(transact.amount).toFixed(2)} ₹
+          //   </div>
+          //   <div className="hidden sm:block sm:col-span-1">
+          //     {transact.transactionId}
+          //   </div>
+          // </div>
+          <WalletItem transact={transact} />
         ))}
-        {totalAmount && (
+        {totalAmount > 0 && (
           <ReactPaginate
             className="flex justify-center border-gray-700 items-center space-x-2 mt-4"
             breakLabel="..."
@@ -131,9 +132,9 @@ const Wallet = () => {
             pageClassName="flex items-center"
             pageLinkClassName="px-4 py-2 border border-gray-400 rounded-md text-sm hover:bg-blue-600 transition duration-200"
             previousClassName="flex items-center"
-            previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+            previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-800 transition duration-200"
             nextClassName="flex items-center"
-            nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+            nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-800 transition duration-200"
             activeClassName="bg-blue-500 text-white"
           />
         )}
@@ -143,3 +144,51 @@ const Wallet = () => {
 };
 
 export default Wallet;
+
+const WalletItem = ({ transact }) => {
+  return (
+    <div
+      key={transact.transactionId}
+      className="flex flex-col sm:grid sm:grid-cols-4 gap-4 mt-3 lg:mt-6 text-sm sm:text-base text-gray-300 border-b border-gray-700 pb-3 sm:pb-0"
+    >
+      <div className="sm:hidden flex flex-col space-y-2">
+        <div>
+          <strong>DESCRIPTION:</strong> {transact.description}
+        </div>
+        <div>
+          <strong>DATE:</strong> {format(transact.date, "dd-MM-yyyy")}
+        </div>
+        <div>
+          <strong>AMOUNT:</strong>{" "}
+          <span
+            className={`${
+              transact.amount > 0 ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {parseInt(transact.amount).toFixed(2)} ₹
+          </span>
+        </div>
+        <div className="hidden lg:block">
+          <strong>TRANSACTION ID:</strong> {transact.transactionId}
+        </div>
+      </div>
+
+      <div className="hidden sm:block sm:col-span-1">
+        {transact.description}
+      </div>
+      <div className="hidden sm:block sm:col-span-1">
+        {format(transact.date, "dd-MM-yyyy")}
+      </div>
+      <div
+        className={`hidden sm:block sm:col-span-1 ${
+          transact.amount > 0 ? "text-green-600" : "text-red-600"
+        }`}
+      >
+        {parseInt(transact.amount).toFixed(2)} ₹
+      </div>
+      <div className="hidden sm:block sm:col-span-1">
+        {transact.transactionId}
+      </div>
+    </div>
+  );
+};

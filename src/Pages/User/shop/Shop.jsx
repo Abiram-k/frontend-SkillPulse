@@ -131,6 +131,11 @@ const Shop = () => {
 
   const handleAddToWishList = async (product) => {
     try {
+      if (!user) {
+        navigate("/login");
+        showToast("warning", `Login for add to wishlist`);
+        return;
+      }
       setSpinner(true);
       await addToWishList(product, user, dispatch);
       setSpinner(false);
@@ -143,6 +148,11 @@ const Shop = () => {
 
   const handleRemoveFromWishlist = async (product) => {
     try {
+      if (!user) {
+        navigate("/login");
+        showToast("warning", `Login for add to cart`);
+        return;
+      }
       setSpinner(true);
       await removeFromWishlist(product, user, dispatch);
       setWishlistItems((prev) => prev.filter((pr) => (pr = !product)));
@@ -206,8 +216,9 @@ const Shop = () => {
   };
 
   const handleAddToCart = async (id) => {
-    if (!user?._id) {
+    if (!user) {
       navigate("/login");
+      showToast("warning", `Login for add to cart`);
       return;
     }
     try {
@@ -433,7 +444,7 @@ const Shop = () => {
                       onClick={() => handleShare(product, product?._id)}
                     />
                   </div>
-                  {product?.units > 0 && (
+                  {product?.units > 0 && user && (
                     <div>
                       {cartProduct.includes(product?._id) ? (
                         <div className="absolute top-2 right-12 w-10 h-10 bg-green-100 hover:bg-green-200 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md">
@@ -465,22 +476,26 @@ const Shop = () => {
                       )}
                     </div>
                   )}
-                  {wishlistItems.includes(product?._id) ? (
-                    <Heart
-                      className="absolute top-3 right-3 w-7 h-7 fill-red-600 text-red-600 cursor-pointer"
-                      onClick={() => {
-                        if (user) handleRemoveFromWishlist(product?._id);
-                        else navigate("/login");
-                      }}
-                    />
-                  ) : (
-                    <Heart
-                      className="absolute top-3 right-3 w-7 h-7 text-gray-300 transition-colors cursor-pointer"
-                      onClick={() => {
-                        if (user) handleAddToWishList(product?._id);
-                        else navigate("/login");
-                      }}
-                    />
+                  {user && (
+                    <div>
+                      {wishlistItems.includes(product?._id) ? (
+                        <Heart
+                          className="absolute top-3 right-3 w-7 h-7 fill-red-600 text-red-600 cursor-pointer"
+                          onClick={() => {
+                            if (user) handleRemoveFromWishlist(product?._id);
+                            else navigate("/login");
+                          }}
+                        />
+                      ) : (
+                        <Heart
+                          className="absolute top-3 right-3 w-7 h-7 text-gray-300 transition-colors cursor-pointer"
+                          onClick={() => {
+                            if (user) handleAddToWishList(product?._id);
+                            else navigate("/login");
+                          }}
+                        />
+                      )}
+                    </div>
                   )}
 
                   <p className="text-xs text-gray-400 mt-1">

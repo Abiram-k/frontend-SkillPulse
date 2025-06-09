@@ -18,7 +18,7 @@ const AlertDialogueButton = ({ name, onClick }) => {
       <AlertDialogTrigger className="btn btn-danger">{name}</AlertDialogTrigger>
       <AlertDialogContent className="bg-black">
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure to {name} ?</AlertDialogTitle>
+          <AlertDialogTitle>Confirm this Action ?</AlertDialogTitle>
           <AlertDialogDescription className="font-mono">
             This action cannot be undone
           </AlertDialogDescription>

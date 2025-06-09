@@ -9,6 +9,7 @@ import { logoutAdmin } from "@/redux/adminSlice";
 import { useDispatch } from "react-redux";
 import ReactPaginate from "react-paginate";
 import { Calendar, Search } from "lucide-react";
+import AlertDialogueButton from "@/Components/AlertDialogueButton";
 
 const Brand = () => {
   const [name, setName] = useState("");
@@ -19,6 +20,7 @@ const Brand = () => {
   const [image, setImage] = useState(null);
   const [spinner, setSpinner] = useState(false);
   const { setData } = useContext(context);
+  const fileInputRef = useRef();
 
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
@@ -53,12 +55,12 @@ const Brand = () => {
       setImage(imageFile);
     }
   };
-
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
     const maxSize = 1 * 1024 * 1024;
     setBrandImage(null);
+
     if (!imageFile) return;
 
     if (!allowedTypes.includes(imageFile.type)) {
@@ -66,6 +68,7 @@ const Brand = () => {
         icon: "error",
         title: "Please upload a JPEG, JPG, or PNG file.",
       });
+      fileInputRef.current.value = "";
       return;
     }
 
@@ -74,7 +77,7 @@ const Brand = () => {
         icon: "error",
         title: "File size must be under 1MB.",
       });
-      window.location.reload();
+      fileInputRef.current.value = "";
       return;
     }
     const reader = new FileReader();
@@ -181,9 +184,9 @@ const Brand = () => {
   };
 
   const handleRestore = async (id) => {
-    const result = confirm("Are you sure to restore brand");
+    // const result = confirm("Are you sure to restore brand");
     try {
-      if (result) {
+      // if (result) {
         const response = await axios.patch(`/admin/brandRestore/${id}`);
         Toast.fire({
           icon: "success",
@@ -194,16 +197,16 @@ const Brand = () => {
             brand?._id === id ? { ...brand, isDeleted: false } : brand
           )
         );
-      }
+      // }
     } catch (error) {
       alert(error?.response?.data.message);
     }
   };
 
   const handleDelete = async (id) => {
-    const result = confirm("Are you sure to delete brand");
+    // const result = confirm("Are you sure to delete brand");
     try {
-      if (result) {
+      // if (result) {
         const response = await axios.delete(`/admin/brand/${id}`);
         setBrands((prev) =>
           prev?.map((brand) =>
@@ -214,12 +217,12 @@ const Brand = () => {
           icon: "success",
           title: `${response.data?.message}`,
         });
-      } else {
-        Toast.fire({
-          icon: "success",
-          title: `Cancelled the deletion`,
-        });
-      }
+      // } else {
+      //   Toast.fire({
+      //     icon: "success",
+      //     title: `Cancelled the deletion`,
+      //   });
+      // }
     } catch (error) {
       Toast.fire({
         icon: "success",
@@ -405,17 +408,32 @@ const Brand = () => {
                       </Link>
                     )}
                     {brand.isDeleted ? (
-                      <button
+                      // <button
+                      //   onClick={() => handleRestore(brand._id)}
+                      //   className="rounded bg-green-600 p-1 font-mono"
+                      // >
+                      //   Restore
+                      // </button>
+
+                      <AlertDialogueButton
+                        name={
+                          <button className="rounded bg-green-600 p-1 font-mono">
+                            Restore
+                          </button>
+                        }
                         onClick={() => handleRestore(brand._id)}
-                        className="rounded bg-green-600 p-1 font-mono"
-                      >
-                        Restore
-                      </button>
+                        className="text-white px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded shadow"
+                      />
                     ) : (
-                      <i
-                        className="fas fa-trash-alt"
+                      <AlertDialogueButton
+                        name={<i className="fas fa-trash-alt"></i>}
                         onClick={() => handleDelete(brand._id)}
-                      ></i>
+                        className="text-white px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded shadow"
+                      />
+                      // <i
+                      //   className="fas fa-trash-alt"
+                      //   onClick={() => handleDelete(brand._id)}
+                      // ></i>
                     )}
                   </td>
                 </tr>
@@ -483,6 +501,7 @@ const Brand = () => {
             <div className="flex flex-col">
               <label className="mr-2 font-semibold">Brand Image</label>
               <input
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 onChange={(e) => {

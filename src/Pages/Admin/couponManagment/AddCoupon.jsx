@@ -39,19 +39,22 @@ function AddCoupon() {
       error.couponAmount = "Enter amount";
     if (couponAmount < 0) error.couponAmount = "Must be positive value *";
 
+    if (couponType != "Amount" && couponAmount > 99)
+      error.couponAmount = "Coupon amount must be below 100 *";
+
     if (!description.trim()) error.description = "Required *";
 
     if (!totalLimit.trim() || isNaN(totalLimit))
       error.totalLimit = "Enter number";
-    if (totalLimit < 1) error.totalLimit = "Must be positive value *";
+    if (totalLimit < 1) error.totalLimit = "Must be greater than 1 *";
     if (!perUserLimit.trim() || isNaN(perUserLimit))
       error.perUserLimit = "Enter number";
-    if (perUserLimit < 1) error.perUserLimit = "Must be positive value *";
-    if (perUserLimit >= totalLimit)
-      error.perUserLimit = "Must be lesser than total";
+    if (perUserLimit < 0) error.perUserLimit = "Must be positive value *";
+    if (perUserLimit > totalLimit)
+      error.perUserLimit = "Must be lesser than or equal as total limit";
     if (!purchaseAmount.trim() || isNaN(purchaseAmount))
       error.purchaseAmount = "Enter amount";
-    if (purchaseAmount < 0) error.purchaseAmount = "Must be positive value *";
+    if (purchaseAmount < 1) error.purchaseAmount = "Must be greater than 0 *";
     if (
       couponType == "Amount" &&
       parseInt(purchaseAmount) < parseInt(couponAmount)
@@ -60,8 +63,10 @@ function AddCoupon() {
         "purchase amount must be greater than coupon Amount";
 
     if (couponType != "Amount" && (!maxDiscount.trim() || isNaN(maxDiscount)))
-      error.maxDiscount = "Enter amount";
-    if (maxDiscount < 0) error.maxDiscount = "Must be posetive value *";
+      error.maxDiscount = "Max discount is required";
+
+    if (couponType != "Amount" && maxDiscount < 1)
+      error.maxDiscount = "Must be greater than 0 *";
 
     // if (couponType == "Amount" && couponAmount != maxDiscount)
     //   error.maxDiscount = "Field must be same as coupon Amount*";

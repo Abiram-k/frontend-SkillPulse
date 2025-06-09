@@ -6,6 +6,7 @@ import { setProductDetails } from "../../../redux/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "@/axiosIntercepters/AxiosInstance";
 import { Toast } from "@/Components/Toast";
+import { Share2 } from "lucide-react";
 const LandingPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [products, setProducts] = useState([]);
@@ -212,42 +213,92 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-8 bg-black">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-8 bg-black font-mono">
         {products?.length > 0 ? (
           products.map(
             (product) =>
               product.isListed &&
               !product.isDeleted && (
                 <div
-                  className="bg-gray-800 p-3 rounded shadow-lg transform hover:scale-105 transition-transform duration-300"
-                  key={product._id}
+                  className="relative bg-gray-800 p-4 rounded shadow-lg transform hover:scale-105 transition-transform duration-300"
+                  key={product?._id}
                 >
                   <img
                     src={
-                      product.productImage[0] || "https://placehold.co/300x200"
+                      product?.productImage[0] || "https://placehold.co/300x200"
                     }
-                    alt={product.productDescription}
-                    className="w-full h-32 object-cover rounded cursor-pointer"
+                    alt={product?.productDescription}
+                    className="w-full h-40 object-cover rounded-t-lg cursor-pointer transition-opacity hover:opacity-90"
                     onClick={() => goToDetails(product)}
                   />
-                  <div className="mt-2 text-center flex flex-col gap-3">
-                    {/* <h3 className="text-sm font-semibold text-white">
-                      {product.brand || }
-                    </h3> */}
-                    <p className="text-xs text-gray-300">
-                      {product.productName}
+
+                  <div className="p-3 text-center">
+                    <p
+                      className="text-sm  text-white truncate lg:text-lg font-bold cursor-pointer"
+                      onClick={() => goToDetails(product)}
+                    >
+                      {product?.productName}
                     </p>
-                    <p className="text-sm font-bold text-green-500">
-                      ₹{product.salesPrice}
-                      <span className="line-through text-gray-400 ml-1">
-                        ₹{product.regularPrice}
+
+                    <p
+                      className="text-sm font-medium text-gray-400 cursor-pointer"
+                      onClick={() => goToDetails(product)}
+                    >
+                      {product?.productDescription.length > 60
+                        ? product?.productDescription.slice(0, 60) + "..."
+                        : product?.productDescription}
+                    </p>
+
+                    <p className="text-lg font-bold text-green-400 mt-1">
+                      {product?.salesPrice < product?.regularPrice && (
+                        <span>₹ {product?.salesPrice.toFixed(0)}</span>
+                      )}
+                      <span
+                        className={`${
+                          product?.salesPrice < product?.regularPrice
+                            ? "line-through text-gray-500"
+                            : "text-green-400"
+                        }  ml-2`}
+                      >
+                        ₹ {product?.regularPrice}
                       </span>
-                      <span className="text-red-500 ml-1">20% off</span>
+                      {(product?.categoryOffer || product?.offer > 0) && (
+                        <span className="text-red-500 ml-2 text-xs">
+                          {product?.categoryOffer >= product?.offer
+                            ? product?.categoryOffer
+                            : product?.offer}{" "}
+                          % off
+                        </span>
+                      )}
                     </p>
+                    <div className="absolute top-2 left-2 w-10 h-10 bg-gray-600 hover:bg-gray-700 border-white border-1 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md">
+                      <Share2
+                        className="w-5 h-5 text-white hover:text-blue-700 transition-colors"
+                        onClick={() => handleShare(product, product?._id)}
+                      />
+                    </div>
+
                     <p className="text-xs text-gray-400 mt-1">
-                      {product.salesPrice > 1000
+                      {product?.salesPrice > 1000
                         ? "Free Delivery"
                         : "Delivery Charges Apply"}
+                    </p>
+                    <p
+                      className={`text-xs mt-1 font-medium ${
+                        product.units <= 0 ? "text-red-500" : "text-green-600"
+                      }`}
+                    >
+                      {product.units <= 0 ? (
+                        "Out of stock"
+                      ) : (
+                        <>
+                          Only{" "}
+                          <span className="font-bold">
+                            {product.units || 1}
+                          </span>{" "}
+                          stocks Left!
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -307,7 +358,7 @@ const LandingPage = () => {
         )}
       </section>
 
-      <footer className="bg-black text-gray-400 py-8">
+      <footer className="bg-black text-gray-400 py-8 font-mono">
         <div className="flex flex-wrap justify-around gap-6">
           <div className="text-center">
             <i className="fas fa-shipping-fast text-2xl"></i>

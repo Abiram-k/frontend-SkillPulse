@@ -9,6 +9,7 @@ import { Toast } from "../../../Components/Toast";
 import { logoutAdmin } from "@/redux/adminSlice";
 import ReactPaginate from "react-paginate";
 import { useDispatch } from "react-redux";
+import AlertDialogueButton from "@/Components/AlertDialogueButton";
 
 function Products() {
   const [product, setProduct] = useState([]);
@@ -65,49 +66,7 @@ function Products() {
       alert(error?.response?.data.message || "error admin/product");
     }
   };
-  const handleDelete = async (id) => {
-    setSpinner(true);
-    const result = confirm("Are you sure to delete this product");
-    try {
-      if (result) {
-        const response = await axios.delete(`/admin/product/${id}`);
-        setSpinner(false);
-        Toast.fire({
-          icon: "success",
-          title: `${response.data.message}`,
-        });
-      } else {
-        setSpinner(false);
-        Toast.fire({
-          icon: "success",
-          title: `Cancelled the deletion`,
-        });
-      }
-    } catch (error) {
-      setSpinner(false);
-      Toast.fire({
-        icon: "success",
-        title: `${response.data.message}`,
-      });
-    }
-  };
-  const handleRestore = async (id) => {
-    const result = confirm("Are you sure to restore categorie");
-    try {
-      if (result) {
-        const response = await axios.patch(`/admin/productRestore/${id}`);
-        Toast.fire({
-          icon: "success",
-          title: `${response.data.message}`,
-        });
-      }
-    } catch (error) {
-      Toast.fire({
-        icon: "success",
-        title: `${response.data.message}`,
-      });
-    }
-  };
+
   useEffect(() => {
     currentPage.current = 1;
     fetchProducts();
@@ -137,6 +96,67 @@ function Products() {
   };
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
+  };
+
+  const handleDelete = async (id) => {
+    setSpinner(true);
+    // const result = confirm("Are you sure to delete this product");
+    try {
+      // if (result) {
+      const response = await axios.delete(`/admin/product/${id}`);
+
+      setProduct((prev) => ({
+        ...prev,
+        products: prev.products.map((product) =>
+          product._id === id ? { ...product, isDeleted: true } : product
+        ),
+      }));
+
+      setSpinner(false);
+      Toast.fire({
+        icon: "success",
+        title: `${response.data.message}`,
+      });
+
+      // } else {
+      //   setSpinner(false);
+      //   Toast.fire({
+      //     icon: "success",
+      //     title: `Cancelled the deletion`,
+      //   });
+      // }
+    } catch (error) {
+      setSpinner(false);
+      Toast.fire({
+        icon: "success",
+        title: `${response.data.message}`,
+      });
+    }
+  };
+  const handleRestore = async (id) => {
+    // const result = confirm("Are you sure to restore categorie");
+    try {
+      // if (result) {
+      const response = await axios.patch(`/admin/productRestore/${id}`);
+
+      setProduct((prev) => ({
+        ...prev,
+        products: prev.products.map((product) =>
+          product._id === id ? { ...product, isDeleted: false } : product
+        ),
+      }));
+
+      Toast.fire({
+        icon: "success",
+        title: `${response.data.message}`,
+      });
+      // }
+    } catch (error) {
+      Toast.fire({
+        icon: "success",
+        title: `${response.data.message}`,
+      });
+    }
   };
   return (
     <>
@@ -238,7 +258,9 @@ function Products() {
                             .join(" ")}
                           ...
                         </td>
-                        <td className="p-2 ">{product.salesPrice}</td>
+                        <td className="p-2 ">
+                          {Math.round(product.salesPrice)}
+                        </td>
                         <td className="p-2 ">{product.units}</td>
                       </>
                     )}
@@ -274,17 +296,35 @@ function Products() {
                         </button>
                       )}
                       {product.isDeleted ? (
-                        <button
+                        // <button
+                        //   onClick={() => handleRestore(product._id)}
+                        //   className="rounded bg-green-600 p-2  font-mono "
+                        // >
+                        //   Restore
+                        // </button>
+
+                        <AlertDialogueButton
+                          name={
+                            <button className="rounded bg-green-600 p-2  font-mono ">
+                              Restore
+                            </button>
+                          }
                           onClick={() => handleRestore(product._id)}
-                          className="rounded bg-green-600 p-2  font-mono "
-                        >
-                          Restore
-                        </button>
+                          className="text-white px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded shadow"
+                        />
                       ) : (
-                        <i
-                          className="fas fa-trash-alt top-5 right-0 absolute"
+                        // <i
+                        //   className="fas fa-trash-alt top-5 right-0 absolute"
+                        //   onClick={() => handleDelete(product._id)}
+                        // ></i>
+
+                        <AlertDialogueButton
+                          name={
+                            <i className="fas fa-trash-alt top-5 right-0 absolute"></i>
+                          }
                           onClick={() => handleDelete(product._id)}
-                        ></i>
+                          className="text-white px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded shadow"
+                        />
                       )}
                     </td>
                   </tr>

@@ -152,6 +152,11 @@ const ProductDetails = () => {
 
   const handleAddToCart = async () => {
     try {
+      if (!user) {
+        navigate("/login");
+        showToast("warning", `Login for add to cart`);
+        return
+      }
       setSpinner(true);
       const response = await axios.post(
         `/addToCart/${product[0]._id}`,

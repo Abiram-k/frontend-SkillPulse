@@ -182,7 +182,7 @@ const ShoppingCartPage = () => {
       console.log(error);
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-black text-white font-mono">
       {spinner && (
@@ -306,7 +306,7 @@ const ShoppingCartPage = () => {
                   </span>
                 </div>
 
-                {cartItems[0]?.appliedCoupon && (
+                {/* {cartItems[0]?.appliedCoupon && (
                   <>
                     <div className="flex justify-between">
                       <span>
@@ -336,24 +336,16 @@ const ShoppingCartPage = () => {
                         ₹
                       </span>
                     </div>
-                    <div className="flex justify-between font-bold pt-3 border-t border-gray-200">
-                      <span>Payable Amount</span>
-                      <span>
-                        {offerPrice(
-                          cartItems[0]?.appliedCoupon?.couponAmount,
-                          cartItems[0]?.appliedCoupon?.couponType
-                        ).toFixed(2) || 0}{" "}
-                        ₹
-                      </span>
-                    </div>
+                   
                   </>
-                )}
-                {!cartItems[0]?.appliedCoupon && (
-                  <div className="flex justify-between font-bold pt-3 border-t border-gray-200">
-                    <span>Payable Amount </span>
-                    <span>{cartTotalPrice()} ₹</span>
-                  </div>
-                )}
+                )} */}
+
+                {/* {!cartItems[0]?.appliedCoupon && ( */}
+                <div className="flex justify-between font-bold pt-3 border-t border-gray-200">
+                  <span>Payable Amount </span>
+                  <span>{cartTotalPrice()} ₹</span>
+                </div>
+                {/* {// )}} */}
               </div>
             </div>
           </div>

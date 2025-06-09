@@ -4,6 +4,7 @@ import axios from "@/axiosIntercepters/AxiosInstance";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 const ForgotPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -11,6 +12,9 @@ const ForgotPassword = () => {
   const [message, setMessage] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   // const email = useSelector((state) => state.users.forgotEmailVerified);
   const email = localStorage.getItem("verifiedForgotEmail");
 
@@ -36,7 +40,6 @@ const ForgotPassword = () => {
     if (confirmPassword != newPassword)
       error.newPassword = "Password is not matching *";
     return error;
-    
   };
 
   const handleSubmit = async (e) => {
@@ -78,29 +81,42 @@ const ForgotPassword = () => {
         <div className="absolute inset-0 bg-red-500/20 blur-xl rounded-2xl -z-10"></div>
 
         <form onSubmit={handleSubmit} className="space-y-6 font-mono">
-          <div>
+          <div className="relative">
             <input
-              type="password"
               name="newPassword"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="Enter new password"
+              type={showPassword ? "text" : "password"}
               className="w-full bg-transparent border-b border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-red-500"
             />
+            <span
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </span>
           </div>
           {message.newPassword && (
             <p className="text-red-600">{message.newPassword}</p>
           )}
 
-          <div>
+          <div className="relative">
             <input
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm password"
               className="w-full bg-transparent border-b border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-red-500"
             />
+
+            <span
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+            >
+              {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </span>
           </div>
           {message.confirmPassword && (
             <p className="text-red-600">{message.confirmPassword}</p>

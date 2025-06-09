@@ -24,8 +24,7 @@ export const CouponPopup = ({ onClose, getCoupons, totalAmount }) => {
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
-        const response = await axios.get("/coupon");
-        console.log(response?.data, "Coupons for management");
+        const response = await axios.get(`/coupon?isForUser=${true}`);
         setCoupons(response?.data);
       } catch (error) {
         console.log(error);
@@ -100,7 +99,7 @@ export const CouponPopup = ({ onClose, getCoupons, totalAmount }) => {
     //         >
     //           {coupons.filter(
     //             (coupon) =>
-    //               parseInt(totalAmount) >= coupon.purchaseAmount 
+    //               parseInt(totalAmount) >= coupon.purchaseAmount
     //             &&
     //               new Date(coupon.expirationDate).setHours(0, 0, 0, 0) >=
     //                 new Date().setHours(0, 0, 0, 0)
@@ -164,93 +163,94 @@ export const CouponPopup = ({ onClose, getCoupons, totalAmount }) => {
     //   </CardFooter>
     // </Card>
     <Card className="w-[550px] relative bg-red-300 mx-2 p-6 rounded-lg shadow-lg border border-red-300">
-    <Button
-      className="absolute top-2 right-2 text-red-600"
-      variant="ghost"
-      size="icon"
-      onClick={onClose}
-    >
-      <X className="h-4 w-4" />
-    </Button>
-    <CardHeader className="text-red-700">
-      <CardTitle className="text-xl font-semibold">Available Coupons</CardTitle>
-      <CardDescription className="text-gray-700 text-sm">
-        Select a coupon to apply to your order.
-      </CardDescription>
-    </CardHeader>
-    <CardContent className="space-y-4">
-      {coupons.filter(
-        (coupon) =>
-          parseInt(totalAmount) >= coupon.purchaseAmount &&
-          new Date(coupon.expirationDate).setHours(0, 0, 0, 0) >=
-            new Date().setHours(0, 0, 0, 0)
-      ).length > 0 ? (
-        <RadioGroup
-          value={selectedCoupon || ""}
-          onValueChange={handleSelectedCoupon}
-          className="space-y-4"
-        >
-          {coupons
-            .filter(
-              (coupon) =>
-                totalAmount >= coupon.purchaseAmount &&
-                new Date(coupon.expirationDate).setHours(0, 0, 0, 0) >=
-                  new Date().setHours(0, 0, 0, 0)
-            )
-            .map((coupon) => (
-              <div
-                key={coupon._id}
-                className="flex items-center justify-between p-3 bg-white rounded-md shadow-sm"
-              >
-                <div className="flex items-center space-x-3">
-                  <RadioGroupItem
-                    value={coupon._id}
-                    id={coupon._id}
-                    className="bg-red-50 border-red-300"
-                  />
-                  <Label htmlFor={coupon._id} className="cursor-pointer">
-                    <span className="font-medium text-red-700 text-lg">
-                      {coupon.couponCode}
-                    </span>
-                    <span className="block text-sm text-gray-600">
-                      {coupon.description}
-                    </span>
-                  </Label>
-                </div>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleCopy(coupon.couponCode)}
-                  className="text-red-600 border-red-300 hover:bg-red-50"
+      <Button
+        className="absolute top-2 right-2 text-red-600"
+        variant="ghost"
+        size="icon"
+        onClick={onClose}
+      >
+        <X className="h-4 w-4" />
+      </Button>
+      <CardHeader className="text-red-700">
+        <CardTitle className="text-xl font-semibold">
+          Available Coupons
+        </CardTitle>
+        <CardDescription className="text-gray-700 text-sm">
+          Select a coupon to apply to your order.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {coupons.filter(
+          (coupon) =>
+            parseInt(totalAmount) >= coupon.purchaseAmount &&
+            new Date(coupon.expirationDate).setHours(0, 0, 0, 0) >=
+              new Date().setHours(0, 0, 0, 0)
+        ).length > 0 ? (
+          <RadioGroup
+            value={selectedCoupon || ""}
+            onValueChange={handleSelectedCoupon}
+            className="space-y-4"
+          >
+            {coupons
+              .filter(
+                (coupon) =>
+                  totalAmount >= coupon.purchaseAmount &&
+                  new Date(coupon.expirationDate).setHours(0, 0, 0, 0) >=
+                    new Date().setHours(0, 0, 0, 0)
+              )
+              .map((coupon) => (
+                <div
+                  key={coupon._id}
+                  className="flex items-center justify-between p-3 bg-white rounded-md shadow-sm"
                 >
-                  <Copy className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-        </RadioGroup>
-      ) : (
-        <p className="text-gray-700 font-medium text-center">
-          No coupons available for your current total amount!
-        </p>
-      )}
-    </CardContent>
-    <CardFooter className="flex justify-between mt-6">
-      <Button
-        variant="outline"
-        onClick={() => setSelectedCoupon(null)}
-        className="text-red-600 border-red-300 hover:bg-red-50"
-      >
-        Clear
-      </Button>
-      <Button
-        onClick={handleApply}
-        disabled={!selectedCoupon}
-        className="text-white bg-red-600 hover:bg-red-700"
-      >
-        Apply
-      </Button>
-    </CardFooter>
-  </Card>
-  
+                  <div className="flex items-center space-x-3">
+                    <RadioGroupItem
+                      value={coupon._id}
+                      id={coupon._id}
+                      className="bg-red-50 border-red-300"
+                    />
+                    <Label htmlFor={coupon._id} className="cursor-pointer">
+                      <span className="font-medium text-red-700 text-lg">
+                        {coupon.couponCode}
+                      </span>
+                      <span className="block text-sm text-gray-600">
+                        {coupon.description}
+                      </span>
+                    </Label>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleCopy(coupon.couponCode)}
+                    className="text-red-600 border-red-300 hover:bg-red-50"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+          </RadioGroup>
+        ) : (
+          <p className="text-gray-700 font-medium text-center">
+            No coupons available for your current total amount!
+          </p>
+        )}
+      </CardContent>
+      <CardFooter className="flex justify-between mt-6">
+        <Button
+          variant="outline"
+          onClick={() => setSelectedCoupon(null)}
+          className="text-red-600 border-red-300 hover:bg-red-50"
+        >
+          Clear
+        </Button>
+        <Button
+          onClick={handleApply}
+          disabled={!selectedCoupon}
+          className="text-white bg-red-600 hover:bg-red-700"
+        >
+          Apply
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };

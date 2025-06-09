@@ -55,7 +55,7 @@ const Customers = () => {
   useEffect(() => {
     fetchCustomers();
     searchFocus?.current.focus();
-  }, [filterUser, startDate, endDate, search]);
+  }, [filterUser, endDate, startDate, search]);
 
   // const lastPostIndex = currentPage * postPerPage;
   // const firstPostIndex = lastPostIndex - postPerPage;

@@ -96,7 +96,9 @@ const BannerManagement = () => {
     try {
       setSpinner(true);
       const response = await axios.get(
-        `/admin/banner?search=${search}&page=${currentPage.current}&limit=${postPerPage}&startDate=${startDate}&endDate=${endDate}`
+        `/admin/banner?search=${search}&page=${
+          currentPage.current
+        }&limit=${postPerPage}&startDate=${startDate}&endDate=${endDate}&isAdmin=${true}`
       );
       setBanner(response?.data.banner);
       setPageCount(response.data?.pageCount);

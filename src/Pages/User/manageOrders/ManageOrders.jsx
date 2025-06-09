@@ -120,36 +120,6 @@ const ManageOrders = () => {
     return "text-gray-500";
   };
 
-  // const filteredOrders = search
-  //   ? orders
-  //       .map((order) => {
-  //         const matchesOrderId = order.orderId
-  //           .toLowerCase()
-  //           .includes(search.toLowerCase());
-
-  //         const matchesFilteredItems = order.orderItems.filter(
-  //           (item) =>
-  //             item.product.productName
-  //               .toLowerCase()
-  //               .includes(search.toLowerCase()) ||
-  //             item.product.category.name
-  //               .toLowerCase()
-  //               .includes(search.toLowerCase())
-  //         );
-
-  //         if (matchesOrderId || matchesFilteredItems.length > 0) {
-  //           return {
-  //             ...order,
-  //             orderItems: matchesOrderId
-  //               ? order.orderItems
-  //               : matchesFilteredItems,
-  //           };
-  //         }
-  //         return null;
-  //       })
-  //       .filter(Boolean)
-  //   : orders;
-
   const handlePlaceOrder = async (paymentFailed, orderId) => {
     const orderForRetry = orders?.filter(
       (order, index) => order?._id.toString() == orderId
@@ -183,7 +153,6 @@ const ManageOrders = () => {
   };
 
   return (
-    // <div className="flex">
     <main className="w-3/4   md:w-full md:p-4 p-1 font-mono h-screen overflow-y-scroll no-scrollbar">
       {spinner && (
         <div className="spinner-overlay">
@@ -279,158 +248,166 @@ const ManageOrders = () => {
       <div className="space-y-6 bg-gray-900 overflow-y-scroll custom-scrollbar mt-5 md:mt-1">
         {orders.length > 0 ? (
           orders?.map((order) => (
-            <div
-              className="border-y sm:text-sm  border-gray-500 p-4 lg:p-6 rounded-lg shadow-md space-y-4 lg:space-y-6 bg-light-red"
-              key={order._id}
-            >
-              <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between items-start lg:items-center text-xs lg:text-base gap-4">
-                <div className="font-medium">
-                  <strong>Order Date:</strong> <p>{order.orderDate}</p>
-                </div>
-                <div
-                  className={`font-semibold ${
-                    order.paymentStatus == "Success"
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  <strong className="text-gray-200">Payment Status:</strong>{" "}
-                  {order.paymentStatus == "Success"
-                    ? "Paid"
-                    : `${order.paymentStatus || "Not paid"} `}
-                </div>
-                {order.paymentStatus === "Failed" && (
-                  <div className="w-full lg:w-fit">
-                    <Razorpay
-                      name="Retry"
-                      orderId={order?._id}
-                      PayAmount={
-                        order.totalDiscount
-                          ? parseInt(order.totalDiscount)
-                          : parseInt(order.totalAmount)
-                      }
-                      handlePlaceOrder={handlePlaceOrder}
-                      retry={true}
-                    />
-                  </div>
-                )}
-                <div>
-                  <strong>Order Number:</strong> {order.orderId}
-                </div>
-                <div>
-                  <strong>Ship To:</strong> {order.address?.firstName}
-                </div>
-                <div className="font-semibold">
-                  <strong>Total:</strong> ₹{" "}
-                  {order.totalDiscount > 0
-                    ? order.totalDiscount?.toFixed(0)
-                    : order.totalAmount?.toFixed(0)}
-                </div>
-              </div>
+            // <div
+            //   className="border-y sm:text-sm  border-gray-500 p-4 lg:p-6 rounded-lg shadow-md space-y-4 lg:space-y-6 bg-light-red"
+            //   key={order._id}
+            // >
+            //   <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between items-start lg:items-center text-xs lg:text-base gap-4">
+            //     <div className="font-medium">
+            //       <strong>Order Date:</strong> <p>{order.orderDate}</p>
+            //     </div>
+            //     <div
+            //       className={`font-semibold ${
+            //         order.paymentStatus == "Success"
+            //           ? "text-green-600"
+            //           : "text-red-600"
+            //       }`}
+            //     >
+            //       <strong className="text-gray-200">Payment Status:</strong>{" "}
+            //       {order.paymentStatus == "Success"
+            //         ? "Paid"
+            //         : `${order.paymentStatus || "Not paid"} `}
+            //     </div>
+            //     {order.paymentStatus === "Failed" && (
+            //       <div className="w-full lg:w-fit">
+            //         <Razorpay
+            //           name="Retry"
+            //           orderId={order?._id}
+            //           PayAmount={
+            //             order.totalDiscount
+            //               ? parseInt(order.totalDiscount)
+            //               : parseInt(order.totalAmount)
+            //           }
+            //           handlePlaceOrder={handlePlaceOrder}
+            //           retry={true}
+            //         />
+            //       </div>
+            //     )}
+            //     <div>
+            //       <strong>Order Number:</strong> {order.orderId}
+            //     </div>
+            //     <div>
+            //       <strong>Ship To:</strong> {order.address?.firstName}
+            //     </div>
+            //     <div className="font-semibold">
+            //       <strong>Total:</strong> ₹{" "}
+            //       {order.totalDiscount > 0
+            //         ? order.totalDiscount?.toFixed(0)
+            //         : order.totalAmount?.toFixed(0)}
+            //     </div>
+            //   </div>
 
-              <div className="space-y-4 lg:space-y-6">
-                {order.orderItems.map((item) => (
-                  <div className="bg-gray-800 p-4 lg:p-6 rounded-lg shadow-inner">
-                    <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-6">
-                      <img
-                        src={
-                          item.product.productImage[0] ||
-                          "https://placehold.co/100x100"
-                        }
-                        alt="Product"
-                        className="w-16 h-16 lg:w-24 lg:h-24 object-cover rounded-md"
-                      />
-                      <div className="space-y-2">
-                        <div className="text-xs lg:text-base">
-                          <strong>Category:</strong>{" "}
-                          {item.product.category.name}
-                        </div>
-                        <div className="text-xs lg:text-base">
-                          <strong>Total Price:</strong> ₹ {item.totalPrice}{" "}
-                          <span className="text-xs">inc GST</span>
-                        </div>
-                        {order.appliedCoupon && (
-                          <div className="text-xs lg:text-base">
-                            <strong>Coupon Discount:</strong>{" "}
-                            <span className="text-green-500">
-                              ₹{(item.totalPrice - item.price).toFixed(0)}
-                            </span>
-                          </div>
-                        )}
-                        <div className="text-xs lg:text-base">
-                          <strong>Qty:</strong> {item.quantity}
-                        </div>
-                        <div className="text-sm lg:text-lg font-semibold">
-                          {item.product.productName}
-                        </div>
-                      </div>
-                    </div>
+            //   <div className="space-y-4 lg:space-y-6">
+            //     {order.orderItems.map((item) => (
+            //       <div className="bg-gray-800 p-4 lg:p-6 rounded-lg shadow-inner">
+            //         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-6">
+            //           <img
+            //             src={
+            //               item.product.productImage[0] ||
+            //               "https://placehold.co/100x100"
+            //             }
+            //             alt="Product"
+            //             className="w-16 h-16 lg:w-24 lg:h-24 object-cover rounded-md"
+            //           />
+            //           <div className="space-y-2">
+            //             <div className="text-xs lg:text-base">
+            //               <strong>Category:</strong>{" "}
+            //               {item.product.category.name}
+            //             </div>
+            //             <div className="text-xs lg:text-base">
+            //               <strong>Total Price:</strong> ₹ {item.totalPrice}{" "}
+            //               <span className="text-xs">inc GST</span>
+            //             </div>
+            //             {order.appliedCoupon && (
+            //               <div className="text-xs lg:text-base">
+            //                 <strong>Coupon Discount:</strong>{" "}
+            //                 <span className="text-green-500">
+            //                   ₹{(item.totalPrice - item.price).toFixed(0)}
+            //                 </span>
+            //               </div>
+            //             )}
+            //             <div className="text-xs lg:text-base">
+            //               <strong>Qty:</strong> {item.quantity}
+            //             </div>
+            //             <div className="text-sm lg:text-lg font-semibold">
+            //               {item.product.productName}
+            //             </div>
+            //           </div>
+            //         </div>
 
-                    <div className="flex flex-col lg:flex-row justify-between gap-4 items-start lg:items-center">
-                      <div className="text-xs lg:text-base">
-                        <strong>Status:</strong>{" "}
-                        <span
-                          className={`${getStatusColor(item.productStatus)}`}
-                        >
-                          {item.productStatus}
-                        </span>
-                      </div>
+            //         <div className="flex flex-col lg:flex-row justify-between gap-4 items-start lg:items-center">
+            //           <div className="text-xs lg:text-base">
+            //             <strong>Status:</strong>{" "}
+            //             <span
+            //               className={`${getStatusColor(item.productStatus)}`}
+            //             >
+            //               {item.productStatus}
+            //             </span>
+            //           </div>
 
-                      <div className="text-xs lg:text-base">
-                        <strong>Date:</strong> {order.orderDate}
-                      </div>
-                      {item.productStatus !== "shipped" &&
-                        item.productStatus !== "delivered" &&
-                        item.productStatus !== "cancelled" &&
-                        item.productStatus !== "returned" &&
-                        order.paymentStatus !== "Failed" && (
-                          <div className="bg-red-500 text-white p-2 rounded">
-                            <AlertDialogueButton
-                              name="Cancel"
-                              onClick={() => handleCancelOrder(item)}
-                            />
-                          </div>
-                        )}
+            //           <div className="text-xs lg:text-base">
+            //             <strong>Date:</strong> {order.orderDate}
+            //           </div>
+            //           {item.productStatus !== "shipped" &&
+            //             item.productStatus !== "delivered" &&
+            //             item.productStatus !== "cancelled" &&
+            //             item.productStatus !== "returned" &&
+            //             order.paymentStatus !== "Failed" && (
+            //               <div className="bg-red-500 text-white p-2 rounded">
+            //                 <AlertDialogueButton
+            //                   name="Cancel"
+            //                   onClick={() => handleCancelOrder(item)}
+            //                 />
+            //               </div>
+            //             )}
 
-                      {item.productStatus === "delivered" &&
-                        item.returnDescription === "" &&
-                        (() => {
-                          const [day, month, year] = order.orderDate
-                            .split("/")
-                            .map(Number);
+            //           {item.productStatus === "delivered" &&
+            //             item.returnDescription === "" &&
+            //             (() => {
+            //               const [day, month, year] = order.orderDate
+            //                 .split("/")
+            //                 .map(Number);
 
-                          const orderDate = new Date(year, month - 1, day);
-                          const currentDate = new Date();
-                          const timeDiff = currentDate - orderDate;
-                          const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
-                          return dayDiff <= 3;
-                        })() && (
-                          <div className="bg-red-500 text-white p-2 rounded-md">
-                            <ReturnProduct
-                              item={item}
-                              setTrigger={setTrigger}
-                            />
-                          </div>
-                        )}
+            //               const orderDate = new Date(year, month - 1, day);
+            //               const currentDate = new Date();
+            //               const timeDiff = currentDate - orderDate;
+            //               const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
+            //               return dayDiff <= 3;
+            //             })() && (
+            //               <div className="bg-red-500 text-white p-2 rounded-md">
+            //                 <ReturnProduct
+            //                   item={item}
+            //                   setTrigger={setTrigger}
+            //                 />
+            //               </div>
+            //             )}
 
-                      {item.productStatus !== "returned" &&
-                        item.returnDescription && (
-                          <p className="text-orange-600">
-                            Return in progress...
-                          </p>
-                        )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+            //           {item.productStatus !== "returned" &&
+            //             item.returnDescription && (
+            //               <p className="text-orange-600">
+            //                 Return in progress...
+            //               </p>
+            //             )}
+            //         </div>
+            //       </div>
+            //     ))}
+            //   </div>
 
-              <button
-                className="mb-0 inline-block hover:scale-105 duration-150 border-gray-500 text-gray-300 bg-gray-700 rounded p-2 lg:p-3 "
-                onClick={() => handleOrderDetails(order?._id)}
-              >
-                View more
-              </button>
-            </div>
+            //   <button
+            //     className="mb-0 inline-block hover:scale-105 duration-150 border-gray-500 text-gray-300 bg-gray-700 rounded p-2 lg:p-3 "
+            //     onClick={() => handleOrderDetails(order?._id)}
+            //   >
+            //     View more
+            //   </button>
+            // </div>
+            <OrderItem
+              order={order}
+              handlePlaceOrder={handlePlaceOrder}
+              getStatusColor={getStatusColor}
+              handleCancelOrder={handleCancelOrder}
+              setTrigger={setTrigger}
+              handleOrderDetails={handleOrderDetails}
+            />
           ))
         ) : (
           <div className="bg-gray-800 p-4 lg:p-6 rounded-lg text-center">
@@ -438,26 +415,27 @@ const ManageOrders = () => {
           </div>
         )}
       </div>
-
-      <ReactPaginate
-        className="flex justify-center mb-1 border-gray-700 items-center space-x-2 mt-4"
-        breakLabel="..."
-        nextLabel="next >"
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={5}
-        pageCount={pageCount}
-        previousLabel="< previous"
-        renderOnZeroPageCount={null}
-        marginPagesDisplayed={2}
-        containerClassName="flex flex-wrap justify-center gap-2"
-        pageClassName="flex items-center"
-        pageLinkClassName="px-4 py-2 border border-gray-400 rounded-md text-sm hover:bg-blue-600 transition duration-200"
-        previousClassName="flex items-center"
-        previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
-        nextClassName="flex items-center"
-        nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
-        activeClassName="bg-blue-500 text-white"
-      />
+      {orders?.length > 0 && (
+        <ReactPaginate
+          className="flex justify-center mb-1 border-gray-700 items-center space-x-2 mt-4"
+          breakLabel="..."
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel="< previous"
+          renderOnZeroPageCount={null}
+          marginPagesDisplayed={2}
+          containerClassName="flex flex-wrap justify-center gap-2"
+          pageClassName="flex items-center"
+          pageLinkClassName="px-4 py-2 border border-gray-400 rounded-md text-sm hover:bg-blue-600 transition duration-200"
+          previousClassName="flex items-center"
+          previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+          nextClassName="flex items-center"
+          nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+          activeClassName="bg-blue-500 text-white"
+        />
+      )}
     </main>
 
     // </div>
@@ -465,3 +443,157 @@ const ManageOrders = () => {
 };
 
 export default ManageOrders;
+
+const OrderItem = ({
+  order,
+  handlePlaceOrder,
+  getStatusColor,
+  handleCancelOrder,
+  setTrigger,
+  handleOrderDetails,
+}) => {
+  return (
+    <div
+      className="border-y sm:text-sm  border-gray-500 p-4 lg:p-6 rounded-lg shadow-md space-y-4 lg:space-y-6 bg-light-red"
+      key={order._id}
+    >
+      <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between items-start lg:items-center text-xs lg:text-base gap-4">
+        <div className="font-medium">
+          <strong>Order Date:</strong> <p>{order.orderDate}</p>
+        </div>
+        <div
+          className={`font-semibold ${
+            order.paymentStatus == "Success" ? "text-green-600" : "text-red-600"
+          }`}
+        >
+          <strong className="text-gray-200">Payment Status:</strong>{" "}
+          {order.paymentStatus == "Success"
+            ? "Paid"
+            : `${order.paymentStatus || "Not paid"} `}
+        </div>
+        {order.paymentStatus === "Failed" && (
+          <div className="w-full lg:w-fit">
+            <Razorpay
+              name="Retry"
+              orderId={order?._id}
+              PayAmount={
+                order.totalDiscount
+                  ? parseInt(order.totalDiscount)
+                  : parseInt(order.totalAmount)
+              }
+              handlePlaceOrder={handlePlaceOrder}
+              retry={true}
+            />
+          </div>
+        )}
+        <div>
+          <strong>Order Number:</strong> {order.orderId}
+        </div>
+        <div>
+          <strong>Ship To:</strong> {order.address?.firstName}
+        </div>
+        <div className="font-semibold">
+          <strong>Total:</strong> ₹{" "}
+          {order.totalDiscount > 0
+            ? order.totalDiscount?.toFixed(0)
+            : order.totalAmount?.toFixed(0)}
+        </div>
+      </div>
+
+      <div className="space-y-4 lg:space-y-6">
+        {order.orderItems.map((item) => (
+          <div
+            className="bg-gray-800 p-4 lg:p-6 rounded-lg shadow-inner"
+            key={item._id || item.product._id}
+          >
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-6">
+              <img
+                src={
+                  item.product.productImage[0] || "https://placehold.co/100x100"
+                }
+                alt="Product"
+                className="w-16 h-16 lg:w-24 lg:h-24 object-cover rounded-md"
+              />
+              <div className="space-y-2">
+                <div className="text-xs lg:text-base">
+                  <strong>Category:</strong> {item.product.category.name}
+                </div>
+                <div className="text-xs lg:text-base">
+                  <strong>Total Price:</strong> ₹ {item.totalPrice}{" "}
+                  <span className="text-xs">inc GST</span>
+                </div>
+                {order.appliedCoupon && (
+                  <div className="text-xs lg:text-base">
+                    <strong>Coupon Discount:</strong>{" "}
+                    <span className="text-green-500">
+                      ₹{(item.totalPrice - item.price).toFixed(0)}
+                    </span>
+                  </div>
+                )}
+                <div className="text-xs lg:text-base">
+                  <strong>Qty:</strong> {item.quantity}
+                </div>
+                <div className="text-sm lg:text-lg font-semibold">
+                  {item.product.productName}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col lg:flex-row justify-between gap-4 items-start lg:items-center">
+              <div className="text-xs lg:text-base">
+                <strong>Status:</strong>{" "}
+                <span className={`${getStatusColor(item.productStatus)}`}>
+                  {item.productStatus}
+                </span>
+              </div>
+
+              <div className="text-xs lg:text-base">
+                <strong>Date:</strong> {order.orderDate}
+              </div>
+              {item.productStatus !== "shipped" &&
+                item.productStatus !== "delivered" &&
+                item.productStatus !== "cancelled" &&
+                item.productStatus !== "returned" &&
+                order.paymentStatus !== "Failed" && (
+                  <div className="bg-red-500 text-white p-2 rounded">
+                    <AlertDialogueButton
+                      name="Cancel"
+                      onClick={() => handleCancelOrder(item)}
+                    />
+                  </div>
+                )}
+
+              {item.productStatus === "delivered" &&
+                item.returnDescription === "" &&
+                (() => {
+                  const [day, month, year] = order.orderDate
+                    .split("/")
+                    .map(Number);
+
+                  const orderDate = new Date(year, month - 1, day);
+                  const currentDate = new Date();
+                  const timeDiff = currentDate - orderDate;
+                  const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
+                  return dayDiff <= 3;
+                })() && (
+                  <div className="bg-red-500 text-white p-2 rounded-md">
+                    <ReturnProduct item={item} setTrigger={setTrigger} />
+                  </div>
+                )}
+
+              {item.productStatus !== "returned" && item.returnDescription && (
+                <p className="text-orange-600">Return in progress...</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <button
+        className="mb-0 inline-block hover:scale-105 duration-150 border-gray-500 text-gray-300 bg-gray-700 rounded p-2 lg:p-3 "
+        onClick={() => handleOrderDetails(order?._id)}
+      >
+        View more
+      </button>
+    </div>
+  );
+};
