@@ -15,6 +15,8 @@ function Login() {
   const [isReferral, setIsReferral] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+  const BACKEND_URL = import.meta.env.VITE_LOCAL_URL;
+
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -69,7 +71,8 @@ function Login() {
     }
   };
   const handleGoogleAuth = () => {
-    window.location.href = `https://skillpulseapi.abiram.website/auth/google?method=login`;
+    // window.location.href = `https://skillpulsebackend.abiram.website/auth/google?method=login`;
+    window.location.href = `${BACKEND_URL}/auth/google?method=login`;
   };
 
   const toggleReferral = () => {
@@ -153,11 +156,11 @@ function Login() {
                 )}
               </button>
             </div>
-              {message.password && (
-                <p className="error text-red-500 text-sm mt-1">
-                  {message.password}
-                </p>
-              )}
+            {message.password && (
+              <p className="error text-red-500 text-sm mt-1">
+                {message.password}
+              </p>
+            )}
             <div>
               <input
                 type="text"

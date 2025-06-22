@@ -15,6 +15,7 @@ const AddProduct = () => {
   const [regularPrice, setRegularPrice] = useState("");
   const [salesPrice, setSalesPrice] = useState("");
   const [brands, setBrands] = useState([]);
+  
   const [units, setUnits] = useState("");
   const [categories, setCategories] = useState([]);
   const [offerPrice, setOfferPrice] = useState("0");
@@ -47,8 +48,8 @@ const AddProduct = () => {
       error.regularPrice = "regular price must a number";
 
     if (isNaN(offerPrice)) error.offerPrice = "offerPrice price must a number";
-    else if (offerPrice < 1 || offerPrice > 99)
-      error.offerPrice = "offerPrice must between 1% and 99%";
+    else if (offerPrice < 0 || offerPrice > 99)
+      error.offerPrice = "offerPrice must between 0% and 99%";
 
     if (brand.trim() === "") error.brand = "brand is required *";
     if (units.trim() === "") error.units = "units is required *";
@@ -207,6 +208,7 @@ const AddProduct = () => {
             <input
               type="text"
               className="ml-2 p-2 border rounded w-full focus:outline-none"
+              placeholder="Enter product name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -222,6 +224,9 @@ const AddProduct = () => {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
+              <option value="" disabled>
+                Select category
+              </option>
               {categories.length > 0 ? (
                 categories.map((category) => (
                   <option key={category._id} value={category.name}>
@@ -245,6 +250,9 @@ const AddProduct = () => {
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
             >
+              <option value="" disabled>
+                Select Brand
+              </option>
               {brands.length > 0 ? (
                 brands.map((brand) => (
                   <>
@@ -266,6 +274,7 @@ const AddProduct = () => {
             <input
               type="text"
               className="ml-2 p-2 border rounded w-full focus:outline-none"
+              placeholder="Enter description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -281,6 +290,7 @@ const AddProduct = () => {
             <input
               type="text"
               className="ml-2 p-2 border rounded w-full focus:outline-none"
+              placeholder="Enter regular price"
               value={regularPrice}
               onChange={(e) => setRegularPrice(e.target.value)}
             />
@@ -295,6 +305,7 @@ const AddProduct = () => {
             <input
               type="text"
               className="ml-2 p-2 border rounded w-full focus:outline-none"
+              placeholder="Enter discount percentage"
               value={offerPrice}
               onChange={(e) => setOfferPrice(e.target.value)}
             />
@@ -309,6 +320,7 @@ const AddProduct = () => {
             <input
               type="text"
               className="ml-2 p-2 border rounded w-full focus:outline-none"
+              placeholder="Enter units "
               value={units}
               onChange={(e) => setUnits(e.target.value)}
             />

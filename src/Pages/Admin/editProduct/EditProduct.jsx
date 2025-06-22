@@ -19,6 +19,9 @@ const EditProduct = () => {
   const [brand, setBrand] = useState("");
   const [units, setUnits] = useState("");
   const [productImage, setProductImage] = useState([]);
+
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [images, setImages] = useState({
     image1: "",
     image2: "",
@@ -115,6 +118,28 @@ const EditProduct = () => {
     setCurrentImage(null);
   };
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get("/admin/category");
+        setCategories(response?.data?.categories);
+      } catch (err) {
+        alert(err?.response?.data?.message);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get("/admin/brand");
+        setBrands(response?.data?.brands);
+      } catch (err) {
+        alert(err?.response?.data?.message);
+      }
+    })();
+  }, []);
+
   const handleEditProduct = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
@@ -181,12 +206,32 @@ const EditProduct = () => {
         <div>
           <label className="flex items-center">
             Category:
-            <input
+            {/* <input
               type="text"
               className="ml-2 p-2 border rounded w-full focus:outline-none"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-            />
+            /> */}
+            <select
+              className="ml-2 p-2 border rounded w-full focus:outline-none"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {!category && (
+                <option value="" disabled>
+                  Select category
+                </option>
+              )}
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))
+              ) : (
+                <option value="">No category were added</option>
+              )}
+            </select>
           </label>
           {message.category && (
             <p className="text-red-600">{message.category}</p>
@@ -209,12 +254,34 @@ const EditProduct = () => {
         <div>
           <label className="flex items-center">
             Brand:
-            <input
+            {/* <input
               type="text"
               className="ml-2 p-2 border rounded w-full focus:outline-none"
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
-            />
+            /> */}
+            <select
+              className="ml-2 p-2 border rounded w-full focus:outline-none"
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
+            >
+              {!brand && (
+                <option value="" disabled>
+                  Select Brand
+                </option>
+              )}
+              {brands.length > 0 ? (
+                brands.map((brand) => (
+                  <>
+                    <option key={brand._id} value={brand.name}>
+                      {brand.name}
+                    </option>
+                  </>
+                ))
+              ) : (
+                <option value="">No Brands were added</option>
+              )}
+            </select>
           </label>
           {message.brand && <p className="text-red-600">{message.brand}</p>}
         </div>
@@ -253,7 +320,7 @@ const EditProduct = () => {
               type="text"
               className="ml-2 p-2 border rounded w-full focus:outline-none"
               value={units}
-              onChange={(e) => setUnits(e.target.value )}
+              onChange={(e) => setUnits(e.target.value)}
             />
           </label>
           {message.units && <p className="text-red-600">{message.units}</p>}

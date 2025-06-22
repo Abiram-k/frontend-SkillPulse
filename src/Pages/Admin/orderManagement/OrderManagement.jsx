@@ -278,7 +278,8 @@ const OrderManagement = () => {
 
                               if (
                                 status === "delivered" ||
-                                status === "cancelled"
+                                status === "cancelled" ||
+                                status == "returned"
                               )
                                 return null;
 

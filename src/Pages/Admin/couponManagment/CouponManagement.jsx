@@ -2,7 +2,8 @@ import axios from "@/axiosIntercepters/AxiosInstance";
 import { Toast } from "@/Components/Toast";
 import { showToast } from "@/Components/ToastNotification";
 import { Pencil } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 
 const CouponManagement = () => {
@@ -22,6 +23,10 @@ const CouponManagement = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [editCouponId, setEditCouponId] = useState("");
   const [spinner, setSpinner] = useState(false);
+
+  const currentPage = useRef();
+  const [pageCount, setPageCount] = useState(1); 
+  const [postPerPage, setPostPerPage] = useState(5);
 
   const validateForm = () => {
     let error = {};
@@ -65,22 +70,48 @@ const CouponManagement = () => {
     return error;
   };
 
+  const handlePageClick = async (e) => {
+    currentPage.current = e.selected + 1;
+    fetchCoupons();
+  };
+
+  const fetchCoupons = async () => {
+    setSpinner(true);
+    try {
+      const response = await axios.get(
+        `/admin/coupon?search=${search}&page=${currentPage.current}&limit=${postPerPage}`
+      );
+      setPageCount(response.data?.pageCount);
+      setCoupons(response?.data?.coupons);
+      setSpinner(false);
+    } catch (error) {
+      console.log(error);
+      setSpinner(false);
+      Toast.fire({
+        icon: "error",
+        title: `${error?.response?.data?.message}`,
+      });
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      setSpinner(true);
-      try {
-        const response = await axios.get(`/admin/coupon?search=${search}`);
-        setCoupons(response?.data);
-        setSpinner(false);
-      } catch (error) {
-        console.log(error);
-        setSpinner(false);
-        Toast.fire({
-          icon: "error",
-          title: `${error?.response?.data?.message}`,
-        });
-      }
-    })();
+    // (async () => {
+    //   setSpinner(true);
+    //   try {
+    //     const response = await axios.get(`/admin/coupon?search=${search}`);
+    //     setCoupons(response?.data);
+    //     setSpinner(false);
+    //   } catch (error) {
+    //     console.log(error);
+    //     setSpinner(false);
+    //     Toast.fire({
+    //       icon: "error",
+    //       title: `${error?.response?.data?.message}`,
+    //     });
+    //   }
+    // })();
+
+    fetchCoupons();
   }, [message, trigger, search]);
 
   const handleEditCoupon = async () => {
@@ -195,45 +226,35 @@ const CouponManagement = () => {
             </thead>
             <tbody>
               {coupons.length > 0 ? (
-                coupons
-                  // .filter((coupon) =>
-                  //   coupon.couponCode.toLowerCase().includes(search.toLowerCase())
-                  // ).length > 0 ? (
-                  //   coupons
-                  //     .filter((coupon) =>
-                  //       coupon.couponCode
-                  //         .toLowerCase()
-                  //         .includes(search.toLowerCase())
-                  //     )
-                  .map((coupon) => (
-                    <tr className=" border-2 border-b-gray-300">
-                      <td className="px-6 py-4 text-black">
-                        {coupon.couponCode}
-                      </td>
-                      <td className="px-6 py-4 text-black">
-                        {coupon?.description}
-                      </td>
-                      <td className="px-6 py-4 text-black">
-                        {coupon?.couponAmount}
-                      </td>
-                      <td className="px-6 py-4 text-black">
-                        {coupon?.totalLimit}
-                      </td>
-                      <td className="px-6 py-4 text-black">
-                        {coupon?.perUserLimit}
-                      </td>
-                      <td className="px-6 py-4 text-black">
-                        {coupon?.maxDiscount || "Nil"}
-                      </td>
-                      <td className="px-6 py-4 text-black">
-                        {coupon?.purchaseAmount}
-                      </td>
-                      <td className="px-6 py-4 text-black">
-                        {getDate(coupon?.expirationDate)}
-                      </td>
-                      <td className="px-6 py-4 text-center text-black">
-                        <div className="flex gap-3 justify-center items-center ">
-                          {/* <Pencil
+                coupons.map((coupon) => (
+                  <tr className=" border-2 border-b-gray-300">
+                    <td className="px-6 py-4 text-black">
+                      {coupon.couponCode}
+                    </td>
+                    <td className="px-6 py-4 text-black">
+                      {coupon?.description}
+                    </td>
+                    <td className="px-6 py-4 text-black">
+                      {coupon?.couponAmount}
+                    </td>
+                    <td className="px-6 py-4 text-black">
+                      {coupon?.totalLimit}
+                    </td>
+                    <td className="px-6 py-4 text-black">
+                      {coupon?.perUserLimit}
+                    </td>
+                    <td className="px-6 py-4 text-black">
+                      {coupon?.maxDiscount || "Nil"}
+                    </td>
+                    <td className="px-6 py-4 text-black">
+                      {coupon?.purchaseAmount}
+                    </td>
+                    <td className="px-6 py-4 text-black">
+                      {getDate(coupon?.expirationDate)}
+                    </td>
+                    <td className="px-6 py-4 text-center text-black">
+                      <div className="flex gap-3 justify-center items-center ">
+                        {/* <Pencil
                               className="w-4 text-blue-500"
                               onClick={() => {
                                 setIsEdit(true);
@@ -241,14 +262,14 @@ const CouponManagement = () => {
                               }}
                             /> */}
 
-                          <i
-                            className="fas fa-times cursor-pointer text-red-600"
-                            onClick={() => handleCouponDelete(coupon._id)}
-                          ></i>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                        <i
+                          className="fas fa-times cursor-pointer text-red-600"
+                          onClick={() => handleCouponDelete(coupon._id)}
+                        ></i>
+                      </div>
+                    </td>
+                  </tr>
+                ))
               ) : (
                 // ) : (
                 //   <tr>
@@ -396,6 +417,27 @@ const CouponManagement = () => {
             </button>
           </div>
         </div>
+      )}
+      {coupons.length && (
+        <ReactPaginate
+          className="flex justify-center border-gray-700 items-center space-x-2 mt-4"
+          breakLabel="..."
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel="< previous"
+          renderOnZeroPageCount={null}
+          marginPagesDisplayed={2}
+          containerClassName="flex flex-wrap justify-center gap-2"
+          pageClassName="flex items-center"
+          pageLinkClassName="px-4 py-2 border border-gray-400 rounded-md text-sm hover:bg-blue-600 transition duration-200"
+          previousClassName="flex items-center"
+          previousLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+          nextClassName="flex items-center"
+          nextLinkClassName="px-4 py-2 border rounded-md text-sm hover:bg-gray-200 transition duration-200"
+          activeClassName="bg-blue-500 text-white"
+        />
       )}
     </main>
   );
