@@ -72,7 +72,7 @@ function Login() {
   };
   const handleGoogleAuth = () => {
     window.location.href = `https://skillpulsebackend.abiram.website/auth/google?method=login`;
-    // window.location.href = `${BACKEND_URL}/auth/google?method=login`;
+    // window.location.href = `http://localhost:3000/auth/google?method=login`;
   };
 
   const toggleReferral = () => {
