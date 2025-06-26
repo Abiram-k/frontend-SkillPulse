@@ -47,6 +47,10 @@ function AddCoupon() {
     if (!totalLimit.trim() || isNaN(totalLimit))
       error.totalLimit = "Enter number";
     if (totalLimit < 1) error.totalLimit = "Must be greater than 1 *";
+
+    if (totalLimit && perUserLimit && totalLimit < perUserLimit)
+      error.perUserLimit = `Must be lower than or equal to total limit  *`;
+
     if (!perUserLimit.trim() || isNaN(perUserLimit))
       error.perUserLimit = "Enter number";
     if (perUserLimit < 0) error.perUserLimit = "Must be positive value *";

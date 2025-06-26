@@ -62,10 +62,13 @@ export default function AdminOrderDetail() {
             {(order.totalAmount - order.totalDiscount).toFixed(2)}
           </p>
           {order.deliveryCharge && (
-            <p className="text-sm">Delivery charge: ₹{order?.deliveryCharge}</p>
+            <p className="text-sm">
+              Delivery charge: ₹{order?.deliveryCharge || 0}
+            </p>
           )}
           <p className="text-sm">
-            Total Paid Amount: ₹{order.totalDiscount?.toFixed(2)}
+            Total Paid Amount: ₹
+            {(order?.totalDiscount + (order?.deliveryCharge || 0)).toFixed(2)}
           </p>
           <p className="text-sm">Payment Status: {order?.paymentStatus}</p>
           <h3 className="text-md font-semibold mt-4">Delivery Address:</h3>

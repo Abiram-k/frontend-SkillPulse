@@ -526,7 +526,7 @@ const OrderItem = ({
                   <div className="text-xs lg:text-base">
                     <strong>Coupon Discount:</strong>{" "}
                     <span className="text-green-500">
-                      ₹{(item.totalPrice - item.price).toFixed(0)}
+                      ₹{(item.totalPrice - item.price).toFixed(2)}
                     </span>
                   </div>
                 )}

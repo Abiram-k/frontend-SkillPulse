@@ -15,7 +15,7 @@ const AddProduct = () => {
   const [regularPrice, setRegularPrice] = useState("");
   const [salesPrice, setSalesPrice] = useState("");
   const [brands, setBrands] = useState([]);
-  
+
   const [units, setUnits] = useState("");
   const [categories, setCategories] = useState([]);
   const [offerPrice, setOfferPrice] = useState("0");
@@ -87,7 +87,7 @@ const AddProduct = () => {
     const imageFile = e.target.files[0];
     setMessage({});
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
-    const maxSize = 1 * 1024 * 1024 * 1024;
+    const maxSize = 1 * 1024 * 1024;
     if (
       imageFile &&
       allowedTypes.includes(imageFile.type) &&

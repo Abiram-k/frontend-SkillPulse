@@ -107,7 +107,7 @@ const Checkout = () => {
         parseInt(couponAmount)
     );
 
-    return totalPrice;
+    return Math.round(totalPrice);
   };
   const handleCouponDelete = async () => {
     try {
@@ -595,7 +595,7 @@ const Checkout = () => {
                       <span>Payable Amount</span>
                       <span>
                         {cartItems[0]?.appliedCoupon?.couponType == "Percentage"
-                          ? cartItems[0]?.totalDiscount +
+                          ? Math.round(cartItems[0]?.totalDiscount )+
                             calculateDeliveryCharge()
                           : offerPrice(
                               cartItems[0]?.appliedCoupon?.couponAmount,

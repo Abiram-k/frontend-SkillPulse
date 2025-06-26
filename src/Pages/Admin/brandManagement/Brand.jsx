@@ -187,16 +187,16 @@ const Brand = () => {
     // const result = confirm("Are you sure to restore brand");
     try {
       // if (result) {
-        const response = await axios.patch(`/admin/brandRestore/${id}`);
-        Toast.fire({
-          icon: "success",
-          title: `${response?.data.message}`,
-        });
-        setBrands((prev) =>
-          prev?.map((brand) =>
-            brand?._id === id ? { ...brand, isDeleted: false } : brand
-          )
-        );
+      const response = await axios.patch(`/admin/brandRestore/${id}`);
+      Toast.fire({
+        icon: "success",
+        title: `${response?.data.message}`,
+      });
+      setBrands((prev) =>
+        prev?.map((brand) =>
+          brand?._id === id ? { ...brand, isDeleted: false } : brand
+        )
+      );
       // }
     } catch (error) {
       alert(error?.response?.data.message);
@@ -207,16 +207,16 @@ const Brand = () => {
     // const result = confirm("Are you sure to delete brand");
     try {
       // if (result) {
-        const response = await axios.delete(`/admin/brand/${id}`);
-        setBrands((prev) =>
-          prev?.map((brand) =>
-            brand?._id === id ? { ...brand, isDeleted: true } : brand
-          )
-        );
-        Toast.fire({
-          icon: "success",
-          title: `${response.data?.message}`,
-        });
+      const response = await axios.delete(`/admin/brand/${id}`);
+      setBrands((prev) =>
+        prev?.map((brand) =>
+          brand?._id === id ? { ...brand, isDeleted: true } : brand
+        )
+      );
+      Toast.fire({
+        icon: "success",
+        title: `${response.data?.message}`,
+      });
       // } else {
       //   Toast.fire({
       //     icon: "success",

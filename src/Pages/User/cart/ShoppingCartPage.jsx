@@ -100,7 +100,11 @@ const ShoppingCartPage = () => {
           } else {
             showToast(
               "error",
-              `Already added all available (${item.product.units}) stocks`
+              `${
+                item.product.units
+                  ? `Already added all available (${item.product.units}) stocks`
+                  : `Item is out of stock`
+              }`
             );
           }
         }
@@ -209,7 +213,14 @@ const ShoppingCartPage = () => {
                     className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded"
                   />
                   <div className="flex-grow">
-                    <h3 className="text-lg">{item?.product?.productName}</h3>
+                    <h3 className="text-lg">
+                      {item?.product?.productName}{" "}
+                      {!item.product?.units && (
+                        <span className="text-red-500 font-semibold text-md ms-4">
+                          Out of stock
+                        </span>
+                      )}
+                    </h3>
                     <p className="text-sm mt-2">
                       {item?.product?.productDescription}
                     </p>
